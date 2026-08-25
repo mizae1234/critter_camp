@@ -25,6 +25,12 @@ class StageDefinition {
   final String rewardCritterId;
   final int baseAcornsReward;
   final String description;
+  final int chapterNumber;
+  final String chapterName;
+  final String storySpeaker;
+  final String speakerEmoji;
+  final String storyTextEn;
+  final String storyTextTh;
 
   const StageDefinition({
     required this.id,
@@ -50,6 +56,12 @@ class StageDefinition {
     this.rewardCritterId = 'hazel',
     this.baseAcornsReward = 15,
     this.description = 'Place one critter per habitat without touching neighbors',
+    this.chapterNumber = 1,
+    this.chapterName = 'Whispering Meadow',
+    this.storySpeaker = 'Hazel',
+    this.speakerEmoji = '🦊',
+    this.storyTextEn = 'Welcome to camp! Let\'s place critters in cozy habitats.',
+    this.storyTextTh = 'ยินดีต้อนรับสู่แคมป์! มาช่วยวางเพื่อนน้องสัตว์ในโซนธรรมชาติกันนะ',
   });
 
   /// Counts the total number of unique habitat regions in this stage.

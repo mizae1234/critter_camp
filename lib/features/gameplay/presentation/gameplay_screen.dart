@@ -13,6 +13,7 @@ import '../../../services/ads/ads_service.dart';
 import '../../../services/analytics/analytics_service.dart';
 import '../../../services/audio/audio_service.dart';
 import '../../../core/localization/app_strings.dart';
+import '../../../core/widgets/mascot_speech_bubble.dart';
 import '../dialogs/oops_dialog.dart';
 
 class GameplayScreen extends StatefulWidget {
@@ -393,24 +394,63 @@ class _GameplayScreenState extends State<GameplayScreen> {
               },
             ),
 
-            // Goals & Rules Reminder Banner
+            // Chapter Story Dialogue Banner
             Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(
-                color: AppColors.primaryContainer.withValues(alpha: 0.4),
-                borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+                color: AppColors.surfaceContainerLowest,
+                borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
+                border: Border.all(color: AppColors.outlineVariant.withValues(alpha: 0.7)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.04),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
               ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.info_outline_rounded, size: 16, color: AppColors.primaryDark),
-                  const SizedBox(width: 6),
-                  Flexible(
-                    child: Text(
-                      widget.stage.description,
-                      style: AppTypography.labelSmall.copyWith(color: AppColors.primaryDark, fontSize: 11),
-                      textAlign: TextAlign.center,
+                  Container(
+                    width: 32,
+                    height: 32,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFEF3C7),
+                      shape: BoxShape.circle,
+                      border: Border.all(color: const Color(0xFFFDE68A)),
+                    ),
+                    child: Center(
+                      child: Text(
+                        widget.stage.speakerEmoji,
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${widget.stage.storySpeaker} • Chapter ${widget.stage.chapterNumber}',
+                          style: AppTypography.labelSmall.copyWith(
+                            color: AppColors.primaryDark,
+                            fontWeight: FontWeight.w800,
+                            fontSize: 10,
+                          ),
+                        ),
+                        const SizedBox(height: 1),
+                        Text(
+                          AppStrings.isThai ? widget.stage.storyTextTh : widget.stage.storyTextEn,
+                          style: AppTypography.bodyMedium.copyWith(
+                            fontSize: 11,
+                            color: AppColors.onSurface,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -422,6 +462,21 @@ class _GameplayScreenState extends State<GameplayScreen> {
               child: Center(
                 child: PuzzleBoardWidget(controller: _controller),
               ),
+            ),
+
+            // Anti-Stuck Mascot Speech Bubble (Nudge)
+            ListenableBuilder(
+              listenable: _controller,
+              builder: (context, _) {
+                if (!_controller.shouldShowHintNudge) {
+                  return const SizedBox.shrink();
+                }
+                return MascotSpeechBubble(
+                  speakerEmoji: widget.stage.speakerEmoji,
+                  onTakeHint: _handleHintRequest,
+                  onDismiss: () => _controller.dismissHintNudge(),
+                );
+              },
             ),
 
             // Controls Toolbar with Progressive Hint Integration

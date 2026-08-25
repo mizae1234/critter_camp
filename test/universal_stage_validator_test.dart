@@ -116,12 +116,24 @@ void main() {
       expect(result.primaryViolationMessage, isNotNull);
     });
 
-    test('All 5 Stages in StageCatalog have at least one verified solvable solution', () {
+    test('All 30 Stages in StageCatalog have at least one verified solvable solution and valid metadata', () {
+      expect(StageCatalog.allStages.length, 30);
+
       for (final stage in StageCatalog.allStages) {
+        // 1. Verify mathematical solvability
         final solution = StageSolver.findSolution(stage);
         expect(solution, isNotNull,
             reason: 'Stage ${stage.stageNumber}: ${stage.name} must be mathematically solvable');
         expect(solution!.length, stage.size);
+
+        // 2. Verify metadata
+        expect(stage.chapterNumber, inInclusiveRange(1, 6));
+        expect(stage.chapterName.isNotEmpty, isTrue);
+        expect(stage.storySpeaker.isNotEmpty, isTrue);
+        expect(stage.speakerEmoji.isNotEmpty, isTrue);
+        expect(stage.storyTextEn.isNotEmpty, isTrue);
+        expect(stage.storyTextTh.isNotEmpty, isTrue);
+        expect(stage.rewardCritterId.isNotEmpty, isTrue);
       }
     });
   });

@@ -112,88 +112,137 @@ class HomeScreen extends StatelessWidget {
               // Continue Journey Hero Card with Campfire Artwork
               Container(
                 decoration: BoxDecoration(
+                  color: AppColors.surfaceContainerLowest,
                   borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
+                  border: Border.all(color: AppColors.outlineVariant.withValues(alpha: 0.7)),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.primaryDark.withValues(alpha: 0.25),
+                      color: AppColors.primaryDark.withValues(alpha: 0.16),
                       blurRadius: 20,
                       offset: const Offset(0, 8),
                     ),
                   ],
                 ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
-                  child: Stack(
-                    children: [
-                      // Backdrop Image
-                      Positioned.fill(
-                        child: Image.asset(
-                          'assets/images/bg_campsite.jpg',
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) => Container(color: AppColors.primaryDark),
-                        ),
-                      ),
-                      // Dark gradient for text legibility
-                      Positioned.fill(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [
-                                Colors.black.withValues(alpha: 0.45),
-                                Colors.black.withValues(alpha: 0.82),
-                              ],
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Scenic Hero Image Banner (Dedicated 155px height)
+                    ClipRRect(
+                      borderRadius: const BorderRadius.vertical(top: Radius.circular(AppSpacing.radiusLg)),
+                      child: Stack(
+                        children: [
+                          Image.asset(
+                            'assets/images/bg_campsite.jpg',
+                            width: double.infinity,
+                            height: 155,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) => Container(height: 155, color: AppColors.primaryDark),
+                          ),
+                          Positioned.fill(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: [
+                                    Colors.transparent,
+                                    Colors.black.withValues(alpha: 0.7),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                          Positioned(
+                            top: 12,
+                            left: 12,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: Colors.black.withValues(alpha: 0.65),
+                                borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
+                              ),
+                              child: Row(
+                                children: [
+                                  Text(currentStage.speakerEmoji, style: const TextStyle(fontSize: 14)),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    'Chapter ${currentStage.chapterNumber}: ${currentStage.chapterName}',
+                                    style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w700),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 12,
+                            left: 14,
+                            right: 14,
+                            child: Text(
+                              '${AppStrings.stagePrefix} ${currentStage.stageNumber}: ${currentStage.name}',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w800,
+                                shadows: [Shadow(color: Colors.black54, blurRadius: 8)],
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(AppSpacing.xl),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white.withValues(alpha: 0.25),
-                                    borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
-                                    border: Border.all(color: Colors.white.withValues(alpha: 0.3)),
-                                  ),
-                                  child: Text(
-                                    '${currentStage.biomeName} • ${currentStage.size}x${currentStage.size}',
-                                    style: AppTypography.labelSmall.copyWith(color: Colors.white, fontWeight: FontWeight.w700),
-                                  ),
+                    ),
+
+                    // Body content
+                    Padding(
+                      padding: const EdgeInsets.all(AppSpacing.lg),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                decoration: BoxDecoration(
+                                  color: AppColors.primaryContainer,
+                                  borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
                                 ),
-                                const Icon(Icons.nature_people_rounded, color: AppColors.accentGold),
-                              ],
-                            ),
-                            const SizedBox(height: AppSpacing.md),
-                            Text(
-                              AppStrings.readyForBrainBreak,
-                              style: AppTypography.headlineLarge.copyWith(color: Colors.white, fontWeight: FontWeight.w800),
-                            ),
-                            const SizedBox(height: AppSpacing.sm),
-                            Text(
-                              '${AppStrings.stagePrefix} ${currentStage.stageNumber}: ${currentStage.name} ${AppStrings.stageWaiting}',
-                              style: AppTypography.bodyMedium.copyWith(color: Colors.white.withValues(alpha: 0.9)),
-                            ),
-                            const SizedBox(height: AppSpacing.lg),
-                            CritterButton(
-                              text: '${AppStrings.playCurrentStage} ${currentStage.stageNumber}',
-                              variant: CritterButtonVariant.secondary,
-                              isFullWidth: true,
-                              icon: Icons.play_arrow_rounded,
-                              onPressed: onContinueLevel,
-                            ),
-                          ],
-                        ),
+                                child: Text(
+                                  '${currentStage.size}x${currentStage.size} Grid',
+                                  style: AppTypography.labelSmall.copyWith(color: AppColors.primaryDark, fontWeight: FontWeight.w700),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFFEF3C7),
+                                  borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+                                ),
+                                child: Text(
+                                  '+${currentStage.baseAcornsReward} Acorns',
+                                  style: AppTypography.labelSmall.copyWith(color: AppColors.accentGold, fontWeight: FontWeight.w700),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            AppStrings.isThai ? currentStage.storyTextTh : currentStage.storyTextEn,
+                            style: AppTypography.bodyMedium.copyWith(fontSize: 12),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 14),
+                          CritterButton(
+                            text: '${AppStrings.playCurrentStage} ${currentStage.stageNumber}',
+                            variant: CritterButtonVariant.primary,
+                            isFullWidth: true,
+                            icon: Icons.play_arrow_rounded,
+                            onPressed: onContinueLevel,
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
 

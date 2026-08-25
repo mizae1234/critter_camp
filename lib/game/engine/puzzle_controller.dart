@@ -30,6 +30,8 @@ class PuzzleController extends ChangeNotifier {
   bool _isPatternMode = false;
   bool _isGameOver = false;
   bool _isCompleted = false;
+  int _secondsSinceLastInteraction = 0;
+  bool _nudgeDismissedThisTurn = false;
 
   StageValidationResult _lastValidation = StageValidationResult.initial;
   Set<CellPosition> _conflictingCells = {};
@@ -68,10 +70,21 @@ class PuzzleController extends ChangeNotifier {
   bool get isPatternMode => _isPatternMode;
   bool get isGameOver => _isGameOver;
   bool get isCompleted => _isCompleted;
+  bool get shouldShowHintNudge => _secondsSinceLastInteraction >= 35 && !_nudgeDismissedThisTurn && !_isCompleted && !_isGameOver;
   StageValidationResult get lastValidation => _lastValidation;
   Set<CellPosition> get conflictingCells => _conflictingCells;
   String? get lastError => _lastError;
   bool get canUndo => _history.isNotEmpty;
+
+  void dismissHintNudge() {
+    _nudgeDismissedThisTurn = true;
+    notifyListeners();
+  }
+
+  void resetInactivity() {
+    _secondsSinceLastInteraction = 0;
+    _nudgeDismissedThisTurn = false;
+  }
 
   GameState get currentGameState => GameState(
     grid: _grid,
@@ -101,6 +114,7 @@ class PuzzleController extends ChangeNotifier {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (!_isCompleted && !_isGameOver) {
         _elapsedSeconds++;
+        _secondsSinceLastInteraction++;
         notifyListeners();
       }
     });
@@ -108,6 +122,7 @@ class PuzzleController extends ChangeNotifier {
 
   void selectTool(ToolMode tool) {
     _selectedTool = tool;
+    resetInactivity();
     notifyListeners();
   }
 
@@ -156,6 +171,7 @@ class PuzzleController extends ChangeNotifier {
     final CellContent previous = _grid[pos.row][pos.col];
     if (previous == newContent) return;
 
+    resetInactivity();
     _grid[pos.row][pos.col] = newContent;
     _movesCount++;
     _history.add(PuzzleMove(
@@ -214,6 +230,7 @@ class PuzzleController extends ChangeNotifier {
   void undo() {
     if (_history.isEmpty || _isCompleted) return;
 
+    resetInactivity();
     final lastMove = _history.removeLast();
     _grid[lastMove.position.row][lastMove.position.col] = lastMove.previousContent;
     audioService?.playUndo();

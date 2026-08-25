@@ -8,7 +8,7 @@ void main() {
   group('PuzzleController Tests', () {
     test('Initializes with empty grid and 3 lives', () {
       final controller = PuzzleController(stage: StageCatalog.stage4);
-      expect(controller.size, 6);
+      expect(controller.size, StageCatalog.stage4.size);
       expect(controller.lives, 3);
       expect(controller.placedCrittersCount, 0);
       expect(controller.selectedTool, ToolMode.placeCritter);

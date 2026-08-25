@@ -133,11 +133,11 @@ class JourneyScreen extends StatelessWidget {
                   ),
                 ),
 
-                // Winding Trail Map Area
+                // Winding Trail Map Area with 30 Stages & 6 Chapters
                 Expanded(
                   child: ListView.builder(
                     padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                    reverse: true, // Stage 1 at bottom, ascending to Stage 5
+                    reverse: true, // Stage 1 at bottom, ascending to Stage 30
                     itemCount: stages.length,
                     itemBuilder: (context, index) {
                       final stage = stages[index];
@@ -145,25 +145,63 @@ class JourneyScreen extends StatelessWidget {
                       final bool isCompleted = userProgress.isLevelCompleted(stageNum);
                       final bool isCurrent = stageNum == userProgress.currentLevel;
                       final bool isLocked = !userProgress.isLevelUnlocked(stageNum);
+                      final bool isChapterStart = (stageNum - 1) % 5 == 0;
 
                       // Alternating zigzag winding path offset
                       final double xOffset = (stageNum % 2 == 0) ? 45.0 : -45.0;
 
-                      return Container(
-                        margin: const EdgeInsets.symmetric(vertical: 14),
-                        child: Transform.translate(
-                          offset: Offset(xOffset, 0),
-                          child: Center(
-                            child: _buildStageNode(
-                              stageNumber: stageNum,
-                              stageName: stage.name,
-                              isCompleted: isCompleted,
-                              isCurrent: isCurrent,
-                              isLocked: isLocked,
-                              onTap: isLocked ? null : () => onSelectLevel(stageNum),
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (isChapterStart)
+                            Container(
+                              margin: const EdgeInsets.symmetric(vertical: 16),
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.95),
+                                borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
+                                border: Border.all(color: AppColors.accentGold.withValues(alpha: 0.8), width: 1.5),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withValues(alpha: 0.08),
+                                    blurRadius: 10,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(stage.speakerEmoji, style: const TextStyle(fontSize: 20)),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    'Chapter ${stage.chapterNumber}: ${stage.chapterName}',
+                                    style: AppTypography.labelSmall.copyWith(
+                                      color: AppColors.primaryDark,
+                                      fontWeight: FontWeight.w800,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          Container(
+                            margin: const EdgeInsets.symmetric(vertical: 14),
+                            child: Transform.translate(
+                              offset: Offset(xOffset, 0),
+                              child: Center(
+                                child: _buildStageNode(
+                                  stageNumber: stageNum,
+                                  stageName: stage.name,
+                                  isCompleted: isCompleted,
+                                  isCurrent: isCurrent,
+                                  isLocked: isLocked,
+                                  onTap: isLocked ? null : () => onSelectLevel(stageNum),
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                        ],
                       );
                     },
                   ),

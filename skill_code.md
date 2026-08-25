@@ -1,13 +1,13 @@
 # Critter Camp — System Architecture & Code Blueprint (`skill_code.md`)
 
 > **Developer Handbook & Architecture Reference**  
-> Documenting the complete directory structure, game engine logic, extensible rule & goal systems, journey progression, backend/database integration, smart monetization guardrails, and developer recipes for adding new content.
+> Documenting the complete directory structure, game engine logic, extensible rule & goal systems, 30-stage journey progression across 6 story chapters, anti-stuck mascot nudge system, universal localization, backend/database integration, smart monetization guardrails, and developer recipes for adding new content.
 
 ---
 
 ## 1. High-Level Architecture Overview
 
-Critter Camp is architected around **5 decoupled core pillars**:
+Critter Camp is architected around **6 decoupled core pillars**:
 
 ```text
 ┌────────────────────────────────────────────────────────────────────────┐
@@ -16,17 +16,20 @@ Critter Camp is architected around **5 decoupled core pillars**:
 │ 1. Core Puzzle Engine   │ Data-driven StageDefinition (Goals + Rules)  │
 │                         │ Multi-solution validation without fixed keys │
 ├─────────────────────────┼──────────────────────────────────────────────┤
-│ 2. Player Identity      │ Persistent Guest UUID ↔ Account Merge        │
+│ 2. 30-Stage Progression │ 6 Chapters / Biomes with rich story lore     │
+│                         │ Handcrafted, verified mathematical solvers   │
+├─────────────────────────┼──────────────────────────────────────────────┤
+│ 3. Anti-Stuck Nudge     │ MascotSpeechBubble (40s inactivity trigger)  │
+│                         │ Progressive hint clues + glowing toolbar     │
+├─────────────────────────┼──────────────────────────────────────────────┤
+│ 4. Player Identity      │ Persistent Guest UUID ↔ Account Merge        │
 │                         │ Zero progress loss on account connection     │
 ├─────────────────────────┼──────────────────────────────────────────────┤
-│ 3. Data & Sync Layer    │ Local-First SharedPreferences + Queue        │
+│ 5. Data & Sync Layer    │ Local-First SharedPreferences + Queue        │
 │                         │ Safe Conflict Merge (MAX stars, MIN moves)   │
 ├─────────────────────────┼──────────────────────────────────────────────┤
-│ 4. Smart Monetization   │ AdPolicyService (Cooldown, Interval, Gap)    │
+│ 6. Smart Monetization   │ AdPolicyService (Cooldown, Interval, Gap)    │
 │                         │ ProgressiveHintService (3-Tier Multi-Clues)  │
-├─────────────────────────┼──────────────────────────────────────────────┤
-│ 5. Shared Backend/Admin │ web/myapp/critter-camp (REST API + SQLite)   │
-│                         │ Web Admin managed Ads & Remote Config        │
 └────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -40,7 +43,7 @@ critter_camp/
 │   ├── main.dart                                 # Flutter entry point (Initializes storage & launches CritterCampApp)
 │   │
 │   ├── app/                                      # Top-level App Configuration
-│   │   ├── app.dart                              # Root Router & Dependency Injection container
+│   │   ├── app.dart                              # Root Router, Title Screen controller & DI container
 │   │   └── theme/                                # Material 3 Design System & Theme Tokens
 │   │       ├── app_colors.dart                   # Curated palette + 8 Habitat colors
 │   │       ├── app_typography.dart               # Plus Jakarta Sans typography scale
@@ -48,6 +51,8 @@ critter_camp/
 │   │       └── app_theme.dart                    # ThemeData configuration
 │   │
 │   ├── core/                                     # Shared Low-Level Components
+│   │   ├── localization/
+│   │   │   └── app_strings.dart                  # Complete English/Thai bilingual dictionary & reactive notifier
 │   │   ├── storage/
 │   │   │   └── local_storage.dart                # Local SharedPreferences & Pending Sync Queue
 │   │   └── widgets/                              # Reusable Design System Widgets
@@ -55,7 +60,8 @@ critter_camp/
 │   │       ├── critter_card.dart                 # Elevated and flat cozy cards
 │   │       ├── critter_avatar.dart               # Character avatar with frame
 │   │       ├── heart_indicator.dart              # 3-Heart lives indicator
-│   │       └── critter_bottom_nav.dart           # Floating 5-tab navigation bar
+│   │       ├── critter_bottom_nav.dart           # Floating 5-tab navigation bar
+│   │       └── mascot_speech_bubble.dart         # Animated Mascot Speech Bubble for Anti-Stuck Nudges
 │   │
 │   ├── data/                                     # Data Layer & Domain Models
 │   │   ├── models/
@@ -75,10 +81,10 @@ critter_camp/
 │   │   │   ├── habitat_region.dart               # HabitatRegion definition & colorblind labels (A..H)
 │   │   │   └── puzzle_move.dart                  # Move history item for Undo support
 │   │   ├── stage/
-│   │   │   ├── stage_definition.dart             # Pure Problem Definition (Size, Board, Goals, Rules)
+│   │   │   ├── stage_definition.dart             # Problem Definition (Size, Board, Chapter, Story Lore)
 │   │   │   ├── game_state.dart                   # Immutable grid state, moves, hints, elapsed time
 │   │   │   └── stages/
-│   │   │       └── stage_catalog.dart            # Catalog of handcrafted stages (Stage 1 to 5+)
+│   │   │       └── stage_catalog.dart            # Complete 30-Stage Adventure Catalog (Stages 1 to 30)
 │   │   ├── goals/                                # Extensible Goals System
 │   │   │   ├── stage_goal.dart                   # Base abstract StageGoal interface
 │   │   │   ├── place_all_critters_goal.dart      # Place N critters goal
@@ -97,272 +103,126 @@ critter_camp/
 │   │   │   ├── universal_stage_validator.dart    # Goals + Rules = Pass/Fail Engine
 │   │   │   └── stage_validation_result.dart      # Pass status, conflict cells, and stars calculation
 │   │   ├── solver/
-│   │   │   └── stage_solver.dart                 # On-the-fly backtracking solver for hints
+│   │   │   └── stage_solver.dart                 # On-the-fly backtracking solver for hints & verification
 │   │   ├── engine/
-│   │   │   └── puzzle_controller.dart            # Gameplay state manager, lives, undo, timer
+│   │   │   └── puzzle_controller.dart            # Board state controller, timer, inactivity tracker
 │   │   └── widgets/
-│   │       ├── puzzle_board_widget.dart          # Dynamic grid rendering with habitat borders
-│   │       ├── puzzle_cell_widget.dart           # Single cell with animated critter / X / conflict
-│   │       └── puzzle_toolbar_widget.dart        # Tool toggles (Critter/X), Undo, Pattern, Hint
+│   │       ├── puzzle_board_widget.dart          # Grid renderer with color zones & thick borders
+│   │       ├── puzzle_cell_widget.dart           # Interactive cell tile
+│   │       └── puzzle_toolbar_widget.dart        # Bottom tools (Place Critter, Mark X, Undo, Hint)
 │   │
-│   ├── services/                                 # Platform & Infrastructure Services
+│   ├── services/                                 # Business & Platform Services
 │   │   ├── api/
-│   │   │   └── api_client.dart                   # HTTP REST Client with offline fallback tolerance
+│   │   │   └── api_client.dart                   # HTTP client for Admin/Cloud API
 │   │   ├── config/
-│   │   │   └── app_config_service.dart           # Remote Ads & Monetization Config from Web Admin
+│   │   │   └── app_config_service.dart           # Remote configuration service & cached storage
 │   │   ├── ads/
-│   │   │   ├── ads_service.dart                  # Centralized Banner, Interstitial, and Rewarded Ads
-│   │   │   └── ad_policy_service.dart            # Interstitial frequency guardrails & grace periods
+│   │   │   ├── ads_service.dart                  # Google AdMob SDK wrapper
+│   │   │   └── ad_policy_service.dart            # Frequency capping & guardrail engine
 │   │   ├── hints/
-│   │   │   └── progressive_hint_service.dart     # 3-Tier Multi-Solution Progressive Hint Engine
+│   │   │   └── progressive_hint_service.dart     # 3-Tier progressive clue generator
 │   │   ├── analytics/
-│   │   │   └── analytics_service.dart            # Telemetry tracker & Reward grant deduplication
+│   │   │   └── analytics_service.dart            # Telemetry tracking & duplicate reward prevention
 │   │   ├── identity/
-│   │   │   └── player_identity_service.dart      # Guest UUID ↔ Authenticated Account merge
-│   │   └── sync/
-│   │       └── cloud_sync_service.dart           # Local-first save + Asynchronous cloud sync
+│   │   │   └── player_identity_service.dart      # Guest identity & account merge service
+│   │   ├── sync/
+│   │   │   └── cloud_sync_service.dart           # Local-first storage & async cloud sync engine
+│   │   └── audio/
+│   │       └── audio_service.dart                # Sound effects & volume controller
 │   │
-│   └── features/                                 # UI Screens (16 Screens Prototype)
-│       ├── onboarding/                           # First Launch & Welcome flow
-│       ├── home/                                 # Camp Hub & Continue Playing
-│       ├── journey/                              # Journey Map with Biomes & Stages
-│       ├── gameplay/                             # Active Puzzle & Level Complete result
-│       ├── collection/                           # Unlocked Critters showcase
-│       ├── daily/                                # Daily Challenge grove
-│       ├── tutorial/                             # Interactive rule guide
-│       ├── leaderboard/                          # Camper rankings
-│       ├── profile/                              # Camper Profile & Account Connect
-│       └── settings/                             # Audio, Accessibility & Cloud Sync status
+│   └── features/                                 # Presentation Layer (8 Full Screens + Dialogs)
+│       ├── onboarding/
+│       │   └── presentation/first_launch_screen.dart # Dynamic Title Screen with Continue button
+│       ├── home/
+│       │   └── presentation/home_screen.dart     # Home hub with full-bleed campfire banner
+│       ├── journey/
+│       │   └── presentation/journey_screen.dart  # 30-stage trail map with 6 chapter milestones
+│       ├── gameplay/
+│       │   ├── presentation/gameplay_screen.dart # Active puzzle board with story dialogue & speech bubble
+│       │   └── dialogs/
+│       │       ├── oops_dialog.dart              # Rule conflict explanation modal
+│       │       └── stage_complete_dialog.dart    # Victory modal with star breakdown & double rewards
+│       ├── collection/
+│       │   ├── presentation/collection_screen.dart # Critter compendium
+│       │   └── dialogs/critter_detail_modal.dart # Critter bio, favorite snack, and perk modal
+│       ├── daily/
+│       │   └── presentation/daily_challenge_screen.dart # Daily puzzle banner & 7-day streak calendar
+│       ├── leaderboard/
+│       │   └── presentation/leaderboard_screen.dart # Daily/Weekly/Global leaderboards
+│       ├── tutorial/
+│       │   └── presentation/tutorial_screen.dart # 3 Golden rules interactive guide
+│       └── settings/
+│           └── presentation/settings_screen.dart # Audio volume, language switch, cloud sync
 │
-├── web/myapp/critter-camp/                       # Shared Platform Backend & Database
-│   ├── server.js                                 # Zero-dependency Node.js REST API Server (:8097)
-│   ├── package.json                              # Scripts & metadata
-│   ├── database/
-│   │   ├── schema.sql                            # Production SQL Schema (players, progress, config)
-│   │   ├── db.js                                 # Database controller with safe conflict merge
-│   │   └── seed_admob.js                         # Google AdMob Test & Production Seeder
-│   └── routes/
-│       ├── config_routes.js                      # GET/POST /api/v1/config/critter-camp
-│       ├── player_routes.js                      # POST /api/v1/players/identity & /upgrade
-│       └── sync_routes.js                        # GET/POST /api/v1/sync/progress
-│
-└── test/                                         # Comprehensive Automated Unit Tests (37 Tests)
-    ├── universal_stage_validator_test.dart       # Multi-solution pass verification
-    ├── stage_lifecycle_test.dart                 # Reset, controller, and solver tests
-    ├── puzzle_controller_test.dart               # Board moves and tool selection tests
-    ├── puzzle_validator_test.dart                # Legacy rule validation compatibility
-    ├── player_identity_service_test.dart         # Guest UUID & Lossless upgrade tests
-    ├── cloud_sync_service_test.dart              # Local-first & Safe conflict merge tests
-    ├── app_config_service_test.dart              # Remote config caching & Ads tests
-    ├── ad_policy_service_test.dart               # Interstitial cooldown & grace period tests
-    ├── progressive_hint_service_test.dart        # 3-Tier multi-clue hints tests
-    └── analytics_service_test.dart               # Telemetry tracking & deduplication tests
+├── tool/
+│   └── stage_generator.dart                      # Automated mathematical solver & stage generator
+├── assets/
+│   ├── images/                                   # High-res art assets (bg_campsite, bg_gameplay, app_icon)
+│   └── audio/                                    # Tactical audio SFX (pop.wav, victory.wav)
+└── test/                                         # 42 Comprehensive Unit & Integration Tests
 ```
 
 ---
 
-## 3. Core Puzzle Game Engine Logic
+## 3. 30-Stage Adventure & 6 Story Chapters
 
-### 3.1 The Multi-Solution Philosophy
+The adventure is divided into **6 thematic Chapters / Biomes**, each featuring a character guide with dedicated story dialogues in English and Thai:
 
-> **Stage = Problem Definition (Board + Goals + Rules)**  
-> ❌ **NO `expectedSolution` or hardcoded placement matrices are stored in `StageDefinition`.**
+| Chapter | Biome Name | Stages | Board Size | Mascot Guide | Story Theme |
+| :---: | :--- | :---: | :---: | :---: | :--- |
+| **1** | 🏕️ **Whispering Meadow** | **1 – 5** | 4x4 $\rightarrow$ 5x5 | 🦊 **Hazel** | Setting up camp & gathering first supplies |
+| **2** | 🌲 **Pine Haven Trail** | **6 – 10** | 5x5 $\rightarrow$ 6x6 | 🐿️ **Finn** | Exploring ancient pine trees & pinecone stashes |
+| **3** | 🪻 **Lavender Valley** | **11 – 15** | 6x6 | 🦔 **Pip** | Harvesting wild herbs & brewing evening tea |
+| **4** | 🌊 **Willow Brook** | **16 – 20** | 6x6 $\rightarrow$ 7x7 | 🦦 **River** | Hopping across stepping stones & waterfalls |
+| **5** | 🍂 **Autumn Hollow** | **21 – 25** | 7x7 | 🦌 **Fawn** | Golden leaf trails & harvest pie feasts |
+| **6** | 🌌 **Starry Summit** | **26 – 30** | 7x7 $\rightarrow$ 8x8 | 🦉 **Luna** | Starlit mountain peak, meteor showers & Aurora |
 
-Validation is a pure mathematical function:
-
-$$\text{Validation Result} = (\text{All Goals Achieved}) \land (\text{Zero Blocking Rule Violations})$$
-
-### 3.2 Goals System (`lib/game/goals/`)
-
-Every goal implements [`StageGoal`](file:///Users/kanittamac/web/critter_camp/lib/game/goals/stage_goal.dart):
+### Story Lore Representation in Code (`StageDefinition`):
 ```dart
-abstract class StageGoal {
-  String get id;
-  String get title;
-  String get description;
-  bool isAchieved(GameState state, StageDefinition stage);
+class StageDefinition {
+  final int stageNumber;
+  final String name;
+  final String biomeName;
+  final int size;
+  final int chapterNumber;
+  final String chapterName;
+  final String storySpeaker;
+  final String speakerEmoji;
+  final String storyTextEn;
+  final String storyTextTh;
+  final List<List<int>> habitatGrid;
+  final List<BonusObjective> bonusObjectives;
+  final String rewardCritterId;
+  final int baseAcornsReward;
 }
 ```
 
-* **`PlaceAllCrittersGoal(requiredCritters)`**: Checks `state.critterCount == requiredCritters`.
-* **`HabitatCoverageGoal()`**: Checks that every unique `HabitatRegion` in `stage.habitatGrid` contains at least one critter.
+---
 
-### 3.3 Rules System (`lib/game/rules/`)
+## 4. Anti-Stuck Mascot Speech Bubble System
 
-Every rule implements [`StageRule`](file:///Users/kanittamac/web/critter_camp/lib/game/rules/stage_rule.dart):
-```dart
-abstract class StageRule {
-  String get id;
-  String get name;
-  String get violationMessage;
-  RuleEvaluation evaluate(GameState state, StageDefinition stage);
-}
-```
+To avoid player frustration without exerting time pressure, the game tracks player interaction timestamps in `PuzzleController`:
 
-* **`NoAdjacentCrittersRule()`**: Evaluates 8-neighbor adjacency:
-  $$|r_1 - r_2| \le 1 \land |c_1 - c_2| \le 1 \implies \text{Conflict}$$
-* **`MaxPerRowRule(maxCritters: 1)`**: Prevents $>1$ critter per row.
-* **`MaxPerColumnRule(maxCritters: 1)`**: Prevents $>1$ critter per column.
-* **`MaxPerHabitatRule(maxCritters: 1)`**: Prevents $>1$ critter in the same habitat region.
-
-### 3.4 Dynamic Solver (`StageSolver`)
-
-[`StageSolver`](file:///Users/kanittamac/web/critter_camp/lib/game/solver/stage_solver.dart) uses recursive constraint-satisfaction backtracking with forward pruning to:
-1. Verify if any handcrafted stage is mathematically solvable.
-2. Find all valid solutions for a stage (`findAllSolutions()`).
-3. Calculate real-time valid moves for the **Hint Engine** from current board state without stored answers.
+1. **Inactivity Detection**: If `_secondsSinceLastInteraction >= 35` seconds without a move, `shouldShowHintNudge` becomes `true`.
+2. **Visual Presentation**: `MascotSpeechBubble` renders above the toolbar with the chapter mascot's emoji and a gentle message:
+   - 🇹🇭: *"ติดตรงไหน ให้ผมช่วยใบ้ไหมครับ? 💡"*
+   - 🇬🇧: *"Need a hand? Tap Hint for a friendly clue! 💡"*
+3. **Auto-Dismiss**: Tapping any cell on the board, selecting a tool, undoing, or taking the hint resets the inactivity counter immediately.
 
 ---
 
-## 4. How to Add a New Stage (Step-by-Step Recipe)
+## 5. Universal Localization Engine (`AppStrings`)
 
-To create a new stage (e.g. Stage 6: *Emerald Canopy*), open [`lib/game/stage/stages/stage_catalog.dart`](file:///Users/kanittamac/web/critter_camp/lib/game/stage/stages/stage_catalog.dart) and define:
-
-```dart
-static final StageDefinition stage6 = StageDefinition(
-  stageNumber: 6,
-  name: 'Emerald Canopy',
-  biomeName: 'Ancient Hollow',
-  description: 'Place 6 critters into 6 habitat canopies without touching.',
-  size: 6,
-  requiredCritters: 6,
-  baseAcornsReward: 25,
-  rewardCritterId: 'moss',
-  habitatGrid: [
-    [0, 0, 1, 1, 2, 2],
-    [0, 0, 1, 1, 2, 2],
-    [3, 3, 1, 1, 4, 4],
-    [3, 3, 5, 5, 4, 4],
-    [3, 3, 5, 5, 4, 4],
-    [5, 5, 5, 5, 4, 4],
-  ],
-  goals: const [
-    PlaceAllCrittersGoal(requiredCritters: 6),
-    HabitatCoverageGoal(),
-  ],
-  rules: const [
-    NoAdjacentCrittersRule(),
-    MaxPerRowRule(),
-    MaxPerColumnRule(),
-    MaxPerHabitatRule(),
-  ],
-  bonusObjectives: const [
-    NoHintsBonus(),
-    MoveEfficiencyBonus(maxMoves: 12),
-  ],
-);
-```
-
-Then register `stage6` inside `StageCatalog.allStages`:
-```dart
-static List<StageDefinition> get allStages => [stage1, stage2, stage3, stage4, stage5, stage6];
-```
+Localization uses a reactive `ValueNotifier<String> AppStrings.currentLocale`:
+* Switching language (`AppStrings.currentLocale.value = 'th'` or `'en'`) immediately rebuilds the `MaterialApp` widget tree.
+* Helper getters like `AppStrings.isThai` and `AppStrings.playCurrentStage` provide clean, zero-boilerplate string access across all 8 screens and modal dialogs.
 
 ---
 
-## 5. How to Create a New Custom Rule
+## 6. How to Add a New Stage Recipe
 
-To create a custom rule (e.g. `MustTouchBorderRule`):
-
-1. Create `lib/game/rules/must_touch_border_rule.dart`:
-```dart
-import '../stage/game_state.dart';
-import '../stage/stage_definition.dart';
-import '../models/puzzle_cell_state.dart';
-import 'stage_rule.dart';
-
-class MustTouchBorderRule extends StageRule {
-  const MustTouchBorderRule({
-    super.id = 'must_touch_border',
-    super.name = 'Border Campers',
-    super.violationMessage = 'Critters must stay near the border of the forest!',
-  });
-
-  @override
-  RuleEvaluation evaluate(GameState state, StageDefinition stage) {
-    final Set<CellPosition> conflicts = {};
-    for (final pos in state.placedCritterPositions) {
-      final bool onBorder = pos.row == 0 || pos.row == stage.size - 1 || pos.col == 0 || pos.col == stage.size - 1;
-      if (!onBorder) {
-        conflicts.add(pos);
-      }
-    }
-    return RuleEvaluation(hasViolation: conflicts.isNotEmpty, conflictingCells: conflicts);
-  }
-}
-```
-2. Attach it to any `StageDefinition.rules` list!
-
----
-
-## 6. Smart Monetization & Ad Guardrails Architecture
-
-### 6.1 Interstitial Guardrails (`AdPolicyService`)
-
-```text
-               Stage Completed
-                     │
-                     ▼
-          AdPolicyService.canShowInterstitial()
-                     │
-    ┌────────────────┴────────────────┐
-    ▼                                 ▼
-[ BLOCKED ]                       [ ALLOWED ]
-• Stage < 4 (Early protection)    • Stage >= 4
-• Interval not reached            • Interval reached (e.g. Every 3 stages)
-• Cooldown < 180s                 • Cooldown >= 180s
-• Rewarded Grace Period < 90s     • Rewarded Grace Period >= 90s
-```
-
-### 6.2 Progressive Hint Engine (`ProgressiveHintService`)
-
-| Hint Tier | Type | Behavior | Cost |
-|:---|:---|:---|:---|
-| **Tier 1** | **Observation** | Identifies unfulfilled habitat zone or constrained row | **FREE** (First hint) |
-| **Tier 2** | **Constraint Deduction** | Reminds player of 8-neighbor diagonal rules | **Rewarded Ad** |
-| **Tier 3** | **Dynamic Guidance** | Uses `StageSolver` on-the-fly to calculate a safe placement | **Rewarded Ad** |
-
----
-
-## 7. Player Identity, Database & Cloud Sync
-
-### 7.1 Play-First Identity Flow
-
-```text
-Fresh Install → Persistent Guest UUID (LocalStorage) → Play Immediately
-                                                            │
-                                  Later: Connect Account (Email/Google/Apple)
-                                                            │
-                                                            ▼
-                                        Lossless Account Upgrade Merge
-                                        (All Stages, Stars & Acorns Preserved)
-```
-
-### 7.2 Safe Conflict Merge Rules
-
-When synchronizing local and cloud progress:
-* $\text{completed} = \text{local.completed} \lor \text{cloud.completed}$
-* $\text{stars} = \max(\text{local.stars}, \text{cloud.stars})$
-* $\text{bestMoves} = \min(\text{validLocal.bestMoves}, \text{validCloud.bestMoves})$
-* $\text{totalAcorns} = \max(\text{local.acorns}, \text{cloud.acorns})$
-
----
-
-## 8. Automated Testing & Verification Commands
-
-```bash
-# 1. Run full Flutter unit test suite (37 tests)
-flutter test
-
-# 2. Run Dart static analyzer (0 warnings target)
-flutter analyze
-
-# 3. Build Web release bundle
-flutter build web --release
-
-# 4. Start local Backend Server
-node web/myapp/critter-camp/server.js
-
-# 5. Run AdMob seed & verify test script
-node web/myapp/critter-camp/test_admob_config.js
-```
+To create a new handcrafted stage:
+1. Define the $N \times N$ `habitatGrid` ensuring each region has ID $0 \dots N-1$.
+2. Run `dart run tool/stage_generator.dart` or `StageSolver.findAllSolutions(stage)` in unit tests to mathematically verify that at least one valid solution exists.
+3. Add the stage definition to `StageCatalog.allStages`.
+4. Run `flutter test` to ensure all 42 automated tests pass.
