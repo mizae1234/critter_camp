@@ -50,7 +50,7 @@ class PuzzleBoardWidget extends StatelessWidget {
                   final int r = index ~/ n;
                   final int c = index % n;
                   final pos = CellPosition(r, c);
-                  final habitat = controller.level.getHabitatAt(r, c);
+                  final habitat = controller.stage.getHabitatAt(r, c);
 
                   return PuzzleCellWidget(
                     row: r,

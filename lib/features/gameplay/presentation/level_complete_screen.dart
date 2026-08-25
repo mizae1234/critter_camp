@@ -6,29 +6,36 @@ import '../../../core/widgets/critter_button.dart';
 import '../../../core/widgets/critter_card.dart';
 import '../../../core/widgets/critter_avatar.dart';
 import '../../../data/models/critter_model.dart';
+import '../../../game/validator/stage_validation_result.dart';
 
 class LevelCompleteScreen extends StatelessWidget {
-  final int levelNumber;
-  final int stars;
+  final int stageNumber;
+  final String stageName;
+  final StageValidationResult validationResult;
   final int acornsEarned;
   final String solveTime;
   final CritterModel unlockedCritter;
-  final VoidCallback onNextPuzzle;
+  final VoidCallback onNextStage;
+  final VoidCallback onReplay;
   final VoidCallback onBackHome;
 
   const LevelCompleteScreen({
     super.key,
-    required this.levelNumber,
-    this.stars = 3,
+    required this.stageNumber,
+    required this.stageName,
+    required this.validationResult,
     this.acornsEarned = 15,
     required this.solveTime,
     required this.unlockedCritter,
-    required this.onNextPuzzle,
+    required this.onNextStage,
+    required this.onReplay,
     required this.onBackHome,
   });
 
   @override
   Widget build(BuildContext context) {
+    final int stars = validationResult.starsEarned.clamp(1, 3);
+
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -40,8 +47,8 @@ class LevelCompleteScreen extends StatelessWidget {
 
               // Celebration Icon & Badge
               Container(
-                width: 100,
-                height: 100,
+                width: 90,
+                height: 90,
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
                     colors: [Color(0xFFFBBF24), Color(0xFFD97706)],
@@ -59,30 +66,30 @@ class LevelCompleteScreen extends StatelessWidget {
                 ),
                 child: const Center(
                   child: Icon(
-                    Icons.emoji_events_rounded,
-                    size: 54,
+                    Icons.auto_awesome_rounded,
+                    size: 48,
                     color: Colors.white,
                   ),
                 ),
               ),
 
-              const SizedBox(height: AppSpacing.lg),
+              const SizedBox(height: AppSpacing.md),
 
               Text(
-                'Perfect!',
+                'Great Solution!',
                 style: AppTypography.displayMedium.copyWith(color: AppColors.primaryDark),
               ),
 
               const SizedBox(height: AppSpacing.xs),
 
               Text(
-                'Level $levelNumber Complete',
+                'Stage $stageNumber: $stageName Solved',
                 style: AppTypography.bodyMedium,
               ),
 
               const SizedBox(height: AppSpacing.md),
 
-              // 3 Stars Row
+              // Stars Row (1 to 3 Stars earned)
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(3, (index) {
@@ -91,40 +98,63 @@ class LevelCompleteScreen extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 4.0),
                     child: Icon(
                       Icons.star_rounded,
-                      size: 36,
+                      size: 40,
                       color: isLit ? const Color(0xFFF59E0B) : AppColors.outlineVariant,
                     ),
                   );
                 }),
               ),
 
-              const SizedBox(height: AppSpacing.lg),
+              const SizedBox(height: AppSpacing.md),
 
-              // Stats Row
+              // Performance Stats Row
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   _buildStatItem('Time', solveTime),
-                  const SizedBox(width: 24),
+                  const SizedBox(width: 20),
                   _buildStatItem('Reward', '+$acornsEarned 🌰'),
-                  const SizedBox(width: 24),
-                  _buildStatItem('Streak', '+1 Day 🔥'),
+                  const SizedBox(width: 20),
+                  _buildStatItem('Stars', '$stars / 3 ⭐'),
                 ],
               ),
 
-              const SizedBox(height: AppSpacing.xl),
+              const SizedBox(height: AppSpacing.lg),
+
+              // Bonus Objectives Completed
+              if (validationResult.bonusObjectivesCompleted.isNotEmpty)
+                CritterCard(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  backgroundColor: AppColors.primaryContainer.withValues(alpha: 0.3),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.stars_rounded, color: AppColors.accentGold, size: 20),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          validationResult.bonusObjectivesCompleted.map((b) => b.title).join(' • '),
+                          style: AppTypography.labelSmall.copyWith(
+                            color: AppColors.primaryDark,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+              const SizedBox(height: AppSpacing.md),
 
               // Unlocked Critter Showcase Card
               CritterCard(
-                backgroundColor: AppColors.primaryContainer.withValues(alpha: 0.35),
-                borderColor: AppColors.primary.withValues(alpha: 0.3),
+                backgroundColor: AppColors.surfaceContainerLow,
                 borderRadius: AppSpacing.radiusLg,
                 padding: const EdgeInsets.all(AppSpacing.md),
                 child: Row(
                   children: [
                     CritterAvatar(
                       emoji: unlockedCritter.emoji,
-                      size: 60,
+                      size: 54,
                       isUnlocked: true,
                     ),
                     const SizedBox(width: 14),
@@ -139,7 +169,7 @@ class LevelCompleteScreen extends StatelessWidget {
                               borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
                             ),
                             child: Text(
-                              'NEW CRITTER UNLOCKED!',
+                              'COZY CAMPER',
                               style: AppTypography.labelSmall.copyWith(color: Colors.white, fontSize: 9),
                             ),
                           ),
@@ -161,21 +191,36 @@ class LevelCompleteScreen extends StatelessWidget {
 
               const Spacer(flex: 2),
 
-              // CTA Buttons
+              // Action CTAs
               CritterButton(
-                text: 'Next Puzzle',
+                text: 'Next Stage',
                 isFullWidth: true,
                 icon: Icons.arrow_forward_rounded,
-                onPressed: onNextPuzzle,
+                onPressed: onNextStage,
               ),
 
               const SizedBox(height: AppSpacing.sm),
 
-              CritterButton(
-                text: 'Back Home',
-                variant: CritterButtonVariant.ghost,
-                isFullWidth: true,
-                onPressed: onBackHome,
+              Row(
+                children: [
+                  Expanded(
+                    child: CritterButton(
+                      text: 'Replay',
+                      variant: CritterButtonVariant.outline,
+                      icon: Icons.replay_rounded,
+                      onPressed: onReplay,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: CritterButton(
+                      text: 'Map',
+                      variant: CritterButtonVariant.ghost,
+                      icon: Icons.map_rounded,
+                      onPressed: onBackHome,
+                    ),
+                  ),
+                ],
               ),
 
               const SizedBox(height: AppSpacing.lg),

@@ -8,6 +8,7 @@ import '../../../core/widgets/streak_badge.dart';
 import '../../../core/widgets/critter_avatar.dart';
 import '../../../data/models/critter_model.dart';
 import '../../../data/models/user_progress.dart';
+import '../../../game/stage/stages/stage_catalog.dart';
 
 class HomeScreen extends StatelessWidget {
   final UserProgress userProgress;
@@ -29,6 +30,8 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currentStage = StageCatalog.getByNumber(userProgress.currentLevel);
+
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -96,7 +99,7 @@ class HomeScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
                           ),
                           child: Text(
-                            'Forest Trail • 6x6',
+                            '${currentStage.biomeName} • ${currentStage.size}x${currentStage.size}',
                             style: AppTypography.labelSmall.copyWith(color: AppColors.primaryContainer),
                           ),
                         ),
@@ -110,12 +113,12 @@ class HomeScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: AppSpacing.sm),
                     Text(
-                      'Level ${userProgress.currentLevel}: Sunlit Meadow is waiting for you.',
+                      'Stage ${currentStage.stageNumber}: ${currentStage.name} is waiting for you.',
                       style: AppTypography.bodyMedium.copyWith(color: Colors.white70),
                     ),
                     const SizedBox(height: AppSpacing.lg),
                     CritterButton(
-                      text: 'Continue Level ${userProgress.currentLevel}',
+                      text: 'Play Stage ${currentStage.stageNumber}',
                       variant: CritterButtonVariant.secondary,
                       isFullWidth: true,
                       icon: Icons.play_arrow_rounded,
@@ -149,9 +152,9 @@ class HomeScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Daily Puzzle • 7x7', style: AppTypography.labelMedium.copyWith(color: AppColors.accentGold)),
+                          Text('Daily Puzzle • 6x6', style: AppTypography.labelMedium.copyWith(color: AppColors.accentGold)),
                           const SizedBox(height: 2),
-                          Text('The Willow Brook', style: AppTypography.titleMedium),
+                          Text('River Bend', style: AppTypography.titleMedium),
                           Text('+25 Acorns reward', style: AppTypography.labelSmall.copyWith(color: AppColors.outline)),
                         ],
                       ),

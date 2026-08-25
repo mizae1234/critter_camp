@@ -4,21 +4,22 @@ import '../../../app/theme/app_typography.dart';
 import '../../../app/theme/app_spacing.dart';
 import '../../../core/widgets/heart_indicator.dart';
 import '../../../game/engine/puzzle_controller.dart';
-import '../../../game/models/puzzle_board_data.dart';
+import '../../../game/stage/stage_definition.dart';
+import '../../../game/validator/stage_validation_result.dart';
 import '../../../game/widgets/puzzle_board_widget.dart';
 import '../../../game/widgets/puzzle_toolbar_widget.dart';
 import '../dialogs/oops_dialog.dart';
 
 class GameplayScreen extends StatefulWidget {
-  final PuzzleLevelData level;
+  final StageDefinition stage;
   final VoidCallback onBack;
-  final VoidCallback onLevelCompleted;
+  final void Function(StageValidationResult result) onStageCompleted;
 
   const GameplayScreen({
     super.key,
-    required this.level,
+    required this.stage,
     required this.onBack,
-    required this.onLevelCompleted,
+    required this.onStageCompleted,
   });
 
   @override
@@ -31,10 +32,10 @@ class _GameplayScreenState extends State<GameplayScreen> {
   @override
   void initState() {
     super.initState();
-    _controller = PuzzleController(level: widget.level);
+    _controller = PuzzleController(stage: widget.stage);
 
-    _controller.onLevelCompleted = () {
-      widget.onLevelCompleted();
+    _controller.onStageCompleted = (result) {
+      widget.onStageCompleted(result);
     };
 
     _controller.onWrongMove = () {
@@ -82,7 +83,7 @@ class _GameplayScreenState extends State<GameplayScreen> {
             ],
           ),
           content: const Text(
-            'You made 3 mistakes in this grove. Would you like to try this level again from the start?',
+            'You made 3 mistakes in this grove. Would you like to try this stage again from the start?',
           ),
           actions: [
             TextButton(
@@ -90,12 +91,12 @@ class _GameplayScreenState extends State<GameplayScreen> {
                 Navigator.of(context).pop();
                 widget.onBack();
               },
-              child: const Text('Quit Level'),
+              child: const Text('Quit Stage'),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                _controller.restartLevel();
+                _controller.resetStage();
               },
               child: const Text('Try Again'),
             ),
@@ -141,11 +142,11 @@ class _GameplayScreenState extends State<GameplayScreen> {
                       Column(
                         children: [
                           Text(
-                            'Level ${widget.level.levelNumber}',
+                            'Stage ${widget.stage.stageNumber}: ${widget.stage.name}',
                             style: AppTypography.titleLarge,
                           ),
                           Text(
-                            '${widget.level.biomeName} • ${widget.level.size}x${widget.level.size}',
+                            '${widget.stage.biomeName} • ${widget.stage.size}x${widget.stage.size}',
                             style: AppTypography.labelSmall.copyWith(color: AppColors.outline),
                           ),
                         ],
@@ -181,7 +182,7 @@ class _GameplayScreenState extends State<GameplayScreen> {
               },
             ),
 
-            // Rules Reminder Banner
+            // Goals & Rules Reminder Banner
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -196,7 +197,7 @@ class _GameplayScreenState extends State<GameplayScreen> {
                   const SizedBox(width: 6),
                   Flexible(
                     child: Text(
-                      '1 critter per habitat & row/col • No touching (even diagonally)',
+                      widget.stage.description,
                       style: AppTypography.labelSmall.copyWith(color: AppColors.primaryDark, fontSize: 11),
                       textAlign: TextAlign.center,
                     ),

@@ -8,8 +8,9 @@ import '../data/repositories/collection_repository.dart';
 import '../data/repositories/progress_repository.dart';
 import '../data/repositories/leaderboard_repository.dart';
 import '../data/repositories/auth_repository.dart';
-import '../game/levels/puzzle_level_catalog.dart';
-import '../game/models/puzzle_board_data.dart';
+import '../game/stage/stage_definition.dart';
+import '../game/stage/stages/stage_catalog.dart';
+import '../game/validator/stage_validation_result.dart';
 import '../features/onboarding/presentation/first_launch_screen.dart';
 import '../features/home/presentation/home_screen.dart';
 import '../features/journey/presentation/journey_screen.dart';
@@ -49,14 +50,15 @@ class _CritterCampAppState extends State<CritterCampApp> {
 
   AppView _currentView = AppView.mainTabs;
   CritterNavTab _currentTab = CritterNavTab.home;
-  PuzzleLevelData _activeLevel = PuzzleLevelCatalog.level18;
+  StageDefinition _activeStage = StageCatalog.stage1;
+  StageValidationResult _lastValidationResult = StageValidationResult.initial;
   
   UserProgress _userProgress = const UserProgress(
-    currentLevel: 18,
-    completedLevels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
-    totalStars: 48,
-    acorns: 1420,
-    streakDays: 14,
+    currentLevel: 1,
+    completedLevels: [],
+    totalStars: 0,
+    acorns: 50,
+    streakDays: 1,
   );
 
   List<CritterModel> _critters = [];
@@ -82,17 +84,24 @@ class _CritterCampAppState extends State<CritterCampApp> {
     });
   }
 
-  void _startLevel(PuzzleLevelData level) {
+  void _startStage(StageDefinition stage) {
     setState(() {
-      _activeLevel = level;
+      _activeStage = stage;
       _currentView = AppView.gameplay;
     });
   }
 
-  Future<void> _handleLevelWon() async {
+  Future<void> _handleStageWon(StageValidationResult result) async {
+    _lastValidationResult = result;
+    final int starsEarned = result.starsEarned;
+
     // Reward progress
-    await _progressRepo.completeLevel(_activeLevel.levelNumber, 3, 15);
-    await _collectionRepo.unlockCritter(_activeLevel.rewardCritterId);
+    await _progressRepo.completeLevel(
+      _activeStage.stageNumber,
+      starsEarned,
+      _activeStage.baseAcornsReward,
+    );
+    await _collectionRepo.unlockCritter(_activeStage.rewardCritterId);
     await _loadAppState();
 
     setState(() {
@@ -145,23 +154,29 @@ class _CritterCampAppState extends State<CritterCampApp> {
 
       case AppView.gameplay:
         return GameplayScreen(
-          level: _activeLevel,
+          stage: _activeStage,
           onBack: () => setState(() => _currentView = AppView.mainTabs),
-          onLevelCompleted: _handleLevelWon,
+          onStageCompleted: _handleStageWon,
         );
 
       case AppView.levelComplete:
         final unlocked = _critters.firstWhere(
-          (c) => c.id == _activeLevel.rewardCritterId,
+          (c) => c.id == _activeStage.rewardCritterId,
           orElse: () => _critters.first,
         );
         return LevelCompleteScreen(
-          levelNumber: _activeLevel.levelNumber,
-          solveTime: '1m 24s',
+          stageNumber: _activeStage.stageNumber,
+          stageName: _activeStage.name,
+          validationResult: _lastValidationResult,
+          acornsEarned: _activeStage.baseAcornsReward,
+          solveTime: '1m 15s',
           unlockedCritter: unlocked,
-          onNextPuzzle: () {
-            final nextLvl = PuzzleLevelCatalog.getByNumber(_activeLevel.levelNumber + 1);
-            _startLevel(nextLvl);
+          onNextStage: () {
+            final nextStage = StageCatalog.getByNumber(_activeStage.stageNumber + 1);
+            _startStage(nextStage);
+          },
+          onReplay: () {
+            _startStage(_activeStage);
           },
           onBackHome: () {
             setState(() {
@@ -188,8 +203,8 @@ class _CritterCampAppState extends State<CritterCampApp> {
         return HomeScreen(
           userProgress: _userProgress,
           recentCritters: _critters,
-          onContinueLevel: () => _startLevel(PuzzleLevelCatalog.getByNumber(_userProgress.currentLevel)),
-          onPlayDaily: () => _startLevel(PuzzleLevelCatalog.daily7x7),
+          onContinueLevel: () => _startStage(StageCatalog.getByNumber(_userProgress.currentLevel)),
+          onPlayDaily: () => _startStage(StageCatalog.stage5),
           onSelectCritter: (c) => setState(() => _currentTab = CritterNavTab.collection),
           onOpenSettings: () => setState(() => _currentView = AppView.settings),
         );
@@ -197,12 +212,12 @@ class _CritterCampAppState extends State<CritterCampApp> {
       case CritterNavTab.journey:
         return JourneyScreen(
           userProgress: _userProgress,
-          onSelectLevel: (lvl) => _startLevel(PuzzleLevelCatalog.getByNumber(lvl)),
+          onSelectLevel: (lvl) => _startStage(StageCatalog.getByNumber(lvl)),
         );
 
       case CritterNavTab.daily:
         return DailyChallengeScreen(
-          onPlayDaily: () => _startLevel(PuzzleLevelCatalog.daily7x7),
+          onPlayDaily: () => _startStage(StageCatalog.stage5),
         );
 
       case CritterNavTab.collection:

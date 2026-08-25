@@ -1,12 +1,13 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:critter_camp/game/models/puzzle_cell_state.dart';
-import 'package:critter_camp/game/levels/puzzle_level_catalog.dart';
+import 'package:critter_camp/game/stage/stages/stage_catalog.dart';
 import 'package:critter_camp/game/engine/puzzle_controller.dart';
+import 'package:critter_camp/game/solver/stage_solver.dart';
 
 void main() {
   group('PuzzleController Tests', () {
     test('Initializes with empty grid and 3 lives', () {
-      final controller = PuzzleController(level: PuzzleLevelCatalog.level18);
+      final controller = PuzzleController(stage: StageCatalog.stage4);
       expect(controller.size, 6);
       expect(controller.lives, 3);
       expect(controller.placedCrittersCount, 0);
@@ -16,7 +17,7 @@ void main() {
     });
 
     test('Tapping cell with placeCritter tool toggles critter', () {
-      final controller = PuzzleController(level: PuzzleLevelCatalog.level18);
+      final controller = PuzzleController(stage: StageCatalog.stage4);
       controller.handleCellTap(0, 2);
       expect(controller.grid[0][2], CellContent.critter);
       expect(controller.placedCrittersCount, 1);
@@ -28,7 +29,7 @@ void main() {
     });
 
     test('Undo reverts last move', () {
-      final controller = PuzzleController(level: PuzzleLevelCatalog.level18);
+      final controller = PuzzleController(stage: StageCatalog.stage4);
       controller.handleCellTap(0, 2);
       expect(controller.grid[0][2], CellContent.critter);
 
@@ -36,8 +37,8 @@ void main() {
       expect(controller.grid[0][2], CellContent.empty);
     });
 
-    test('Hint places solution piece', () {
-      final controller = PuzzleController(level: PuzzleLevelCatalog.level18);
+    test('Hint places valid piece dynamically', () {
+      final controller = PuzzleController(stage: StageCatalog.stage4);
       expect(controller.hintsRemaining, 3);
 
       final used = controller.useHint();
@@ -46,12 +47,15 @@ void main() {
       expect(controller.placedCrittersCount, 1);
     });
 
-    test('Placing full solution triggers onLevelCompleted callback', () {
-      final controller = PuzzleController(level: PuzzleLevelCatalog.level18);
-      bool won = false;
-      controller.onLevelCompleted = () => won = true;
+    test('Placing full solution triggers onStageCompleted callback', () {
+      final controller = PuzzleController(stage: StageCatalog.stage4);
+      final solution = StageSolver.findSolution(StageCatalog.stage4);
+      expect(solution, isNotNull);
 
-      for (final pos in controller.level.solution) {
+      bool won = false;
+      controller.onStageCompleted = (res) => won = true;
+
+      for (final pos in solution!) {
         controller.handleCellTap(pos.row, pos.col);
       }
 

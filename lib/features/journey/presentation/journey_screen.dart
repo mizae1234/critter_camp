@@ -3,6 +3,7 @@ import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_typography.dart';
 import '../../../app/theme/app_spacing.dart';
 import '../../../data/models/user_progress.dart';
+import '../../../game/stage/stages/stage_catalog.dart';
 
 class JourneyScreen extends StatelessWidget {
   final UserProgress userProgress;
@@ -16,6 +17,9 @@ class JourneyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final stages = StageCatalog.allStages;
+    final int completedCount = stages.where((s) => userProgress.isLevelCompleted(s.stageNumber)).length;
+
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -35,7 +39,7 @@ class JourneyScreen extends StatelessWidget {
                         style: AppTypography.headlineMedium.copyWith(color: AppColors.primaryDark),
                       ),
                       Text(
-                        'Biome 1 • 17/25 Levels Cleared',
+                        'Biome 1 • $completedCount/${stages.length} Stages Cleared',
                         style: AppTypography.labelSmall.copyWith(color: AppColors.outline),
                       ),
                     ],
@@ -71,28 +75,30 @@ class JourneyScreen extends StatelessWidget {
             Expanded(
               child: ListView.builder(
                 padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
-                reverse: true, // Level 1 at bottom, ascending to Level 25
-                itemCount: 25,
+                reverse: true, // Stage 1 at bottom, ascending to Stage 5
+                itemCount: stages.length,
                 itemBuilder: (context, index) {
-                  final int levelNum = index + 1;
-                  final bool isCompleted = userProgress.isLevelCompleted(levelNum);
-                  final bool isCurrent = levelNum == userProgress.currentLevel;
-                  final bool isLocked = !userProgress.isLevelUnlocked(levelNum);
+                  final stage = stages[index];
+                  final int stageNum = stage.stageNumber;
+                  final bool isCompleted = userProgress.isLevelCompleted(stageNum);
+                  final bool isCurrent = stageNum == userProgress.currentLevel;
+                  final bool isLocked = !userProgress.isLevelUnlocked(stageNum);
 
                   // Calculate alternating offset for winding trail effect
-                  final double xOffset = (levelNum % 2 == 0) ? 50.0 : -50.0;
+                  final double xOffset = (stageNum % 2 == 0) ? 40.0 : -40.0;
 
                   return Container(
-                    margin: const EdgeInsets.symmetric(vertical: 12),
+                    margin: const EdgeInsets.symmetric(vertical: 14),
                     child: Transform.translate(
                       offset: Offset(xOffset, 0),
                       child: Center(
-                        child: _buildLevelNode(
-                          levelNumber: levelNum,
+                        child: _buildStageNode(
+                          stageNumber: stageNum,
+                          stageName: stage.name,
                           isCompleted: isCompleted,
                           isCurrent: isCurrent,
                           isLocked: isLocked,
-                          onTap: isLocked ? null : () => onSelectLevel(levelNum),
+                          onTap: isLocked ? null : () => onSelectLevel(stageNum),
                         ),
                       ),
                     ),
@@ -106,8 +112,9 @@ class JourneyScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildLevelNode({
-    required int levelNumber,
+  Widget _buildStageNode({
+    required int stageNumber,
+    required String stageName,
     required bool isCompleted,
     required bool isCurrent,
     required bool isLocked,
@@ -121,7 +128,7 @@ class JourneyScreen extends StatelessWidget {
       child = Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('$levelNumber', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Colors.white)),
+          Text('$stageNumber', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Colors.white)),
           const Text('PLAY', style: TextStyle(fontSize: 9, fontWeight: FontWeight.w800, color: AppColors.primaryContainer)),
         ],
       );
@@ -130,7 +137,7 @@ class JourneyScreen extends StatelessWidget {
       child = Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('$levelNumber', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white)),
+          Text('$stageNumber', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white)),
           const Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -148,33 +155,46 @@ class JourneyScreen extends StatelessWidget {
 
     return GestureDetector(
       onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        width: isCurrent ? 74 : 60,
-        height: isCurrent ? 74 : 60,
-        decoration: BoxDecoration(
-          color: bg,
-          shape: BoxShape.circle,
-          border: Border.all(
-            color: isCurrent ? AppColors.primaryLight : AppColors.outlineVariant,
-            width: isCurrent ? 3 : 1.5,
-          ),
-          boxShadow: [
-            if (isCurrent)
-              BoxShadow(
-                color: AppColors.primary.withValues(alpha: 0.4),
-                blurRadius: 16,
-                offset: const Offset(0, 4),
-              )
-            else
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
-                blurRadius: 6,
-                offset: const Offset(0, 2),
+      child: Column(
+        children: [
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            width: isCurrent ? 72 : 58,
+            height: isCurrent ? 72 : 58,
+            decoration: BoxDecoration(
+              color: bg,
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: isCurrent ? AppColors.primaryLight : AppColors.outlineVariant,
+                width: isCurrent ? 3 : 1.5,
               ),
-          ],
-        ),
-        child: Center(child: child),
+              boxShadow: [
+                if (isCurrent)
+                  BoxShadow(
+                    color: AppColors.primary.withValues(alpha: 0.4),
+                    blurRadius: 16,
+                    offset: const Offset(0, 4),
+                  )
+                else
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    blurRadius: 6,
+                    offset: const Offset(0, 2),
+                  ),
+              ],
+            ),
+            child: Center(child: child),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            stageName,
+            style: AppTypography.labelSmall.copyWith(
+              color: isLocked ? AppColors.outline : AppColors.onSurface,
+              fontWeight: isCurrent ? FontWeight.w700 : FontWeight.w500,
+              fontSize: 11,
+            ),
+          ),
+        ],
       ),
     );
   }
