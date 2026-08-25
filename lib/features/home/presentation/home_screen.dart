@@ -276,7 +276,7 @@ class HomeScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(AppStrings.recentCritters, style: AppTypography.titleLarge),
-                  Text('${recentCritters.where((c) => c.isUnlocked).length} Unlocked', style: AppTypography.labelSmall.copyWith(color: AppColors.outline)),
+                  Text('${recentCritters.where((c) => c.isUnlocked).length} ${AppStrings.unlocked}', style: AppTypography.labelSmall.copyWith(color: AppColors.outline)),
                 ],
               ),
 

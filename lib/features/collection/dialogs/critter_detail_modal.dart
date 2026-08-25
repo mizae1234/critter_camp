@@ -5,6 +5,7 @@ import '../../../app/theme/app_spacing.dart';
 import '../../../core/widgets/critter_avatar.dart';
 import '../../../core/widgets/critter_button.dart';
 import '../../../data/models/critter_model.dart';
+import '../../../core/localization/app_strings.dart';
 
 class CritterDetailModal extends StatelessWidget {
   final CritterModel critter;
@@ -81,7 +82,7 @@ class CritterDetailModal extends StatelessWidget {
                 Expanded(
                   child: _buildInfoBox(
                     icon: Icons.restaurant_rounded,
-                    label: 'Favorite Snack',
+                    label: AppStrings.isThai ? 'ของว่างโปรด' : 'Favorite Snack',
                     value: critter.favoriteFood,
                   ),
                 ),
@@ -95,7 +96,7 @@ class CritterDetailModal extends StatelessWidget {
                 Expanded(
                   child: _buildInfoBox(
                     icon: Icons.auto_awesome_rounded,
-                    label: 'Special Perk',
+                    label: AppStrings.isThai ? 'ความสามารถพิเศษ' : 'Special Perk',
                     value: critter.perkDescription,
                     isHighlight: true,
                   ),
@@ -106,7 +107,7 @@ class CritterDetailModal extends StatelessWidget {
             const SizedBox(height: AppSpacing.lg),
 
             CritterButton(
-              text: 'Close',
+              text: AppStrings.isThai ? 'ปิด' : 'Close',
               variant: CritterButtonVariant.ghost,
               isFullWidth: true,
               onPressed: onClose,

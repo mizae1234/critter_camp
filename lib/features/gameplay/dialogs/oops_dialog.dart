@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_typography.dart';
 import '../../../app/theme/app_spacing.dart';
+import '../../../core/localization/app_strings.dart';
 import '../../../core/widgets/critter_button.dart';
 import '../../../core/widgets/heart_indicator.dart';
 
@@ -57,7 +58,7 @@ class OopsDialog extends StatelessWidget {
             const SizedBox(height: AppSpacing.md),
 
             Text(
-              'Oops! That\'s a conflict',
+              AppStrings.isThai ? 'อุ๊ปส์! ผิดกฎปริศนา' : 'Oops! That\'s a conflict',
               style: AppTypography.headlineMedium.copyWith(color: AppColors.error),
             ),
 
@@ -81,7 +82,10 @@ class OopsDialog extends StatelessWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('Hearts left: ', style: AppTypography.labelSmall),
+                  Text(
+                    AppStrings.isThai ? 'หัวใจที่เหลือ: ' : 'Hearts left: ',
+                    style: AppTypography.labelSmall,
+                  ),
                   HeartIndicator(currentHearts: remainingLives),
                 ],
               ),
@@ -91,7 +95,7 @@ class OopsDialog extends StatelessWidget {
 
             // Actions
             CritterButton(
-              text: 'Undo Move',
+              text: AppStrings.isThai ? 'เลิกทำตานี้ (Undo)' : 'Undo Move',
               variant: CritterButtonVariant.primary,
               isFullWidth: true,
               icon: Icons.undo_rounded,
@@ -101,7 +105,7 @@ class OopsDialog extends StatelessWidget {
             const SizedBox(height: AppSpacing.sm),
 
             CritterButton(
-              text: 'Keep Going',
+              text: AppStrings.isThai ? 'เล่นต่อ' : 'Keep Going',
               variant: CritterButtonVariant.ghost,
               isFullWidth: true,
               onPressed: onDismiss,

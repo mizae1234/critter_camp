@@ -12,6 +12,7 @@ import '../../../services/hints/progressive_hint_service.dart';
 import '../../../services/ads/ads_service.dart';
 import '../../../services/analytics/analytics_service.dart';
 import '../../../services/audio/audio_service.dart';
+import '../../../core/localization/app_strings.dart';
 import '../dialogs/oops_dialog.dart';
 
 class GameplayScreen extends StatefulWidget {
@@ -118,7 +119,9 @@ class _GameplayScreenState extends State<GameplayScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'You used your free stage clue! Watch a short camp sponsor video to unlock the next progressive clue for this puzzle.',
+                AppStrings.isThai
+                    ? 'คุณใช้คำใบ้ฟรีของด่านนี้แล้ว ดูวิดีโอสั้นเพื่อปลดล็อกคำใบ้ขั้นถัดไป'
+                    : 'You used your free stage clue! Watch a short video to unlock the next progressive clue.',
                 style: AppTypography.bodyMedium.copyWith(fontSize: 13),
               ),
               const SizedBox(height: 12),
@@ -134,7 +137,7 @@ class _GameplayScreenState extends State<GameplayScreen> {
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        'Next: ${clue.title}',
+                        '${AppStrings.hint}: ${clue.title}',
                         style: AppTypography.labelMedium.copyWith(fontWeight: FontWeight.w700),
                       ),
                     ),
@@ -146,7 +149,7 @@ class _GameplayScreenState extends State<GameplayScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Maybe Later'),
+              child: Text(AppStrings.cancel),
             ),
             ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
@@ -154,7 +157,7 @@ class _GameplayScreenState extends State<GameplayScreen> {
                 foregroundColor: Colors.white,
               ),
               icon: const Icon(Icons.play_circle_fill_rounded, size: 18),
-              label: const Text('Watch Video'),
+              label: Text(AppStrings.isThai ? 'ดูวิดีโอรับคำใบ้' : 'Watch Video'),
               onPressed: () async {
                 Navigator.of(context).pop();
                 widget.analyticsService?.trackRewardedStarted(placement: 'hint');

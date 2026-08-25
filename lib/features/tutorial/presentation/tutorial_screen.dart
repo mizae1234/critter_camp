@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_typography.dart';
 import '../../../app/theme/app_spacing.dart';
+import '../../../core/localization/app_strings.dart';
 import '../../../core/widgets/critter_button.dart';
 import '../../../core/widgets/critter_card.dart';
 
@@ -15,81 +16,86 @@ class TutorialScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('How to Play'),
+        title: Text(AppStrings.howToPlay),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_rounded),
           onPressed: onDismiss,
         ),
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.md),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Camp Puzzle Rules',
-                style: AppTypography.headlineLarge.copyWith(color: AppColors.primaryDark),
+      body: Stack(
+        children: [
+          // 🌲 Scenic Forest Background
+          Positioned.fill(
+            child: Opacity(
+              opacity: 0.15,
+              child: Image.asset(
+                'assets/images/bg_gameplay.jpg',
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
               ),
-              const SizedBox(height: 4),
-              Text(
-                'Help every cute critter find its cozy home without disturbing its neighbors.',
-                style: AppTypography.bodyMedium,
-              ),
-
-              const SizedBox(height: AppSpacing.lg),
-
-              _buildRuleCard(
-                number: '1',
-                title: 'One Critter Per Habitat',
-                desc: 'Each colored region on the board must have exactly one critter.',
-                icon: Icons.palette_rounded,
-                iconColor: AppColors.habitatSage,
-              ),
-
-              const SizedBox(height: AppSpacing.md),
-
-              _buildRuleCard(
-                number: '2',
-                title: 'One Per Row & Column',
-                desc: 'No row or column can contain more than one critter.',
-                icon: Icons.grid_4x4_rounded,
-                iconColor: AppColors.primary,
-              ),
-
-              const SizedBox(height: AppSpacing.md),
-
-              _buildRuleCard(
-                number: '3',
-                title: 'No Touching (Even Diagonally!)',
-                desc: 'Critters need personal space! Two critters cannot touch in any of the 8 directions.',
-                icon: Icons.accessibility_new_rounded,
-                iconColor: const Color(0xFFE11D48),
-              ),
-
-              const SizedBox(height: AppSpacing.md),
-
-              _buildRuleCard(
-                number: '💡',
-                title: 'Use X to Mark Impossible Spots',
-                desc: 'Eliminate cells where a critter cannot go to solve tricky boards faster.',
-                icon: Icons.close_rounded,
-                iconColor: AppColors.accentGold,
-              ),
-
-              const SizedBox(height: AppSpacing.xl),
-
-              CritterButton(
-                text: 'Got It! Let\'s Play',
-                isFullWidth: true,
-                icon: Icons.check_rounded,
-                onPressed: onDismiss,
-              ),
-
-              const SizedBox(height: AppSpacing.xl),
-            ],
+            ),
           ),
-        ),
+          SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.md),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    AppStrings.howToPlayTitle,
+                    style: AppTypography.headlineLarge.copyWith(color: AppColors.primaryDark),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    AppStrings.appTagline,
+                    style: AppTypography.bodyMedium,
+                  ),
+
+                  const SizedBox(height: AppSpacing.lg),
+
+                  _buildRuleCard(
+                    number: '1',
+                    title: AppStrings.rule1Title,
+                    desc: AppStrings.rule1Desc,
+                    icon: Icons.grid_4x4_rounded,
+                    iconColor: AppColors.primary,
+                  ),
+
+                  const SizedBox(height: AppSpacing.md),
+
+                  _buildRuleCard(
+                    number: '2',
+                    title: AppStrings.rule2Title,
+                    desc: AppStrings.rule2Desc,
+                    icon: Icons.palette_rounded,
+                    iconColor: AppColors.habitatSage,
+                  ),
+
+                  const SizedBox(height: AppSpacing.md),
+
+                  _buildRuleCard(
+                    number: '3',
+                    title: AppStrings.rule3Title,
+                    desc: AppStrings.rule3Desc,
+                    icon: Icons.accessibility_new_rounded,
+                    iconColor: const Color(0xFFE11D48),
+                  ),
+
+                  const SizedBox(height: AppSpacing.xl),
+
+                  CritterButton(
+                    text: AppStrings.gotIt,
+                    isFullWidth: true,
+                    icon: Icons.check_rounded,
+                    onPressed: onDismiss,
+                  ),
+
+                  const SizedBox(height: AppSpacing.xl),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

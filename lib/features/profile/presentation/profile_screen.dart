@@ -9,6 +9,7 @@ import '../../../data/models/player_profile.dart';
 import '../../../data/repositories/auth_repository.dart';
 import '../../../services/identity/player_identity_service.dart';
 import '../../../services/sync/cloud_sync_service.dart';
+import '../../../core/localization/app_strings.dart';
 
 class ProfileScreen extends StatefulWidget {
   final AuthRepository authRepository;
@@ -138,247 +139,259 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.md),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Camper Profile',
-                    style: AppTypography.headlineMedium.copyWith(color: AppColors.primaryDark),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.settings_rounded),
-                    onPressed: widget.onOpenSettings,
-                  ),
-                ],
+      body: Stack(
+        children: [
+          // Cozy Campsite Background
+          Positioned.fill(
+            child: Opacity(
+              opacity: 0.18,
+              child: Image.asset(
+                'assets/images/bg_campsite.jpg',
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
               ),
+            ),
+          ),
+          SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.md),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Header
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        AppStrings.profile,
+                        style: AppTypography.headlineMedium.copyWith(color: AppColors.primaryDark),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.settings_rounded),
+                        onPressed: widget.onOpenSettings,
+                      ),
+                    ],
+                  ),
 
-              const SizedBox(height: AppSpacing.md),
+                  const SizedBox(height: AppSpacing.md),
 
-              // Profile Card
-              CritterCard(
-                backgroundColor: AppColors.surfaceContainerLow,
-                borderRadius: AppSpacing.radiusLg,
-                padding: const EdgeInsets.all(AppSpacing.lg),
-                child: Column(
-                  children: [
-                    Row(
+                  // Profile Card
+                  CritterCard(
+                    backgroundColor: AppColors.surfaceContainerLow,
+                    borderRadius: AppSpacing.radiusLg,
+                    padding: const EdgeInsets.all(AppSpacing.lg),
+                    child: Column(
                       children: [
-                        CritterAvatar(emoji: p.avatarEmoji, size: 68),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
+                        Row(
+                          children: [
+                            CritterAvatar(emoji: p.avatarEmoji, size: 68),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    widget.identityService.currentIdentity.displayName,
-                                    style: AppTypography.titleLarge,
-                                  ),
-                                  const SizedBox(width: 6),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.primaryContainer,
-                                      borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
-                                    ),
-                                    child: Text(
-                                      'Lvl ${p.level}',
-                                      style: AppTypography.labelSmall.copyWith(
-                                        fontSize: 10,
-                                        color: AppColors.primaryDark,
-                                        fontWeight: FontWeight.w700,
+                                  Row(
+                                    children: [
+                                      Text(
+                                        widget.identityService.currentIdentity.displayName,
+                                        style: AppTypography.titleLarge,
                                       ),
+                                      const SizedBox(width: 6),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.primaryContainer,
+                                          borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+                                        ),
+                                        child: Text(
+                                          'Lvl ${p.level}',
+                                          style: AppTypography.labelSmall.copyWith(
+                                            fontSize: 10,
+                                            color: AppColors.primaryDark,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    '${p.rankTitle} • ${widget.identityService.effectivePlayerId}',
+                                    style: AppTypography.labelSmall.copyWith(color: AppColors.outline),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                    decoration: BoxDecoration(
+                                      color: isGuest ? const Color(0xFFFEF3C7) : const Color(0xFFDCFCE7),
+                                      borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(
+                                          isGuest ? Icons.phone_android_rounded : Icons.cloud_done_rounded,
+                                          size: 12,
+                                          color: isGuest ? const Color(0xFFD97706) : const Color(0xFF15803D),
+                                        ),
+                                        const SizedBox(width: 4),
+                                        Text(
+                                          isGuest ? AppStrings.guestMode : AppStrings.connectedAccount,
+                                          style: AppTypography.labelSmall.copyWith(
+                                            color: isGuest ? const Color(0xFF92400E) : const Color(0xFF15803D),
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 2),
-                              Text(
-                                '${p.rankTitle} • ${widget.identityService.effectivePlayerId}',
-                                style: AppTypography.labelSmall.copyWith(color: AppColors.outline),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              const SizedBox(height: 8),
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                                decoration: BoxDecoration(
-                                  color: isGuest ? const Color(0xFFFEF3C7) : const Color(0xFFDCFCE7),
-                                  borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(
-                                      isGuest ? Icons.phone_android_rounded : Icons.cloud_done_rounded,
-                                      size: 12,
-                                      color: isGuest ? const Color(0xFFD97706) : const Color(0xFF15803D),
-                                    ),
-                                    const SizedBox(width: 4),
-                                    Text(
-                                      isGuest ? 'Guest (Saved on Device)' : 'Cloud Save Enabled',
-                                      style: AppTypography.labelSmall.copyWith(
-                                        color: isGuest ? const Color(0xFF92400E) : const Color(0xFF15803D),
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
+
+                        if (isGuest) ...[
+                          const SizedBox(height: AppSpacing.md),
+                          CritterButton(
+                            text: AppStrings.signInOrRegister,
+                            variant: CritterButtonVariant.secondary,
+                            isFullWidth: true,
+                            icon: Icons.cloud_upload_rounded,
+                            onPressed: _showConnectAccountDialog,
+                          ),
+                        ],
                       ],
                     ),
+                  ),
 
-                    if (isGuest) ...[
-                      const SizedBox(height: AppSpacing.md),
-                      CritterButton(
-                        text: 'Connect Account (Enable Cloud Save)',
-                        variant: CritterButtonVariant.secondary,
-                        isFullWidth: true,
-                        icon: Icons.cloud_upload_rounded,
-                        onPressed: _showConnectAccountDialog,
-                      ),
+                  const SizedBox(height: AppSpacing.lg),
+
+                  // Stats 4-Grid
+                  GridView.count(
+                    crossAxisCount: 2,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    mainAxisSpacing: 10,
+                    crossAxisSpacing: 10,
+                    childAspectRatio: 1.6,
+                    children: [
+                      _buildStatCard(AppStrings.stagesCleared, '${p.puzzlesSolved}', Icons.extension_rounded, AppColors.primary),
+                      _buildStatCard(AppStrings.stars, '${p.perfectClears}', Icons.star_rounded, AppColors.accentGold),
+                      _buildStatCard(AppStrings.currentStreak, '${p.streakDays} Days', Icons.local_fire_department_rounded, const Color(0xFFEA580C)),
+                      _buildStatCard(AppStrings.totalAcorns, '${p.totalAcorns}', Icons.grain_rounded, AppColors.textAccentBrown),
                     ],
+                  ),
+
+                  const SizedBox(height: AppSpacing.md),
+
+                  if (widget.onOpenLeaderboard != null)
+                    CritterCard(
+                      backgroundColor: const Color(0xFFF3F4F6),
+                      borderRadius: AppSpacing.radiusMd,
+                      onTap: widget.onOpenLeaderboard,
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 44,
+                            height: 44,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFE0E7FF),
+                              borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+                            ),
+                            child: const Center(child: Text('🏆', style: TextStyle(fontSize: 22))),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(AppStrings.viewLeaderboard, style: AppTypography.titleMedium.copyWith(fontSize: 14, fontWeight: FontWeight.w700)),
+                                Text(AppStrings.topCampersThisWeek, style: AppTypography.labelSmall.copyWith(color: AppColors.outline)),
+                              ],
+                            ),
+                          ),
+                          const Icon(Icons.chevron_right_rounded, color: AppColors.outline),
+                        ],
+                      ),
+                    ),
+
+                  if (widget.onOpenFirstLaunch != null) ...[
+                    const SizedBox(height: 8),
+                    CritterCard(
+                      backgroundColor: const Color(0xFFFBF6EE),
+                      borderRadius: AppSpacing.radiusMd,
+                      onTap: widget.onOpenFirstLaunch,
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 44,
+                            height: 44,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFEF3C7),
+                              borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+                            ),
+                            child: const Center(child: Text('⛺', style: TextStyle(fontSize: 22))),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(AppStrings.welcomePortal, style: AppTypography.titleMedium.copyWith(fontSize: 14, fontWeight: FontWeight.w700)),
+                                Text(AppStrings.welcomePortalSub, style: AppTypography.labelSmall.copyWith(color: AppColors.outline)),
+                              ],
+                            ),
+                          ),
+                          const Icon(Icons.chevron_right_rounded, color: AppColors.outline),
+                        ],
+                      ),
+                    ),
                   ],
-                ),
-              ),
 
-              const SizedBox(height: AppSpacing.lg),
+                  const SizedBox(height: AppSpacing.lg),
 
-              // Stats 4-Grid
-              Text('Camping Statistics', style: AppTypography.titleMedium),
-              const SizedBox(height: AppSpacing.sm),
+                  // Badges Section
+                  Text(AppStrings.badgesAndAchievements, style: AppTypography.titleMedium),
+                  const SizedBox(height: AppSpacing.sm),
 
-              GridView.count(
-                crossAxisCount: 2,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                mainAxisSpacing: 10,
-                crossAxisSpacing: 10,
-                childAspectRatio: 1.6,
-                children: [
-                  _buildStatCard('Stages Cleared', '${p.puzzlesSolved}', Icons.extension_rounded, AppColors.primary),
-                  _buildStatCard('Perfect Clears', '${p.perfectClears}', Icons.star_rounded, AppColors.accentGold),
-                  _buildStatCard('Current Streak', '${p.streakDays} Days', Icons.local_fire_department_rounded, const Color(0xFFEA580C)),
-                  _buildStatCard('Total Acorns', '${p.totalAcorns}', Icons.grain_rounded, AppColors.textAccentBrown),
+                  ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: p.badges.length,
+                    separatorBuilder: (context, index) => const SizedBox(height: 8),
+                    itemBuilder: (context, index) {
+                      final badge = p.badges[index];
+                      return CritterCard(
+                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                        child: Row(
+                          children: [
+                            Text(badge.iconEmoji, style: const TextStyle(fontSize: 24)),
+                            const SizedBox(width: 14),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(badge.title, style: AppTypography.titleMedium.copyWith(fontSize: 13)),
+                                  Text(badge.description, style: AppTypography.labelSmall.copyWith(color: AppColors.outline, fontSize: 11)),
+                                ],
+                              ),
+                            ),
+                            const Icon(Icons.check_circle_rounded, color: AppColors.primary, size: 18),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+
+                  const SizedBox(height: AppSpacing.xxl),
                 ],
               ),
-
-              const SizedBox(height: AppSpacing.md),
-
-              if (widget.onOpenLeaderboard != null)
-                CritterCard(
-                  backgroundColor: const Color(0xFFF3F4F6),
-                  borderRadius: AppSpacing.radiusMd,
-                  onTap: widget.onOpenLeaderboard,
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 44,
-                        height: 44,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFE0E7FF),
-                          borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
-                        ),
-                        child: const Center(child: Text('🏆', style: TextStyle(fontSize: 22))),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Camp Leaderboard', style: AppTypography.titleMedium.copyWith(fontSize: 14, fontWeight: FontWeight.w700)),
-                            Text('View Weekly & Thailand Rankings', style: AppTypography.labelSmall.copyWith(color: AppColors.outline)),
-                          ],
-                        ),
-                      ),
-                      const Icon(Icons.chevron_right_rounded, color: AppColors.outline),
-                    ],
-                  ),
-                ),
-
-              if (widget.onOpenFirstLaunch != null) ...[
-                const SizedBox(height: 8),
-                CritterCard(
-                  backgroundColor: const Color(0xFFFBF6EE),
-                  borderRadius: AppSpacing.radiusMd,
-                  onTap: widget.onOpenFirstLaunch,
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 44,
-                        height: 44,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFFEF3C7),
-                          borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
-                        ),
-                        child: const Center(child: Text('⛺', style: TextStyle(fontSize: 22))),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Welcome / Account Portal', style: AppTypography.titleMedium.copyWith(fontSize: 14, fontWeight: FontWeight.w700)),
-                            Text('Switch Account • Play as Guest • Register', style: AppTypography.labelSmall.copyWith(color: AppColors.outline)),
-                          ],
-                        ),
-                      ),
-                      const Icon(Icons.chevron_right_rounded, color: AppColors.outline),
-                    ],
-                  ),
-                ),
-              ],
-
-              const SizedBox(height: AppSpacing.lg),
-
-              // Badges Section
-              Text('Badges & Achievements', style: AppTypography.titleMedium),
-              const SizedBox(height: AppSpacing.sm),
-
-              ListView.separated(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: p.badges.length,
-                separatorBuilder: (context, index) => const SizedBox(height: 8),
-                itemBuilder: (context, index) {
-                  final badge = p.badges[index];
-                  return CritterCard(
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                    child: Row(
-                      children: [
-                        Text(badge.iconEmoji, style: const TextStyle(fontSize: 24)),
-                        const SizedBox(width: 14),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(badge.title, style: AppTypography.titleMedium.copyWith(fontSize: 13)),
-                              Text(badge.description, style: AppTypography.labelSmall.copyWith(color: AppColors.outline, fontSize: 11)),
-                            ],
-                          ),
-                        ),
-                        const Icon(Icons.check_circle_rounded, color: AppColors.primary, size: 18),
-                      ],
-                    ),
-                  );
-                },
-              ),
-
-              const SizedBox(height: AppSpacing.xxl),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

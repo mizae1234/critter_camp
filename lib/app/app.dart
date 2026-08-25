@@ -209,12 +209,13 @@ class _CritterCampAppState extends State<CritterCampApp> {
           configService: _configService,
           audioService: _audioService,
           onBack: () => setState(() => _currentView = AppView.mainTabs),
+          onOpenWelcomeScreen: () => setState(() => _currentView = AppView.firstLaunch),
         );
 
       case AppView.leaderboard:
         return Scaffold(
           appBar: AppBar(
-            title: const Text('Leaderboard'),
+            title: Text(AppStrings.leaderboard),
             leading: IconButton(
               icon: const Icon(Icons.arrow_back_rounded),
               onPressed: () => setState(() => _currentView = AppView.mainTabs),

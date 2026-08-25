@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_typography.dart';
 import '../../../app/theme/app_spacing.dart';
+import '../../../core/localization/app_strings.dart';
 import '../../../core/widgets/critter_avatar.dart';
 import '../../../data/models/leaderboard_entry.dart';
 import '../../../data/repositories/leaderboard_repository.dart';
@@ -43,135 +44,160 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Top Header & Filters
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Leaderboard',
-                        style: AppTypography.headlineMedium.copyWith(color: AppColors.primaryDark),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                        decoration: BoxDecoration(
-                          color: AppColors.primaryContainer,
-                          borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
-                        ),
-                        child: Text(
-                          'Season 1',
-                          style: AppTypography.labelSmall.copyWith(color: AppColors.primaryDark, fontWeight: FontWeight.w700),
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  // Timeframe Switcher
-                  Row(
-                    children: ['Daily', 'Weekly', 'Global', 'Thailand'].map((tab) {
-                      final isSelected = tab == _selectedTab;
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 6.0),
-                        child: ChoiceChip(
-                          label: Text(tab),
-                          selected: isSelected,
-                          selectedColor: AppColors.primary,
-                          labelStyle: AppTypography.labelSmall.copyWith(
-                            color: isSelected ? Colors.white : AppColors.onSurfaceVariant,
-                            fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                          ),
-                          backgroundColor: AppColors.surfaceContainerLow,
-                          onSelected: (val) {
-                            if (val) {
-                              setState(() => _selectedTab = tab);
-                              _loadData();
-                            }
-                          },
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ],
+      body: Stack(
+        children: [
+          // 🌲 Scenic Forest Background
+          Positioned.fill(
+            child: Opacity(
+              opacity: 0.15,
+              child: Image.asset(
+                'assets/images/bg_gameplay.jpg',
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
               ),
             ),
-
-            if (_isLoading)
-              const Expanded(child: Center(child: CircularProgressIndicator()))
-            else
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+          ),
+          SafeArea(
+            child: Column(
+              children: [
+                // Top Header & Filters
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                   child: Column(
                     children: [
-                      // Top 3 Podium
-                      if (top3.length >= 3)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 16.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              // #2 Silver
-                              _buildPodiumItem(top3[1], height: 90, rankColor: const Color(0xFF94A3B8), medal: '🥈'),
-                              const SizedBox(width: 12),
-                              // #1 Gold
-                              _buildPodiumItem(top3[0], height: 115, rankColor: const Color(0xFFF59E0B), medal: '🥇'),
-                              const SizedBox(width: 12),
-                              // #3 Bronze
-                              _buildPodiumItem(top3[2], height: 80, rankColor: const Color(0xFFD97706), medal: '🥉'),
-                            ],
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            AppStrings.topCampers,
+                            style: AppTypography.headlineMedium.copyWith(color: AppColors.primaryDark),
                           ),
-                        ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: AppColors.primaryContainer,
+                              borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
+                            ),
+                            child: Text(
+                              'Season 1',
+                              style: AppTypography.labelSmall.copyWith(color: AppColors.primaryDark, fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                        ],
+                      ),
 
                       const SizedBox(height: 10),
 
-                      // Rest List (#4 to #10)
-                      ListView.separated(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: rest.length,
-                        separatorBuilder: (context, index) => const SizedBox(height: 6),
-                        itemBuilder: (context, index) {
-                          final entry = rest[index];
-                          return _buildRankRow(entry);
-                        },
+                      // Timeframe Switcher
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            _buildTabChip('Daily', AppStrings.dailyTab),
+                            _buildTabChip('Weekly', AppStrings.weeklyTab),
+                            _buildTabChip('Global', AppStrings.globalTab),
+                            _buildTabChip('Thailand', AppStrings.thailandTab),
+                          ],
+                        ),
                       ),
-
-                      const SizedBox(height: 80),
                     ],
                   ),
                 ),
-              ),
 
-            // Sticky Bottom User Rank Bar
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              decoration: BoxDecoration(
-                color: AppColors.surfaceContainerHigh,
-                border: const Border(top: BorderSide(color: AppColors.outlineVariant, width: 1)),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.08),
-                    blurRadius: 10,
-                    offset: const Offset(0, -4),
+                if (_isLoading)
+                  const Expanded(child: Center(child: CircularProgressIndicator()))
+                else
+                  Expanded(
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Column(
+                        children: [
+                          // Top 3 Podium
+                          if (top3.length >= 3)
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 16.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  // #2 Silver
+                                  _buildPodiumItem(top3[1], height: 90, rankColor: const Color(0xFF94A3B8), medal: '🥈'),
+                                  const SizedBox(width: 12),
+                                  // #1 Gold
+                                  _buildPodiumItem(top3[0], height: 115, rankColor: const Color(0xFFF59E0B), medal: '🥇'),
+                                  const SizedBox(width: 12),
+                                  // #3 Bronze
+                                  _buildPodiumItem(top3[2], height: 80, rankColor: const Color(0xFFD97706), medal: '🥉'),
+                                ],
+                              ),
+                            ),
+
+                          const SizedBox(height: 10),
+
+                          // Rest List (#4 to #10)
+                          ListView.separated(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: rest.length,
+                            separatorBuilder: (context, index) => const SizedBox(height: 6),
+                            itemBuilder: (context, index) {
+                              final entry = rest[index];
+                              return _buildRankRow(entry);
+                            },
+                          ),
+
+                          const SizedBox(height: 80),
+                        ],
+                      ),
+                    ),
                   ),
-                ],
-              ),
-              child: SafeArea(
-                top: false,
-                child: _buildRankRow(userEntry, isHighlight: true),
-              ),
+
+                // Sticky Bottom User Rank Bar
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: AppColors.surfaceContainerHigh,
+                    border: const Border(top: BorderSide(color: AppColors.outlineVariant, width: 1)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.08),
+                        blurRadius: 10,
+                        offset: const Offset(0, -4),
+                      ),
+                    ],
+                  ),
+                  child: SafeArea(
+                    top: false,
+                    child: _buildRankRow(userEntry, isHighlight: true),
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTabChip(String key, String label) {
+    final isSelected = key == _selectedTab;
+    return Padding(
+      padding: const EdgeInsets.only(right: 6.0),
+      child: ChoiceChip(
+        label: Text(label),
+        selected: isSelected,
+        selectedColor: AppColors.primary,
+        labelStyle: AppTypography.labelSmall.copyWith(
+          color: isSelected ? Colors.white : AppColors.onSurfaceVariant,
+          fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
         ),
+        backgroundColor: AppColors.surfaceContainerLow,
+        onSelected: (val) {
+          if (val) {
+            setState(() => _selectedTab = key);
+            _loadData();
+          }
+        },
       ),
     );
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_typography.dart';
 import '../../../app/theme/app_spacing.dart';
+import '../../../core/localization/app_strings.dart';
 import '../../../core/widgets/critter_avatar.dart';
 import '../../../core/widgets/critter_card.dart';
 import '../../../data/models/critter_model.dart';
@@ -32,101 +33,116 @@ class _CollectionScreenState extends State<CollectionScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.md),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: Stack(
+        children: [
+          // 🌲 Scenic Forest Background
+          Positioned.fill(
+            child: Opacity(
+              opacity: 0.15,
+              child: Image.asset(
+                'assets/images/bg_gameplay.jpg',
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
+              ),
+            ),
+          ),
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.md),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  // Header
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'My Critters',
-                        style: AppTypography.headlineMedium.copyWith(color: AppColors.primaryDark),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            AppStrings.campCrittersTitle,
+                            style: AppTypography.headlineMedium.copyWith(color: AppColors.primaryDark, fontSize: 20),
+                          ),
+                          Text(
+                            '$unlockedCount of ${widget.critters.length} ${AppStrings.unlocked}',
+                            style: AppTypography.labelSmall.copyWith(color: AppColors.outline),
+                          ),
+                        ],
                       ),
-                      Text(
-                        '$unlockedCount of ${widget.critters.length} Discovered',
-                        style: AppTypography.labelSmall.copyWith(color: AppColors.outline),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: AppColors.primaryContainer,
+                          borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
+                        ),
+                        child: Text(
+                          AppStrings.collection,
+                          style: AppTypography.labelSmall.copyWith(color: AppColors.primaryDark, fontWeight: FontWeight.w700),
+                        ),
                       ),
                     ],
                   ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryContainer,
-                      borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
+
+                  const SizedBox(height: AppSpacing.md),
+
+                  // Filter Pills
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: categories.map((cat) {
+                        final bool isSelected = cat == _selectedFilter;
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: FilterChip(
+                            selected: isSelected,
+                            label: Text(cat == 'All' ? (AppStrings.isThai ? 'ทั้งหมด' : 'All') : cat),
+                            labelStyle: AppTypography.labelSmall.copyWith(
+                              color: isSelected ? Colors.white : AppColors.onSurfaceVariant,
+                              fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                            ),
+                            backgroundColor: AppColors.surfaceContainerLow,
+                            selectedColor: AppColors.primary,
+                            checkmarkColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
+                              side: BorderSide(
+                                color: isSelected ? AppColors.primary : AppColors.outlineVariant,
+                              ),
+                            ),
+                            onSelected: (val) {
+                              setState(() {
+                                _selectedFilter = cat;
+                              });
+                            },
+                          ),
+                        );
+                      }).toList(),
                     ),
-                    child: Text(
-                      'Collection',
-                      style: AppTypography.labelSmall.copyWith(color: AppColors.primaryDark, fontWeight: FontWeight.w700),
+                  ),
+
+                  const SizedBox(height: AppSpacing.md),
+
+                  // Critters Grid
+                  Expanded(
+                    child: GridView.builder(
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 14,
+                        crossAxisSpacing: 14,
+                        childAspectRatio: 0.82,
+                      ),
+                      itemCount: filteredList.length,
+                      itemBuilder: (context, index) {
+                        final critter = filteredList[index];
+                        return _buildCritterCard(critter);
+                      },
                     ),
                   ),
                 ],
               ),
-
-              const SizedBox(height: AppSpacing.md),
-
-              // Filter Pills
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: categories.map((cat) {
-                    final bool isSelected = cat == _selectedFilter;
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: FilterChip(
-                        selected: isSelected,
-                        label: Text(cat),
-                        labelStyle: AppTypography.labelSmall.copyWith(
-                          color: isSelected ? Colors.white : AppColors.onSurfaceVariant,
-                          fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                        ),
-                        backgroundColor: AppColors.surfaceContainerLow,
-                        selectedColor: AppColors.primary,
-                        checkmarkColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
-                          side: BorderSide(
-                            color: isSelected ? AppColors.primary : AppColors.outlineVariant,
-                          ),
-                        ),
-                        onSelected: (val) {
-                          setState(() {
-                            _selectedFilter = cat;
-                          });
-                        },
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-
-              const SizedBox(height: AppSpacing.md),
-
-              // Critters Grid
-              Expanded(
-                child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 14,
-                    crossAxisSpacing: 14,
-                    childAspectRatio: 0.82,
-                  ),
-                  itemCount: filteredList.length,
-                  itemBuilder: (context, index) {
-                    final critter = filteredList[index];
-                    return _buildCritterCard(critter);
-                  },
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -145,13 +161,13 @@ class _CollectionScreenState extends State<CollectionScreen> {
           ),
           const SizedBox(height: 10),
           Text(
-            critter.isUnlocked ? critter.name : 'Unknown Critter',
+            critter.isUnlocked ? critter.name : AppStrings.lockedCritter,
             style: AppTypography.titleMedium,
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 2),
           Text(
-            critter.isUnlocked ? critter.title : 'Unlock at Level ${critter.unlockLevel}',
+            critter.isUnlocked ? critter.title : '${AppStrings.stagePrefix} ${critter.unlockLevel}',
             style: AppTypography.labelSmall.copyWith(color: AppColors.outline),
             textAlign: TextAlign.center,
             maxLines: 1,
