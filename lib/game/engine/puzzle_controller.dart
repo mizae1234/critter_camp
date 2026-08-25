@@ -76,6 +76,8 @@ class PuzzleController extends ChangeNotifier {
     elapsedSeconds: _elapsedSeconds,
   );
 
+  GameState get state => currentGameState;
+
   int get placedCrittersCount {
     int count = 0;
     for (int r = 0; r < size; r++) {
@@ -136,6 +138,14 @@ class PuzzleController extends ChangeNotifier {
     final CellContent current = _grid[row][col];
     final CellContent next = (current == CellContent.xMark) ? CellContent.empty : CellContent.xMark;
     _applyMove(pos, next);
+  }
+
+  /// Direct critter placement helper (e.g. for dynamic hint guidance)
+  void placeCritterAt(int row, int col) {
+    if (_isCompleted || _isGameOver) return;
+    final pos = CellPosition(row, col);
+    _applyMove(pos, CellContent.critter);
+    notifyListeners();
   }
 
   void _applyMove(CellPosition pos, CellContent newContent) {

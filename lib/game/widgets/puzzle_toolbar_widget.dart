@@ -6,8 +6,13 @@ import '../engine/puzzle_controller.dart';
 
 class PuzzleToolbarWidget extends StatelessWidget {
   final PuzzleController controller;
+  final VoidCallback? onCustomHint;
 
-  const PuzzleToolbarWidget({super.key, required this.controller});
+  const PuzzleToolbarWidget({
+    super.key,
+    required this.controller,
+    this.onCustomHint,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +79,15 @@ class PuzzleToolbarWidget extends StatelessWidget {
                     clipBehavior: Clip.none,
                     children: [
                       ElevatedButton.icon(
-                        onPressed: controller.hintsRemaining > 0 ? () => controller.useHint() : null,
+                        onPressed: controller.hintsRemaining > 0
+                            ? () {
+                                if (onCustomHint != null) {
+                                  onCustomHint!();
+                                } else {
+                                  controller.useHint();
+                                }
+                              }
+                            : null,
                         icon: const Icon(Icons.lightbulb_rounded, size: 18, color: AppColors.accentGold),
                         label: const Text('Hint'),
                         style: ElevatedButton.styleFrom(

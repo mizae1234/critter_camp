@@ -11,6 +11,9 @@ import '../data/repositories/auth_repository.dart';
 import '../services/api/api_client.dart';
 import '../services/config/app_config_service.dart';
 import '../services/ads/ads_service.dart';
+import '../services/ads/ad_policy_service.dart';
+import '../services/hints/progressive_hint_service.dart';
+import '../services/analytics/analytics_service.dart';
 import '../services/identity/player_identity_service.dart';
 import '../services/sync/cloud_sync_service.dart';
 import '../game/stage/stage_definition.dart';
@@ -52,6 +55,9 @@ class _CritterCampAppState extends State<CritterCampApp> {
   late ApiClient _apiClient;
   late AppConfigService _configService;
   late AdsService _adsService;
+  late AdPolicyService _adPolicyService;
+  late ProgressiveHintService _hintService;
+  late AnalyticsService _analyticsService;
   late PlayerIdentityService _identityService;
   late CloudSyncService _syncService;
 
@@ -84,6 +90,9 @@ class _CritterCampAppState extends State<CritterCampApp> {
     _apiClient = ApiClient(storage: widget.storage);
     _configService = AppConfigService(storage: widget.storage, apiClient: _apiClient);
     _adsService = AdsService(configService: _configService);
+    _adPolicyService = AdPolicyService(configService: _configService, adsService: _adsService);
+    _hintService = ProgressiveHintService(configService: _configService);
+    _analyticsService = AnalyticsService();
     _identityService = PlayerIdentityService(storage: widget.storage, apiClient: _apiClient);
     _syncService = CloudSyncService(storage: widget.storage, apiClient: _apiClient, identityService: _identityService);
 
@@ -93,13 +102,13 @@ class _CritterCampAppState extends State<CritterCampApp> {
     _leaderboardRepo = MockLeaderboardRepository();
     _authRepo = MockAuthRepository(widget.storage);
 
-    // 3. Load App State & Start Background Tasks
+    // 3. Track App Start & Init Background Services
+    _analyticsService.trackGameStarted();
     _loadAppState();
     _initBackgroundServices();
   }
 
   Future<void> _initBackgroundServices() async {
-    // Non-blocking remote config fetch and ads initialization
     await _configService.fetchRemoteConfig();
     await _adsService.initialize();
     await _syncService.syncPendingProgress();
@@ -192,6 +201,9 @@ class _CritterCampAppState extends State<CritterCampApp> {
       case AppView.gameplay:
         return GameplayScreen(
           stage: _activeStage,
+          hintService: _hintService,
+          adsService: _adsService,
+          analyticsService: _analyticsService,
           onBack: () => setState(() => _currentView = AppView.mainTabs),
           onStageCompleted: _handleStageWon,
         );
@@ -208,6 +220,13 @@ class _CritterCampAppState extends State<CritterCampApp> {
           acornsEarned: _activeStage.baseAcornsReward,
           solveTime: '1m 15s',
           unlockedCritter: unlocked,
+          adPolicyService: _adPolicyService,
+          adsService: _adsService,
+          analyticsService: _analyticsService,
+          onBonusAcornsClaimed: (extraAcorns) async {
+            await widget.storage.addAcorns(extraAcorns);
+            await _loadAppState();
+          },
           onNextStage: () {
             final nextStage = StageCatalog.getByNumber(_activeStage.stageNumber + 1);
             _startStage(nextStage);

@@ -8,16 +8,25 @@ import '../../../game/stage/stage_definition.dart';
 import '../../../game/validator/stage_validation_result.dart';
 import '../../../game/widgets/puzzle_board_widget.dart';
 import '../../../game/widgets/puzzle_toolbar_widget.dart';
+import '../../../services/hints/progressive_hint_service.dart';
+import '../../../services/ads/ads_service.dart';
+import '../../../services/analytics/analytics_service.dart';
 import '../dialogs/oops_dialog.dart';
 
 class GameplayScreen extends StatefulWidget {
   final StageDefinition stage;
+  final ProgressiveHintService? hintService;
+  final AdsService? adsService;
+  final AnalyticsService? analyticsService;
   final VoidCallback onBack;
   final void Function(StageValidationResult result) onStageCompleted;
 
   const GameplayScreen({
     super.key,
     required this.stage,
+    this.hintService,
+    this.adsService,
+    this.analyticsService,
     required this.onBack,
     required this.onStageCompleted,
   });
@@ -28,13 +37,26 @@ class GameplayScreen extends StatefulWidget {
 
 class _GameplayScreenState extends State<GameplayScreen> {
   late PuzzleController _controller;
+  int _hintsUsedOnThisStage = 0;
 
   @override
   void initState() {
     super.initState();
     _controller = PuzzleController(stage: widget.stage);
 
+    widget.analyticsService?.trackStageStarted(
+      stageNumber: widget.stage.stageNumber,
+      stageName: widget.stage.name,
+    );
+
     _controller.onStageCompleted = (result) {
+      widget.analyticsService?.trackStageCompleted(
+        stageNumber: widget.stage.stageNumber,
+        stars: result.starsEarned,
+        moves: _controller.movesCount,
+        elapsedSeconds: _controller.elapsedSeconds,
+        hintsUsed: _hintsUsedOnThisStage,
+      );
       widget.onStageCompleted(result);
     };
 
@@ -45,6 +67,157 @@ class _GameplayScreenState extends State<GameplayScreen> {
     _controller.onGameOver = () {
       _showGameOverDialog();
     };
+  }
+
+  void _handleHintRequest() {
+    if (widget.hintService == null) {
+      _controller.useHint();
+      return;
+    }
+
+    final clue = widget.hintService!.generateClue(
+      stage: widget.stage,
+      state: _controller.state,
+      hintsUsedOnStage: _hintsUsedOnThisStage,
+    );
+
+    widget.analyticsService?.trackHintRequested(
+      stageNumber: widget.stage.stageNumber,
+      hintTier: _hintsUsedOnThisStage + 1,
+      isFree: clue.isFree,
+    );
+
+    if (clue.isFree) {
+      _applyHintClue(clue);
+    } else {
+      _showRewardedHintOfferDialog(clue);
+    }
+  }
+
+  void _showRewardedHintOfferDialog(HintClue clue) {
+    widget.analyticsService?.trackRewardedOffered(placement: 'hint');
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: AppColors.surfaceContainerLowest,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSpacing.radiusMd)),
+          title: const Row(
+            children: [
+              Icon(Icons.video_collection_rounded, color: AppColors.primary),
+              SizedBox(width: 8),
+              Text('Unlock Progressive Clue'),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'You used your free stage clue! Watch a short camp sponsor video to unlock the next progressive clue for this puzzle.',
+                style: AppTypography.bodyMedium.copyWith(fontSize: 13),
+              ),
+              const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: AppColors.surfaceContainerHigh,
+                  borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.lightbulb_outline_rounded, color: AppColors.accentGold, size: 20),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        'Next: ${clue.title}',
+                        style: AppTypography.labelMedium.copyWith(fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Maybe Later'),
+            ),
+            ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white,
+              ),
+              icon: const Icon(Icons.play_circle_fill_rounded, size: 18),
+              label: const Text('Watch Video'),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                widget.analyticsService?.trackRewardedStarted(placement: 'hint');
+
+                if (widget.adsService != null) {
+                  await widget.adsService!.showRewarded(
+                    onRewarded: () {
+                      widget.analyticsService?.trackRewardedCompleted(placement: 'hint');
+                      widget.analyticsService?.trackRewardGranted(
+                        grantId: 'hint_${widget.stage.stageNumber}_$_hintsUsedOnThisStage',
+                        rewardType: 'progressive_hint',
+                        amount: 1,
+                      );
+                      _applyHintClue(clue);
+                    },
+                  );
+                } else {
+                  _applyHintClue(clue);
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _applyHintClue(HintClue clue) {
+    setState(() {
+      _hintsUsedOnThisStage++;
+    });
+
+    widget.analyticsService?.trackHintUsed(
+      stageNumber: widget.stage.stageNumber,
+      hintTier: clue.tier.name,
+    );
+
+    // If guidance clue with suggestion, apply piece placement
+    if (clue.suggestedRow != null && clue.suggestedCol != null) {
+      _controller.placeCritterAt(clue.suggestedRow!, clue.suggestedCol!);
+    }
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: AppColors.surfaceContainerLowest,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSpacing.radiusMd)),
+          title: Row(
+            children: [
+              const Icon(Icons.lightbulb_rounded, color: AppColors.accentGold),
+              const SizedBox(width: 8),
+              Flexible(child: Text(clue.title, style: AppTypography.titleLarge)),
+            ],
+          ),
+          content: Text(clue.message, style: AppTypography.bodyMedium),
+          actions: [
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white),
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Got It!'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _showOopsDialog() {
@@ -89,6 +262,7 @@ class _GameplayScreenState extends State<GameplayScreen> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
+                widget.analyticsService?.trackStageAbandoned(stageNumber: widget.stage.stageNumber, reason: 'game_over');
                 widget.onBack();
               },
               child: const Text('Quit Stage'),
@@ -96,7 +270,9 @@ class _GameplayScreenState extends State<GameplayScreen> {
             ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop();
+                widget.analyticsService?.trackStageRestarted(stageNumber: widget.stage.stageNumber);
                 _controller.resetStage();
+                setState(() => _hintsUsedOnThisStage = 0);
               },
               child: const Text('Try Again'),
             ),
@@ -136,7 +312,10 @@ class _GameplayScreenState extends State<GameplayScreen> {
                     children: [
                       IconButton(
                         icon: const Icon(Icons.arrow_back_rounded),
-                        onPressed: widget.onBack,
+                        onPressed: () {
+                          widget.analyticsService?.trackStageAbandoned(stageNumber: widget.stage.stageNumber, reason: 'back_pressed');
+                          widget.onBack();
+                        },
                         tooltip: 'Back',
                       ),
                       Column(
@@ -213,8 +392,11 @@ class _GameplayScreenState extends State<GameplayScreen> {
               ),
             ),
 
-            // Controls Toolbar
-            PuzzleToolbarWidget(controller: _controller),
+            // Controls Toolbar with Progressive Hint Integration
+            PuzzleToolbarWidget(
+              controller: _controller,
+              onCustomHint: _handleHintRequest,
+            ),
           ],
         ),
       ),

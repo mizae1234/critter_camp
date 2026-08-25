@@ -7,14 +7,21 @@ import '../../../core/widgets/critter_card.dart';
 import '../../../core/widgets/critter_avatar.dart';
 import '../../../data/models/critter_model.dart';
 import '../../../game/validator/stage_validation_result.dart';
+import '../../../services/ads/ad_policy_service.dart';
+import '../../../services/ads/ads_service.dart';
+import '../../../services/analytics/analytics_service.dart';
 
-class LevelCompleteScreen extends StatelessWidget {
+class LevelCompleteScreen extends StatefulWidget {
   final int stageNumber;
   final String stageName;
   final StageValidationResult validationResult;
   final int acornsEarned;
   final String solveTime;
   final CritterModel unlockedCritter;
+  final AdPolicyService? adPolicyService;
+  final AdsService? adsService;
+  final AnalyticsService? analyticsService;
+  final void Function(int extraAcorns)? onBonusAcornsClaimed;
   final VoidCallback onNextStage;
   final VoidCallback onReplay;
   final VoidCallback onBackHome;
@@ -27,14 +34,81 @@ class LevelCompleteScreen extends StatelessWidget {
     this.acornsEarned = 15,
     required this.solveTime,
     required this.unlockedCritter,
+    this.adPolicyService,
+    this.adsService,
+    this.analyticsService,
+    this.onBonusAcornsClaimed,
     required this.onNextStage,
     required this.onReplay,
     required this.onBackHome,
   });
 
   @override
+  State<LevelCompleteScreen> createState() => _LevelCompleteScreenState();
+}
+
+class _LevelCompleteScreenState extends State<LevelCompleteScreen> {
+  bool _bonusClaimed = false;
+  bool _isClaiming = false;
+
+  Future<void> _handleNextStage() async {
+    final policy = widget.adPolicyService;
+    policy?.recordStageCompleted();
+
+    // Evaluate Interstitial Ad eligibility at natural break
+    if (policy != null && policy.canShowInterstitial(stageNumber: widget.stageNumber)) {
+      widget.analyticsService?.trackInterstitialEligible(stageNumber: widget.stageNumber);
+      policy.recordInterstitialShown();
+      widget.analyticsService?.trackInterstitialShown(stageNumber: widget.stageNumber);
+      if (widget.adsService != null) {
+        await widget.adsService!.showInterstitial();
+      }
+    }
+
+    widget.onNextStage();
+  }
+
+  Future<void> _handleClaimBonus() async {
+    if (_bonusClaimed || _isClaiming) return;
+
+    setState(() => _isClaiming = true);
+    widget.analyticsService?.trackRewardedOffered(placement: 'post_stage');
+    widget.analyticsService?.trackRewardedStarted(placement: 'post_stage');
+
+    if (widget.adsService != null) {
+      await widget.adsService!.showRewarded(
+        onRewarded: () {
+          widget.adPolicyService?.recordRewardedCompleted();
+          widget.analyticsService?.trackRewardedCompleted(placement: 'post_stage');
+          final granted = widget.analyticsService?.trackRewardGranted(
+            grantId: 'post_stage_${widget.stageNumber}',
+            rewardType: 'acorns_double',
+            amount: widget.acornsEarned,
+          ) ?? true;
+
+          if (granted) {
+            widget.onBonusAcornsClaimed?.call(widget.acornsEarned);
+          }
+
+          setState(() {
+            _bonusClaimed = true;
+            _isClaiming = false;
+          });
+        },
+      );
+    } else {
+      widget.onBonusAcornsClaimed?.call(widget.acornsEarned);
+      setState(() {
+        _bonusClaimed = true;
+        _isClaiming = false;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final int stars = validationResult.starsEarned.clamp(1, 3);
+    final int stars = widget.validationResult.starsEarned.clamp(1, 3);
+    final bool canOfferBonus = widget.adPolicyService?.canOfferPostStageBonus() ?? true;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -47,8 +121,8 @@ class LevelCompleteScreen extends StatelessWidget {
 
               // Celebration Icon & Badge
               Container(
-                width: 90,
-                height: 90,
+                width: 84,
+                height: 84,
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
                     colors: [Color(0xFFFBBF24), Color(0xFFD97706)],
@@ -67,13 +141,13 @@ class LevelCompleteScreen extends StatelessWidget {
                 child: const Center(
                   child: Icon(
                     Icons.auto_awesome_rounded,
-                    size: 48,
+                    size: 44,
                     color: Colors.white,
                   ),
                 ),
               ),
 
-              const SizedBox(height: AppSpacing.md),
+              const SizedBox(height: AppSpacing.sm),
 
               Text(
                 'Great Solution!',
@@ -83,11 +157,11 @@ class LevelCompleteScreen extends StatelessWidget {
               const SizedBox(height: AppSpacing.xs),
 
               Text(
-                'Stage $stageNumber: $stageName Solved',
+                'Stage ${widget.stageNumber}: ${widget.stageName} Solved',
                 style: AppTypography.bodyMedium,
               ),
 
-              const SizedBox(height: AppSpacing.md),
+              const SizedBox(height: AppSpacing.sm),
 
               // Stars Row (1 to 3 Stars earned)
               Row(
@@ -98,52 +172,28 @@ class LevelCompleteScreen extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 4.0),
                     child: Icon(
                       Icons.star_rounded,
-                      size: 40,
+                      size: 38,
                       color: isLit ? const Color(0xFFF59E0B) : AppColors.outlineVariant,
                     ),
                   );
                 }),
               ),
 
-              const SizedBox(height: AppSpacing.md),
+              const SizedBox(height: AppSpacing.sm),
 
               // Performance Stats Row
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _buildStatItem('Time', solveTime),
+                  _buildStatItem('Time', widget.solveTime),
                   const SizedBox(width: 20),
-                  _buildStatItem('Reward', '+$acornsEarned 🌰'),
+                  _buildStatItem('Reward', '+${widget.acornsEarned * (_bonusClaimed ? 2 : 1)} 🌰'),
                   const SizedBox(width: 20),
                   _buildStatItem('Stars', '$stars / 3 ⭐'),
                 ],
               ),
 
-              const SizedBox(height: AppSpacing.lg),
-
-              // Bonus Objectives Completed
-              if (validationResult.bonusObjectivesCompleted.isNotEmpty)
-                CritterCard(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  backgroundColor: AppColors.primaryContainer.withValues(alpha: 0.3),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.stars_rounded, color: AppColors.accentGold, size: 20),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          validationResult.bonusObjectivesCompleted.map((b) => b.title).join(' • '),
-                          style: AppTypography.labelSmall.copyWith(
-                            color: AppColors.primaryDark,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-              const SizedBox(height: AppSpacing.md),
+              const SizedBox(height: AppSpacing.sm),
 
               // Unlocked Critter Showcase Card
               CritterCard(
@@ -153,8 +203,8 @@ class LevelCompleteScreen extends StatelessWidget {
                 child: Row(
                   children: [
                     CritterAvatar(
-                      emoji: unlockedCritter.emoji,
-                      size: 54,
+                      emoji: widget.unlockedCritter.emoji,
+                      size: 48,
                       isUnlocked: true,
                     ),
                     const SizedBox(width: 14),
@@ -175,11 +225,11 @@ class LevelCompleteScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            '${unlockedCritter.name} the ${unlockedCritter.species}',
+                            '${widget.unlockedCritter.name} the ${widget.unlockedCritter.species}',
                             style: AppTypography.titleMedium,
                           ),
                           Text(
-                            unlockedCritter.title,
+                            widget.unlockedCritter.title,
                             style: AppTypography.labelSmall.copyWith(color: AppColors.onSurfaceVariant),
                           ),
                         ],
@@ -189,6 +239,57 @@ class LevelCompleteScreen extends StatelessWidget {
                 ),
               ),
 
+              // Optional Rewarded Ad Bonus Card
+              if (canOfferBonus) ...[
+                const SizedBox(height: AppSpacing.sm),
+                CritterCard(
+                  backgroundColor: _bonusClaimed ? const Color(0xFFDCFCE7) : const Color(0xFFFEF3C7),
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                  child: Row(
+                    children: [
+                      Icon(
+                        _bonusClaimed ? Icons.check_circle_rounded : Icons.card_giftcard_rounded,
+                        color: _bonusClaimed ? const Color(0xFF15803D) : const Color(0xFFB45309),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              _bonusClaimed ? 'Double Acorns Claimed!' : 'Double Your Acorns!',
+                              style: AppTypography.labelMedium.copyWith(
+                                fontWeight: FontWeight.w700,
+                                color: _bonusClaimed ? const Color(0xFF15803D) : const Color(0xFF92400E),
+                              ),
+                            ),
+                            Text(
+                              _bonusClaimed ? '+${widget.acornsEarned} Acorns added' : 'Watch a video for +${widget.acornsEarned} acorns',
+                              style: AppTypography.labelSmall.copyWith(
+                                color: _bonusClaimed ? const Color(0xFF15803D) : const Color(0xFFB45309),
+                                fontSize: 11,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      if (!_bonusClaimed)
+                        ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFD97706),
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                            visualDensity: VisualDensity.compact,
+                          ),
+                          icon: const Icon(Icons.play_arrow_rounded, size: 16),
+                          label: const Text('2x 🌰', style: TextStyle(fontSize: 12)),
+                          onPressed: _handleClaimBonus,
+                        ),
+                    ],
+                  ),
+                ),
+              ],
+
               const Spacer(flex: 2),
 
               // Action CTAs
@@ -196,10 +297,10 @@ class LevelCompleteScreen extends StatelessWidget {
                 text: 'Next Stage',
                 isFullWidth: true,
                 icon: Icons.arrow_forward_rounded,
-                onPressed: onNextStage,
+                onPressed: _handleNextStage,
               ),
 
-              const SizedBox(height: AppSpacing.sm),
+              const SizedBox(height: AppSpacing.xs),
 
               Row(
                 children: [
@@ -208,7 +309,7 @@ class LevelCompleteScreen extends StatelessWidget {
                       text: 'Replay',
                       variant: CritterButtonVariant.outline,
                       icon: Icons.replay_rounded,
-                      onPressed: onReplay,
+                      onPressed: widget.onReplay,
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -217,13 +318,13 @@ class LevelCompleteScreen extends StatelessWidget {
                       text: 'Map',
                       variant: CritterButtonVariant.ghost,
                       icon: Icons.map_rounded,
-                      onPressed: onBackHome,
+                      onPressed: widget.onBackHome,
                     ),
                   ),
                 ],
               ),
 
-              const SizedBox(height: AppSpacing.lg),
+              const SizedBox(height: AppSpacing.md),
             ],
           ),
         ),

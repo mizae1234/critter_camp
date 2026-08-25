@@ -30,6 +30,25 @@ const ADMOB_SEEDS = {
         nativeAdvancedId: 'ca-app-pub-3940256099942544/3986624511',
       },
     },
+    monetization: {
+      enabled: true,
+      rewarded: {
+        enabled: true,
+        hintEnabled: true,
+        postStageBonusEnabled: true,
+      },
+      interstitial: {
+        enabled: true,
+        stageInterval: 3,
+        cooldownSeconds: 180,
+        minimumStageBeforeFirstAd: 4,
+        rewardedGracePeriodSeconds: 90,
+      },
+      hints: {
+        firstHintFree: true,
+        maxHintsPerStage: 3,
+      },
+    },
     placements: {
       homeBanner: {
         enabled: true,
@@ -50,6 +69,7 @@ const ADMOB_SEEDS = {
       zenModeEnabled: true,
       patternModeEnabled: true,
       cloudSyncEnabled: true,
+      progressiveHintsEnabled: true,
     },
     maintenanceMode: false,
     minVersion: '1.0.0',
@@ -76,6 +96,25 @@ const ADMOB_SEEDS = {
         rewardedId: 'ca-app-pub-XXXXXXXXXXXXXXXX/XXXXXXXXXX',
       },
     },
+    monetization: {
+      enabled: true,
+      rewarded: {
+        enabled: true,
+        hintEnabled: true,
+        postStageBonusEnabled: true,
+      },
+      interstitial: {
+        enabled: true,
+        stageInterval: 3,
+        cooldownSeconds: 180,
+        minimumStageBeforeFirstAd: 4,
+        rewardedGracePeriodSeconds: 90,
+      },
+      hints: {
+        firstHintFree: true,
+        maxHintsPerStage: 3,
+      },
+    },
     maintenanceMode: false,
     minVersion: '1.0.0',
     seededAt: new Date().toISOString(),
@@ -86,7 +125,6 @@ function seedAdMob(env = 'development') {
   const seedData = ADMOB_SEEDS[env] || ADMOB_SEEDS.development;
   const result = db.updateAppConfig('critter-camp', seedData);
   console.log(`\n✅ [AdMob Seeder] Successfully seeded AdMob test configuration for [${env.toUpperCase()}]!`);
-  console.log(JSON.stringify(result, null, 2));
   return result;
 }
 

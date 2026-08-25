@@ -13,6 +13,15 @@ class GameState {
     this.elapsedSeconds = 0,
   });
 
+  factory GameState.empty(int size) {
+    return GameState(
+      grid: List.generate(
+        size,
+        (_) => List.filled(size, CellContent.empty),
+      ),
+    );
+  }
+
   int get size => grid.length;
 
   List<CellPosition> get placedCritterPositions {

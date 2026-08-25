@@ -13,7 +13,7 @@ class CritterDatabase {
   }
 
   initDefaultData() {
-    // Initial Web Admin Managed Config for 'critter-camp'
+    // Initial Web Admin Managed Config for 'critter-camp' with Phase 4 Monetization
     this.appConfigs.set('critter-camp', {
       appId: 'critter-camp',
       appName: 'Critter Camp',
@@ -24,18 +24,58 @@ class CritterDatabase {
           bannerId: 'ca-app-pub-3940256099942544/6300978111',
           interstitialId: 'ca-app-pub-3940256099942544/1033173712',
           rewardedId: 'ca-app-pub-3940256099942544/5224354917',
+          rewardedInterstitialId: 'ca-app-pub-3940256099942544/5354046379',
+          nativeAdvancedId: 'ca-app-pub-3940256099942544/2247696110',
         },
         ios: {
           appId: 'ca-app-pub-3940256099942544~1458002511',
           bannerId: 'ca-app-pub-3940256099942544/2934735716',
           interstitialId: 'ca-app-pub-3940256099942544/4411468910',
           rewardedId: 'ca-app-pub-3940256099942544/1712485313',
+          rewardedInterstitialId: 'ca-app-pub-3940256099942544/6978759866',
+          nativeAdvancedId: 'ca-app-pub-3940256099942544/3986624511',
+        },
+      },
+      monetization: {
+        enabled: true,
+        rewarded: {
+          enabled: true,
+          hintEnabled: true,
+          postStageBonusEnabled: true,
+        },
+        interstitial: {
+          enabled: true,
+          stageInterval: 3,
+          cooldownSeconds: 180,
+          minimumStageBeforeFirstAd: 4,
+          rewardedGracePeriodSeconds: 90,
+        },
+        hints: {
+          firstHintFree: true,
+          maxHintsPerStage: 3,
+        },
+      },
+      placements: {
+        homeBanner: {
+          enabled: true,
+          adFormat: 'adaptive_banner',
+          position: 'bottom',
+        },
+        stageCompleteInterstitial: {
+          enabled: true,
+          frequency: 'every_3_stages',
+        },
+        hintRewarded: {
+          enabled: true,
+          rewardAcorns: 10,
+          rewardHints: 1,
         },
       },
       featureFlags: {
         zenModeEnabled: true,
         patternModeEnabled: true,
         cloudSyncEnabled: true,
+        progressiveHintsEnabled: true,
       },
       maintenanceMode: false,
       minVersion: '1.0.0',
@@ -61,7 +101,6 @@ class CritterDatabase {
 
   // Player Identity
   getOrCreatePlayer({ guestId, userId, email, displayName }) {
-    // 1. Look up by userId (if authenticated)
     if (userId) {
       for (const player of this.players.values()) {
         if (player.userId === userId) {
@@ -71,7 +110,6 @@ class CritterDatabase {
       }
     }
 
-    // 2. Look up by guestId
     if (guestId) {
       for (const player of this.players.values()) {
         if (player.guestId === guestId) {
@@ -81,7 +119,6 @@ class CritterDatabase {
       }
     }
 
-    // 3. Create new Player
     const id = `player_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
     const newPlayer = {
       id,
@@ -102,7 +139,6 @@ class CritterDatabase {
     return newPlayer;
   }
 
-  // Guest -> Account Upgrade (Safe Merge)
   upgradeGuestToAccount({ guestId, userId, email, displayName }) {
     let guestPlayer = null;
     let existingAuthPlayer = null;
@@ -116,9 +152,7 @@ class CritterDatabase {
       return this.getOrCreatePlayer({ guestId, userId, email, displayName });
     }
 
-    // If existing auth player already exists, merge guest progress into it
     if (existingAuthPlayer && guestPlayer && existingAuthPlayer.id !== guestPlayer.id) {
-      // Transfer stage progress from guest to existing account
       for (const [key, prog] of this.stageProgress.entries()) {
         if (prog.playerId === guestPlayer.id) {
           const authKey = `${existingAuthPlayer.id}:${prog.stageNumber}`;
@@ -126,7 +160,6 @@ class CritterDatabase {
           if (!existingProg) {
             this.stageProgress.set(authKey, { ...prog, playerId: existingAuthPlayer.id });
           } else {
-            // Safe merge: MAX stars, MIN moves
             this.stageProgress.set(authKey, {
               ...existingProg,
               completed: existingProg.completed || prog.completed,
@@ -142,7 +175,6 @@ class CritterDatabase {
       return existingAuthPlayer;
     }
 
-    // Otherwise simply attach userId to guest player
     const target = guestPlayer || existingAuthPlayer;
     target.userId = userId;
     target.email = email || target.email;
@@ -152,7 +184,6 @@ class CritterDatabase {
     return target;
   }
 
-  // Stage Progress Sync (Safe Merge: completed OR, MAX stars, MIN moves)
   syncStageProgress(playerId, stagesToSync) {
     const results = [];
 
@@ -175,7 +206,6 @@ class CritterDatabase {
         this.stageProgress.set(key, newRecord);
         results.push(newRecord);
       } else {
-        // Safe Merge conflict resolution
         const merged = {
           ...existing,
           completed: existing.completed || item.completed,
