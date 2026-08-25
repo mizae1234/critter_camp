@@ -313,6 +313,7 @@ class _CritterCampAppState extends State<CritterCampApp> {
           syncService: _syncService,
           onOpenSettings: () => setState(() => _currentView = AppView.settings),
           onOpenLeaderboard: () => setState(() => _currentView = AppView.leaderboard),
+          onOpenFirstLaunch: () => setState(() => _currentView = AppView.firstLaunch),
         );
     }
   }

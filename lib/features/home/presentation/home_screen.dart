@@ -100,50 +100,91 @@ class HomeScreen extends StatelessWidget {
 
               const SizedBox(height: AppSpacing.xl),
 
-              // Continue Journey Hero Card
-              CritterCard(
-                backgroundColor: AppColors.primaryDark,
-                borderRadius: AppSpacing.radiusLg,
-                padding: const EdgeInsets.all(AppSpacing.xl),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
-                          ),
-                          child: Text(
-                            '${currentStage.biomeName} • ${currentStage.size}x${currentStage.size}',
-                            style: AppTypography.labelSmall.copyWith(color: AppColors.primaryContainer),
-                          ),
-                        ),
-                        const Icon(Icons.nature_people_rounded, color: AppColors.primaryLight),
-                      ],
-                    ),
-                    const SizedBox(height: AppSpacing.md),
-                    Text(
-                      AppStrings.readyForBrainBreak,
-                      style: AppTypography.headlineLarge.copyWith(color: Colors.white),
-                    ),
-                    const SizedBox(height: AppSpacing.sm),
-                    Text(
-                      '${AppStrings.stagePrefix} ${currentStage.stageNumber}: ${currentStage.name} ${AppStrings.stageWaiting}',
-                      style: AppTypography.bodyMedium.copyWith(color: Colors.white70),
-                    ),
-                    const SizedBox(height: AppSpacing.lg),
-                    CritterButton(
-                      text: '${AppStrings.playCurrentStage} ${currentStage.stageNumber}',
-                      variant: CritterButtonVariant.secondary,
-                      isFullWidth: true,
-                      icon: Icons.play_arrow_rounded,
-                      onPressed: onContinueLevel,
+              // Continue Journey Hero Card with Campfire Artwork
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.primaryDark.withValues(alpha: 0.25),
+                      blurRadius: 20,
+                      offset: const Offset(0, 8),
                     ),
                   ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
+                  child: Stack(
+                    children: [
+                      // Backdrop Image
+                      Positioned.fill(
+                        child: Image.asset(
+                          'assets/images/bg_campsite.jpg',
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) => Container(color: AppColors.primaryDark),
+                        ),
+                      ),
+                      // Dark gradient for text legibility
+                      Positioned.fill(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Colors.black.withValues(alpha: 0.45),
+                                Colors.black.withValues(alpha: 0.82),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(AppSpacing.xl),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withValues(alpha: 0.25),
+                                    borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
+                                    border: Border.all(color: Colors.white.withValues(alpha: 0.3)),
+                                  ),
+                                  child: Text(
+                                    '${currentStage.biomeName} • ${currentStage.size}x${currentStage.size}',
+                                    style: AppTypography.labelSmall.copyWith(color: Colors.white, fontWeight: FontWeight.w700),
+                                  ),
+                                ),
+                                const Icon(Icons.nature_people_rounded, color: AppColors.accentGold),
+                              ],
+                            ),
+                            const SizedBox(height: AppSpacing.md),
+                            Text(
+                              AppStrings.readyForBrainBreak,
+                              style: AppTypography.headlineLarge.copyWith(color: Colors.white, fontWeight: FontWeight.w800),
+                            ),
+                            const SizedBox(height: AppSpacing.sm),
+                            Text(
+                              '${AppStrings.stagePrefix} ${currentStage.stageNumber}: ${currentStage.name} ${AppStrings.stageWaiting}',
+                              style: AppTypography.bodyMedium.copyWith(color: Colors.white.withValues(alpha: 0.9)),
+                            ),
+                            const SizedBox(height: AppSpacing.lg),
+                            CritterButton(
+                              text: '${AppStrings.playCurrentStage} ${currentStage.stageNumber}',
+                              variant: CritterButtonVariant.secondary,
+                              isFullWidth: true,
+                              icon: Icons.play_arrow_rounded,
+                              onPressed: onContinueLevel,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
 

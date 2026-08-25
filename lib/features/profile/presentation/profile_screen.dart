@@ -16,6 +16,7 @@ class ProfileScreen extends StatefulWidget {
   final CloudSyncService syncService;
   final VoidCallback onOpenSettings;
   final VoidCallback? onOpenLeaderboard;
+  final VoidCallback? onOpenFirstLaunch;
 
   const ProfileScreen({
     super.key,
@@ -24,6 +25,7 @@ class ProfileScreen extends StatefulWidget {
     required this.syncService,
     required this.onOpenSettings,
     this.onOpenLeaderboard,
+    this.onOpenFirstLaunch,
   });
 
   @override
@@ -304,6 +306,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ],
                   ),
                 ),
+
+              if (widget.onOpenFirstLaunch != null) ...[
+                const SizedBox(height: 8),
+                CritterCard(
+                  backgroundColor: const Color(0xFFFBF6EE),
+                  borderRadius: AppSpacing.radiusMd,
+                  onTap: widget.onOpenFirstLaunch,
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 44,
+                        height: 44,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFEF3C7),
+                          borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+                        ),
+                        child: const Center(child: Text('⛺', style: TextStyle(fontSize: 22))),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Welcome / Account Portal', style: AppTypography.titleMedium.copyWith(fontSize: 14, fontWeight: FontWeight.w700)),
+                            Text('Switch Account • Play as Guest • Register', style: AppTypography.labelSmall.copyWith(color: AppColors.outline)),
+                          ],
+                        ),
+                      ),
+                      const Icon(Icons.chevron_right_rounded, color: AppColors.outline),
+                    ],
+                  ),
+                ),
+              ],
 
               const SizedBox(height: AppSpacing.lg),
 
