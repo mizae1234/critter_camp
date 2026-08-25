@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Logged-In Profile - MossyFox</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#291802",
+                        "secondary-fixed": "#d0eac9",
+                        "habitat-sand": "#D9C5B2",
+                        "inverse-surface": "#30312d",
+                        "on-surface": "#1b1c19",
+                        "on-secondary-container": "#536a50",
+                        "surface-variant": "#e4e2dd",
+                        "surface-container-highest": "#e4e2dd",
+                        "on-error-container": "#93000a",
+                        "habitat-lavender": "#B8B5CB",
+                        "tertiary-fixed-dim": "#e2c19c",
+                        "on-error": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "text-accent-brown": "#664E31",
+                        "background": "#fbf9f3",
+                        "on-primary-fixed": "#0f1f09",
+                        "outline": "#74786f",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#b8cda9",
+                        "primary-container": "#5d7052",
+                        "on-background": "#1b1c19",
+                        "surface-container": "#f0eee8",
+                        "surface-dim": "#dcdad4",
+                        "habitat-sage": "#748C70",
+                        "habitat-blue": "#A8B9C0",
+                        "tertiary": "#664e31",
+                        "on-surface-variant": "#444840",
+                        "outline-variant": "#c4c8bd",
+                        "surface-container-low": "#f5f3ee",
+                        "primary-fixed": "#d4e9c4",
+                        "secondary": "#4d644b",
+                        "on-tertiary-container": "#ffe8d2",
+                        "error-container": "#ffdad6",
+                        "surface-bright": "#fbf9f3",
+                        "secondary-fixed-dim": "#b4ceae",
+                        "tertiary-container": "#806647",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed-variant": "#3a4c30",
+                        "secondary-container": "#d0eac9",
+                        "surface-container-high": "#eae8e2",
+                        "primary-fixed-dim": "#b8cda9",
+                        "habitat-peach": "#F4D9C6",
+                        "tertiary-fixed": "#ffddb7",
+                        "habitat-terracotta": "#D69E8E",
+                        "surface-cream": "#F2E8CF",
+                        "surface-container-lowest": "#ffffff",
+                        "surface": "#fbf9f3",
+                        "on-tertiary-fixed-variant": "#594226",
+                        "on-primary-container": "#ddf3cd",
+                        "surface-tint": "#516447",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed-variant": "#364c34",
+                        "primary": "#45573b",
+                        "on-secondary-fixed": "#0b200c",
+                        "inverse-on-surface": "#f2f1eb"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-lg": "40px",
+                        "gutter": "16px",
+                        "unit": "4px",
+                        "margin-mobile": "24px",
+                        "stack-md": "20px",
+                        "stack-sm": "12px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "label-bold": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-bold": ["14px", { "lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "700" }],
+                        "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["22px", { "lineHeight": "30px", "fontWeight": "600" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #fbf9f3; /* surface */
+            color: #1b1c19; /* on-surface */
+        }
+        .weightless-shadow {
+            box-shadow: 0 4px 24px rgba(102, 78, 49, 0.05);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="min-h-screen pb-24 font-body-md">
+<!-- Top App Bar -->
+<header class="flex justify-between items-center px-margin-mobile h-20 w-full bg-surface dark:bg-surface-dim docked full-width top-0 sticky z-40">
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">arrow_back</span>
+</button>
+<h1 class="font-headline-md text-headline-md font-bold text-habitat-sage">Profile</h1>
+</div>
+<button class="text-on-surface-variant hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">settings</span>
+</button>
+</header>
+<!-- Main Content -->
+<main class="px-margin-mobile flex flex-col gap-stack-lg pt-4 md:grid md:grid-cols-4 md:gap-gutter max-w-7xl mx-auto">
+<!-- Profile Header Area -->
+<section class="flex flex-col items-center gap-stack-sm md:col-span-4 md:flex-row md:items-start md:gap-stack-lg">
+<!-- Avatar -->
+<div class="w-32 h-32 rounded-full overflow-hidden border-4 border-surface-cream shadow-[0_8px_32px_rgba(102,78,49,0.1)] shrink-0">
+<img class="w-full h-full object-cover" data-alt="A stylized, flat vector illustration of a cute fox in a warm, minimalist style. The fox has soft, rounded features and is set against a gentle sage green background. The lighting is soft and even, highlighting the tactile, matte finish of the illustration. The overall mood is nurturing, refined, and peaceful." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQ_n_EYSqsl2CSfWR__hGu9AXMugg2azQp0o87Id-zwh7FcJ8yniHOVxmYc0-9WKoOSBa4Ebs21uqjzxZsGOTd_fKYrGqC4FNog6hPH5l6AEgAaFKkuMghXAp0NlU5FgV19v3NVGTTgStPw8TI29rd9PFWJd-nJtnR_Cxt0CJeN7LxzOPI9bme8cnaAl5z8KXT_ADtQfrQ5s3x0JdgVoi25nz9Hk54kwnErHf33l1hCzMMuA4UOQ8K"/>
+</div>
+<div class="text-center md:text-left flex flex-col justify-center h-full pt-4 md:pt-0">
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary">MossyFox</h2>
+<div class="flex items-center justify-center md:justify-start gap-1 text-on-surface-variant mt-2">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+<span class="font-body-md text-body-md">Thailand 🇹🇭</span>
+</div>
+</div>
+</section>
+<!-- Stats Grid (Bento Style) -->
+<section class="grid grid-cols-2 gap-unit md:col-span-4 lg:grid-cols-4 lg:gap-gutter">
+<!-- Journey Stat -->
+<div class="bg-surface-cream rounded-xl p-6 weightless-shadow flex flex-col justify-between items-center text-center">
+<span class="material-symbols-outlined text-habitat-sage text-3xl mb-2" style="font-variation-settings: 'FILL' 1;">map</span>
+<span class="font-display-lg text-display-lg text-primary">128</span>
+<span class="font-label-bold text-label-bold text-on-surface-variant uppercase tracking-widest mt-1">Journey</span>
+</div>
+<!-- Streak Stat -->
+<div class="bg-habitat-peach rounded-xl p-6 weightless-shadow flex flex-col justify-between items-center text-center">
+<span class="material-symbols-outlined text-tertiary text-3xl mb-2" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="font-display-lg text-display-lg text-on-tertiary-fixed">14</span>
+<span class="font-label-bold text-label-bold text-tertiary uppercase tracking-widest mt-1">Streak</span>
+</div>
+<!-- Rank Stat -->
+<div class="bg-habitat-blue rounded-xl p-6 weightless-shadow flex flex-col justify-between items-center text-center">
+<span class="material-symbols-outlined text-on-secondary-fixed text-3xl mb-2" style="font-variation-settings: 'FILL' 1;">emoji_events</span>
+<span class="font-display-lg text-display-lg text-on-secondary-fixed">#27</span>
+<span class="font-label-bold text-label-bold text-on-secondary-fixed-variant uppercase tracking-widest mt-1">Rank</span>
+</div>
+<!-- Critters Stat -->
+<div class="bg-primary-container rounded-xl p-6 weightless-shadow flex flex-col justify-between items-center text-center">
+<span class="material-symbols-outlined text-on-primary-container text-3xl mb-2" style="font-variation-settings: 'FILL' 1;">pets</span>
+<span class="font-display-lg text-display-lg text-on-primary-container">18<span class="text-body-lg opacity-70">/36</span></span>
+<span class="font-label-bold text-label-bold text-on-primary-container uppercase tracking-widest mt-1">Critters</span>
+</div>
+</section>
+<!-- Advanced Stats List -->
+<section class="md:col-span-4 mt-4">
+<h3 class="font-headline-md text-headline-md text-primary mb-stack-sm">Advanced Stats</h3>
+<div class="bg-surface-container rounded-[2rem] p-6 weightless-shadow flex flex-col gap-4">
+<div class="flex justify-between items-center border-b border-surface-variant pb-4 last:border-0 last:pb-0">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-habitat-lavender flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined">star</span>
+</div>
+<span class="font-body-lg text-body-lg text-on-surface">Perfect Games</span>
+</div>
+<span class="font-headline-md text-headline-md text-primary">72</span>
+</div>
+<div class="flex justify-between items-center border-b border-surface-variant pb-4 last:border-0 last:pb-0">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-habitat-sand flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined">timer</span>
+</div>
+<span class="font-body-lg text-body-lg text-on-surface">Avg. Time</span>
+</div>
+<span class="font-headline-md text-headline-md text-primary">02:04</span>
+</div>
+<div class="flex justify-between items-center border-b border-surface-variant pb-4 last:border-0 last:pb-0">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-habitat-sage/30 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">calendar_month</span>
+</div>
+<span class="font-body-lg text-body-lg text-on-surface">Daily Puzzles</span>
+</div>
+<span class="font-headline-md text-headline-md text-primary">38</span>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Nav Bar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-surface-container dark:bg-surface-container-highest shadow-[0_-4px_24px_rgba(102,78,49,0.05)] rounded-t-[2rem] md:hidden">
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-5 py-2 hover:bg-habitat-cream/50 dark:hover:bg-surface-variant/20 rounded-full transition-colors group">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">home</span>
+<span class="font-label-sm text-label-sm mt-1">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-5 py-2 hover:bg-habitat-cream/50 dark:hover:bg-surface-variant/20 rounded-full transition-colors group">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">map</span>
+<span class="font-label-sm text-label-sm mt-1">Journey</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-5 py-2 hover:bg-habitat-cream/50 dark:hover:bg-surface-variant/20 rounded-full transition-colors group">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">calendar_today</span>
+<span class="font-label-sm text-label-sm mt-1">Daily</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-5 py-2 hover:bg-habitat-cream/50 dark:hover:bg-surface-variant/20 rounded-full transition-colors group">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">pets</span>
+<span class="font-label-sm text-label-sm mt-1">Collection</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-secondary-container dark:bg-on-secondary-fixed-variant text-on-secondary-container dark:text-secondary-fixed rounded-full px-5 py-2 scale-90 duration-200 ease-out">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-label-sm text-label-sm mt-1">Profile</span>
+</button>
+</nav>
+</body></html>

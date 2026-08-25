@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Critter Camp - UI Design System & 16 Screens Prototype</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app" class="app-layout">
+    
+    <!-- Top Header -->
+    <header class="app-header">
+      <div class="brand-group">
+        <div class="brand-badge">
+          <span class="material-symbols-outlined brand-icon">forest</span>
+        </div>
+        <div class="brand-info">
+          <h1 class="brand-title">Critter Camp</h1>
+          <span class="brand-subtitle">Design System & 16 Interactive Screens</span>
+        </div>
+      </div>
+
+      <!-- Quick Navigation Stats & Flow Steps -->
+      <div class="header-center">
+        <div class="flow-pill-nav" id="flowPillNav">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Header Actions -->
+      <div class="header-actions">
+        <button id="btnGridView" class="action-btn" title="Toggle 16-Screen Grid Gallery (G)">
+          <span class="material-symbols-outlined">grid_view</span>
+          <span class="btn-text">Grid Gallery</span>
+        </button>
+        <button id="btnAutoPlay" class="action-btn" title="Auto Play Flow (P)">
+          <span class="material-symbols-outlined" id="playIcon">play_arrow</span>
+          <span class="btn-text">Auto Play</span>
+        </button>
+        <button id="btnOpenDirect" class="action-btn primary" title="Open Screen in New Tab">
+          <span class="material-symbols-outlined">open_in_new</span>
+          <span class="btn-text">Open Standalone</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Body Area -->
+    <main class="app-main">
+      
+      <!-- Left Sidebar: Screen List by Categories -->
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-search">
+          <span class="material-symbols-outlined search-icon">search</span>
+          <input type="text" id="searchInput" placeholder="Search 16 screens..." autocomplete="off">
+          <span id="screenCountBadge" class="badge-count">16</span>
+        </div>
+
+        <div class="sidebar-categories" id="sidebarCategories">
+          <!-- Categories & Screen items injected by JS -->
+        </div>
+
+        <div class="sidebar-footer">
+          <div class="info-card">
+            <span class="material-symbols-outlined">info</span>
+            <div class="info-text">
+              <strong>Stitch MCP Export</strong>
+              <span>16 Core Canvas Screens</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Center: Device Stage / Screen Viewer -->
+      <section class="stage-container">
+        <!-- Stage Toolbar -->
+        <div class="stage-toolbar">
+          <div class="toolbar-left">
+            <button id="btnPrevScreen" class="tool-btn" title="Previous Screen (Left Arrow)">
+              <span class="material-symbols-outlined">chevron_left</span>
+            </button>
+            <div class="current-screen-info">
+              <span class="current-index" id="currentScreenIndex">01 / 16</span>
+              <span class="current-name" id="currentScreenTitle">First Launch</span>
+            </div>
+            <button id="btnNextScreen" class="tool-btn" title="Next Screen (Right Arrow)">
+              <span class="material-symbols-outlined">chevron_right</span>
+            </button>
+          </div>
+
+          <div class="toolbar-center">
+            <div class="view-mode-selector">
+              <button class="mode-btn active" data-mode="interactive">
+                <span class="material-symbols-outlined">touch_app</span>
+                Interactive HTML
+              </button>
+              <button class="mode-btn" data-mode="screenshot">
+                <span class="material-symbols-outlined">image</span>
+                Design Screenshot
+              </button>
+              <button class="mode-btn" data-mode="code">
+                <span class="material-symbols-outlined">code</span>
+                Source Code
+              </button>
+            </div>
+          </div>
+
+          <div class="toolbar-right">
+            <div class="scale-control">
+              <button id="btnZoomOut" class="tool-btn-sm" title="Zoom Out"><span class="material-symbols-outlined">remove</span></button>
+              <span id="zoomLevel" class="scale-text">100%</span>
+              <button id="btnZoomIn" class="tool-btn-sm" title="Zoom In"><span class="material-symbols-outlined">add</span></button>
+              <button id="btnZoomReset" class="tool-btn-sm" title="Reset Zoom"><span class="material-symbols-outlined">restart_alt</span></button>
+            </div>
+            <button id="btnToggleSidebars" class="tool-btn" title="Toggle Full Focus Mode">
+              <span class="material-symbols-outlined">fullscreen</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Phone Device Frame -->
+        <div class="stage-viewport" id="stageViewport">
+          
+          <!-- Mode 1: Interactive Device Frame -->
+          <div class="device-frame" id="deviceFrame">
+            <div class="device-notch">
+              <div class="dynamic-island">
+                <span class="island-camera"></span>
+                <span class="island-sensor"></span>
+              </div>
+            </div>
+            <div class="device-screen-container">
+              <iframe id="screenIframe" src="" title="Critter Camp Screen"></iframe>
+            </div>
+            <div class="device-home-indicator"></div>
+          </div>
+
+          <!-- Mode 2: Screenshot Image Viewer -->
+          <div class="screenshot-viewer" id="screenshotViewer" style="display: none;">
+            <div class="screenshot-wrapper">
+              <img id="screenshotImg" src="" alt="Screen Screenshot">
+            </div>
+          </div>
+
+          <!-- Mode 3: Code Viewer -->
+          <div class="code-viewer" id="codeViewer" style="display: none;">
+            <div class="code-header">
+              <span class="code-filename" id="codeFilename">screen.html</span>
+              <button id="btnCopyCode" class="copy-btn">
+                <span class="material-symbols-outlined">content_copy</span>
+                Copy HTML
+              </button>
+            </div>
+            <pre><code id="codeContent">Loading...</code></pre>
+          </div>
+
+        </div>
+
+        <!-- Bottom Thumbnail Strip -->
+        <div class="bottom-filmstrip" id="bottomFilmstrip">
+          <div class="filmstrip-track" id="filmstripTrack">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Panel: Inspector & Screen Info -->
+      <aside class="inspector-panel" id="inspectorPanel">
+        <div class="inspector-header">
+          <h3>Screen Details</h3>
+          <span class="category-tag" id="inspectCategory">Onboarding</span>
+        </div>
+
+        <div class="inspector-body">
+          <div class="screen-meta-card">
+            <div class="meta-row">
+              <span class="meta-label">Title</span>
+              <span class="meta-val" id="inspectTitle">First Launch</span>
+            </div>
+            <div class="meta-row">
+              <span class="meta-label">Screen ID</span>
+              <span class="meta-val mono" id="inspectId">4544...</span>
+            </div>
+            <div class="meta-row">
+              <span class="meta-label">Aspect Ratio</span>
+              <span class="meta-val" id="inspectDim">390 x 844 (Mobile)</span>
+            </div>
+            <div class="meta-row">
+              <span class="meta-label">HTML File</span>
+              <span class="meta-val mono" id="inspectFile">01_first_launch.html</span>
+            </div>
+          </div>
+
+          <!-- Flow Jump Shortcuts -->
+          <div class="flow-actions-section">
+            <h4>Quick Jump in Flow</h4>
+            <div class="flow-step-buttons" id="flowStepButtons">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- Keyboard Shortcuts Help -->
+          <div class="shortcuts-card">
+            <h4>Keyboard Shortcuts</h4>
+            <ul>
+              <li><kbd>←</kbd> / <kbd>→</kbd> : Prev / Next Screen</li>
+              <li><kbd>1</kbd> - <kbd>3</kbd> : Switch View Mode</li>
+              <li><kbd>G</kbd> : Toggle Grid Gallery</li>
+              <li><kbd>Space</kbd> : Play / Pause Flow</li>
+              <li><kbd>Esc</kbd> : Close Gallery</li>
+            </ul>
+          </div>
+        </div>
+      </aside>
+
+    </main>
+
+    <!-- Grid Gallery Modal (Overlays full screen) -->
+    <div class="grid-modal" id="gridModal">
+      <div class="grid-modal-header">
+        <div class="grid-modal-title">
+          <span class="material-symbols-outlined">grid_view</span>
+          <h2>All 16 Critter Camp Screens</h2>
+        </div>
+        <button id="btnCloseGrid" class="close-btn">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="grid-modal-body" id="gridCardsContainer">
+        <!-- 16 cards injected by JS -->
+      </div>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Critter Camp - Level Complete</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#291802",
+                        "secondary-fixed": "#d0eac9",
+                        "habitat-sand": "#D9C5B2",
+                        "inverse-surface": "#30312d",
+                        "on-surface": "#1b1c19",
+                        "on-secondary-container": "#536a50",
+                        "surface-variant": "#e4e2dd",
+                        "surface-container-highest": "#e4e2dd",
+                        "on-error-container": "#93000a",
+                        "habitat-lavender": "#B8B5CB",
+                        "tertiary-fixed-dim": "#e2c19c",
+                        "on-error": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "text-accent-brown": "#664E31",
+                        "background": "#fbf9f3",
+                        "on-primary-fixed": "#0f1f09",
+                        "outline": "#74786f",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#b8cda9",
+                        "primary-container": "#5d7052",
+                        "on-background": "#1b1c19",
+                        "surface-container": "#f0eee8",
+                        "surface-dim": "#dcdad4",
+                        "habitat-sage": "#748C70",
+                        "habitat-blue": "#A8B9C0",
+                        "tertiary": "#664e31",
+                        "on-surface-variant": "#444840",
+                        "outline-variant": "#c4c8bd",
+                        "surface-container-low": "#f5f3ee",
+                        "primary-fixed": "#d4e9c4",
+                        "secondary": "#4d644b",
+                        "on-tertiary-container": "#ffe8d2",
+                        "error-container": "#ffdad6",
+                        "surface-bright": "#fbf9f3",
+                        "secondary-fixed-dim": "#b4ceae",
+                        "tertiary-container": "#806647",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed-variant": "#3a4c30",
+                        "secondary-container": "#d0eac9",
+                        "surface-container-high": "#eae8e2",
+                        "primary-fixed-dim": "#b8cda9",
+                        "habitat-peach": "#F4D9C6",
+                        "tertiary-fixed": "#ffddb7",
+                        "habitat-terracotta": "#D69E8E",
+                        "surface-cream": "#F2E8CF",
+                        "surface-container-lowest": "#ffffff",
+                        "surface": "#fbf9f3",
+                        "on-tertiary-fixed-variant": "#594226",
+                        "on-primary-container": "#ddf3cd",
+                        "surface-tint": "#516447",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed-variant": "#364c34",
+                        "primary": "#45573b",
+                        "on-secondary-fixed": "#0b200c",
+                        "inverse-on-surface": "#f2f1eb"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px",
+                        "2xl": "1rem",
+                        "3xl": "2rem"
+                    },
+                    "spacing": {
+                        "stack-lg": "40px",
+                        "gutter": "16px",
+                        "unit": "4px",
+                        "margin-mobile": "24px",
+                        "stack-md": "20px",
+                        "stack-sm": "12px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "label-bold": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-bold": ["14px", { "lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "700" }],
+                        "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["22px", { "lineHeight": "30px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .confetti {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background-color: #748C70;
+            border-radius: 50%;
+            animation: fall linear forwards;
+            opacity: 0.6;
+        }
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+            }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background min-h-screen flex flex-col items-center justify-center p-margin-mobile md:p-stack-lg text-on-background relative overflow-hidden">
+<!-- Confetti Container -->
+<div class="absolute inset-0 pointer-events-none z-0" id="confetti-container"></div>
+<main class="w-full max-w-md bg-surface-cream rounded-3xl p-stack-lg shadow-[0_24px_48px_rgba(102,78,49,0.05)] relative z-10 flex flex-col items-center text-center space-y-stack-md">
+<!-- Header Section -->
+<header class="space-y-stack-sm w-full flex flex-col items-center">
+<!-- Stars / Leaves -->
+<div class="flex justify-center space-x-gutter mb-unit">
+<span class="material-symbols-outlined text-display-lg font-display-lg text-habitat-sage" style="font-variation-settings: 'FILL' 1;">eco</span>
+<span class="material-symbols-outlined text-display-lg font-display-lg text-habitat-sage transform -translate-y-2" style="font-variation-settings: 'FILL' 1;">eco</span>
+<span class="material-symbols-outlined text-display-lg font-display-lg text-habitat-sage" style="font-variation-settings: 'FILL' 1;">eco</span>
+</div>
+<h1 class="font-display-lg text-display-lg text-primary">Perfect!</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Every critter found its home.</p>
+</header>
+<!-- Stats Bento Grid -->
+<div class="w-full grid grid-cols-3 gap-unit">
+<div class="bg-surface rounded-2xl p-stack-sm flex flex-col items-center justify-center">
+<span class="font-label-bold text-label-bold text-on-surface-variant mb-unit">Time</span>
+<span class="font-headline-md text-headline-md text-primary">02:18</span>
+</div>
+<div class="bg-surface rounded-2xl p-stack-sm flex flex-col items-center justify-center">
+<span class="font-label-bold text-label-bold text-on-surface-variant mb-unit">Mistakes</span>
+<span class="font-headline-md text-headline-md text-primary">0</span>
+</div>
+<div class="bg-surface rounded-2xl p-stack-sm flex flex-col items-center justify-center">
+<span class="font-label-bold text-label-bold text-on-surface-variant mb-unit">Hints</span>
+<span class="font-headline-md text-headline-md text-primary">0</span>
+</div>
+</div>
+<!-- Reward Section -->
+<div class="w-full bg-tertiary-fixed-dim/20 rounded-2xl p-stack-sm flex items-center justify-center space-x-gutter">
+<span class="material-symbols-outlined text-headline-lg font-headline-lg text-tertiary" style="font-variation-settings: 'FILL' 1;">nature</span>
+<span class="font-headline-lg text-headline-lg text-tertiary">+3 Acorns</span>
+</div>
+<!-- New Critter Unlocked -->
+<div class="w-full bg-habitat-peach/30 rounded-3xl p-stack-md flex flex-col items-center space-y-stack-sm border border-habitat-peach/50">
+<span class="font-label-bold text-label-bold text-tertiary uppercase tracking-wider">New Critter Unlocked</span>
+<div class="w-32 h-32 rounded-full overflow-hidden border-4 border-surface shadow-[0_12px_24px_rgba(102,78,49,0.05)] relative group cursor-pointer">
+<img class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" data-alt="A charming, soft-focus 3D rendering of a cute, stylized hedgehog named Hazel sitting on a small mossy log. The lighting is warm, natural, and inviting, creating a cozy and safe 'nurturing' atmosphere. The colors are muted earth tones with soft terracotta and sage accents, reflecting a tactile modernism style. High-key lighting, soft shadows, premium editorial feel." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBexsMG5yCyMK8Iy8gWAHMIRZWUjU7_nYoCU6XY7q3VcYFejGBpKzgzC1fAvhXb4pVI_tmhMFVk-7jCJ7y3cD_0Gw4emN7G5ISWIMJI--_sEBKLvW-aNYKwzbdM0oVRgawp74DHD9GgmeTqGCerOfqKyFEGHvY4UlGN5ZpczC6V-6EbFgyqQ3dPVG8x9OCpMUA7htlLvbnDAHMCNba9VjTHbGvoLMVOujtwtWTGSgxw2I19OHNEtsny"/>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Hazel the Hedgehog</h3>
+</div>
+<!-- Actions -->
+<div class="w-full flex flex-col space-y-stack-sm pt-stack-sm">
+<button class="w-full py-4 bg-habitat-sage text-on-primary font-label-bold text-label-bold rounded-full shadow-[0_8px_16px_rgba(116,140,112,0.2)] hover:bg-primary transition-colors duration-200">
+                Next Puzzle
+            </button>
+<button class="w-full py-4 bg-transparent border border-habitat-sage text-habitat-sage font-label-bold text-label-bold rounded-full hover:bg-habitat-sage/5 transition-colors duration-200">
+                Back Home
+            </button>
+</div>
+</main>
+<script>
+        // Subtle Confetti Effect
+        function createConfetti() {
+            const container = document.getElementById('confetti-container');
+            const colors = ['#748C70', '#D9C5B2', '#D69E8E', '#F4D9C6']; // Brand colors
+            
+            for (let i = 0; i < 30; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                
+                // Randomize properties
+                const size = Math.random() * 6 + 4 + 'px';
+                const left = Math.random() * 100 + 'vw';
+                const duration = Math.random() * 3 + 2 + 's';
+                const delay = Math.random() * 2 + 's';
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                
+                confetti.style.width = size;
+                confetti.style.height = size;
+                confetti.style.left = left;
+                confetti.style.top = '-10px';
+                confetti.style.backgroundColor = color;
+                confetti.style.animationDuration = duration;
+                confetti.style.animationDelay = delay;
+                
+                container.appendChild(confetti);
+            }
+        }
+        
+        // Trigger confetti on load
+        window.addEventListener('DOMContentLoaded', createConfetti);
+    </script>
+</body></html>

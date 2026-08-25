@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Critter Camp - Level 18 (Wrong Move)</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#291802",
+                        "secondary-fixed": "#d0eac9",
+                        "habitat-sand": "#D9C5B2",
+                        "inverse-surface": "#30312d",
+                        "on-surface": "#1b1c19",
+                        "on-secondary-container": "#536a50",
+                        "surface-variant": "#e4e2dd",
+                        "surface-container-highest": "#e4e2dd",
+                        "on-error-container": "#93000a",
+                        "habitat-lavender": "#B8B5CB",
+                        "tertiary-fixed-dim": "#e2c19c",
+                        "on-error": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "text-accent-brown": "#664E31",
+                        "background": "#fbf9f3",
+                        "on-primary-fixed": "#0f1f09",
+                        "outline": "#74786f",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#b8cda9",
+                        "primary-container": "#5d7052",
+                        "on-background": "#1b1c19",
+                        "surface-container": "#f0eee8",
+                        "surface-dim": "#dcdad4",
+                        "habitat-sage": "#748C70",
+                        "habitat-blue": "#A8B9C0",
+                        "tertiary": "#664e31",
+                        "on-surface-variant": "#444840",
+                        "outline-variant": "#c4c8bd",
+                        "surface-container-low": "#f5f3ee",
+                        "primary-fixed": "#d4e9c4",
+                        "secondary": "#4d644b",
+                        "on-tertiary-container": "#ffe8d2",
+                        "error-container": "#ffdad6",
+                        "surface-bright": "#fbf9f3",
+                        "secondary-fixed-dim": "#b4ceae",
+                        "tertiary-container": "#806647",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed-variant": "#3a4c30",
+                        "secondary-container": "#d0eac9",
+                        "surface-container-high": "#eae8e2",
+                        "primary-fixed-dim": "#b8cda9",
+                        "habitat-peach": "#F4D9C6",
+                        "tertiary-fixed": "#ffddb7",
+                        "habitat-terracotta": "#D69E8E",
+                        "surface-cream": "#F2E8CF",
+                        "surface-container-lowest": "#ffffff",
+                        "surface": "#fbf9f3",
+                        "on-tertiary-fixed-variant": "#594226",
+                        "on-primary-container": "#ddf3cd",
+                        "surface-tint": "#516447",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed-variant": "#364c34",
+                        "primary": "#45573b",
+                        "on-secondary-fixed": "#0b200c",
+                        "inverse-on-surface": "#f2f1eb"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-lg": "40px",
+                        "gutter": "16px",
+                        "unit": "4px",
+                        "margin-mobile": "24px",
+                        "stack-md": "20px",
+                        "stack-sm": "12px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "label-bold": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-bold": ["14px", { "lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "700" }],
+                        "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["22px", { "lineHeight": "30px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: theme('colors.background'); }
+        .grid-cell { aspect-ratio: 1/1; }
+        .shadow-ambient { box-shadow: 0px 24px 48px -12px rgba(102,78,49,0.05); }
+        .shake-animation {
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+        .error-glow {
+            box-shadow: 0 0 15px rgba(186, 26, 26, 0.4);
+            border: 2px solid theme('colors.error');
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-on-background min-h-screen flex flex-col font-sans antialiased overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-surface-dim docked full-width top-0 bg-surface dark:bg-surface-dim flat no shadows flex justify-between items-center px-margin-mobile h-20 w-full shrink-0 z-40 relative sticky top-0">
+<button aria-label="Go Back" class="flex items-center justify-center p-2 rounded-full hover:bg-surface-variant/50 transition-colors text-primary dark:text-primary-fixed-dim">
+<span class="material-symbols-outlined" style="font-size: 24px;">arrow_back</span>
+</button>
+<h1 class="text-headline-md font-headline-md font-bold text-habitat-sage truncate px-4">
+            Level 18: Sunny Meadow
+        </h1>
+<div class="flex items-center gap-1 font-label-bold text-label-bold text-primary dark:text-primary-fixed-dim">
+<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">favorite</span>
+<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">favorite</span>
+<span class="material-symbols-outlined text-error-container">favorite</span>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 w-full max-w-lg mx-auto px-margin-mobile pb-32 pt-stack-md flex flex-col items-center justify-center relative">
+<!-- Error Feedback Message -->
+<div class="w-full mb-stack-md shake-animation flex items-center justify-center gap-2 bg-error-container text-on-error-container px-4 py-3 rounded-xl shadow-ambient">
+<span class="material-symbols-outlined">warning</span>
+<p class="font-body-md text-body-md font-medium text-center">Not quite — this critter needs more space.</p>
+</div>
+<!-- Puzzle Board Container -->
+<div class="w-full bg-surface-cream rounded-[2rem] p-4 shadow-ambient relative">
+<!-- Grid Guides (Decorative) -->
+<div class="absolute inset-0 border-2 border-surface-variant/30 rounded-[2rem] pointer-events-none"></div>
+<!-- 6x6 Grid -->
+<div class="grid grid-cols-6 gap-unit w-full relative z-10">
+<!-- Row 1 -->
+<div class="grid-cell bg-surface-container rounded-lg flex items-center justify-center cursor-pointer hover:bg-surface-variant transition-colors"></div>
+<div class="grid-cell bg-surface-container rounded-lg flex items-center justify-center cursor-pointer hover:bg-surface-variant transition-colors"></div>
+<div class="grid-cell bg-surface-container rounded-lg flex items-center justify-center cursor-pointer hover:bg-surface-variant transition-colors"></div>
+<div class="grid-cell bg-surface-container rounded-lg flex items-center justify-center cursor-pointer hover:bg-surface-variant transition-colors"></div>
+<div class="grid-cell bg-surface-container rounded-lg flex items-center justify-center cursor-pointer hover:bg-surface-variant transition-colors"></div>
+<div class="grid-cell bg-surface-container rounded-lg flex items-center justify-center cursor-pointer hover:bg-surface-variant transition-colors"></div>
+<!-- Row 2 -->
+<div class="grid-cell bg-surface-container rounded-lg flex items-center justify-center cursor-pointer hover:bg-surface-variant transition-colors"></div>
+<div class="grid-cell bg-surface-container rounded-lg flex items-center justify-center cursor-pointer hover:bg-surface-variant transition-colors">
+<div class="w-2 h-2 rounded-full bg-surface-variant/80"></div> <!-- Empty indicator -->
+</div>
+<div class="grid-cell bg-habitat-sage/20 rounded-lg flex items-center justify-center cursor-pointer relative shadow-ambient">
+<span class="material-symbols-outlined text-habitat-sage text-2xl" style="font-variation-settings: 'FILL' 1;">eco</span>
+</div>
+<div class="grid-cell bg-surface-container rounded-lg flex items-center justify-center cursor-pointer hover:bg-surface-variant transition-colors"></div>
+<div class="grid-cell bg-surface-container rounded-lg flex items-center justify-center cursor-pointer hover:bg-surface-variant transition-colors"></div>
+<div class="grid-cell bg-surface-container rounded-lg flex items-center justify-center cursor-pointer hover:bg-surface-variant transition-colors"></div>
+<!-- Row 3 -->
+<div class="grid-cell bg-surface-container rounded-lg flex items-center justify-center cursor-pointer hover:bg-surface-variant transition-colors"></div>
+<div class="grid-cell bg-surface-container rounded-lg flex items-center justify-center cursor-pointer hover:bg-surface-variant transition-colors"></div>
+<div class="grid-cell bg-surface-container rounded-lg flex items-center justify-center cursor-pointer hover:bg-surface-variant transition-colors"></div>
+<div class="grid-cell bg-surface-container rounded-lg flex items-center justify-center cursor-pointer hover:bg-surface-variant transition-colors"></div>
+<div class="grid-cell bg-surface-container rounded-lg flex items-center justify-center cursor-pointer hover:bg-surface-variant transition-colors"></div>
+<div class="grid-cell bg-surface-container rounded-lg flex items-center justify-center cursor-pointer hover:bg-surface-variant transition-colors"></div>
+<!-- Row 4 -->
+<div class="grid-cell bg-surface-container rounded-lg flex items-center justify-center cursor-pointer hover:bg-surface-variant transition-colors"></div>
+<div class="grid-cell bg-surface-container rounded-lg flex items-center justify-center cursor-pointer hover:bg-surface-variant transition-colors"></div>
+<div class="grid-cell bg-surface-container rounded-lg flex items-center justify-center cursor-pointer hover:bg-surface-variant transition-colors"></div>
+<div class="grid-cell bg-surface-container rounded-lg flex items-center justify-center cursor-pointer hover:bg-surface-variant transition-colors"></div>
+<div class="grid-cell bg-habitat-sage/20 rounded-lg flex items-center justify-center cursor-pointer relative shadow-ambient">
+<span class="material-symbols-outlined text-habitat-sage text-2xl" style="font-variation-settings: 'FILL' 1;">eco</span>
+</div>
+<div class="grid-cell bg-surface-container rounded-lg flex items-center justify-center cursor-pointer hover:bg-surface-variant transition-colors"></div>
+<!-- Row 5 - The Error -->
+<div class="grid-cell bg-surface-container rounded-lg flex items-center justify-center cursor-pointer hover:bg-surface-variant transition-colors"></div>
+<div class="grid-cell bg-surface-container rounded-lg flex items-center justify-center cursor-pointer hover:bg-surface-variant transition-colors"></div>
+<div class="grid-cell bg-surface-container rounded-lg flex items-center justify-center cursor-pointer hover:bg-surface-variant transition-colors"></div>
+<div class="grid-cell bg-error-container/50 error-glow rounded-lg flex items-center justify-center cursor-pointer relative shadow-ambient">
+<!-- Incorrectly placed critter -->
+<span class="material-symbols-outlined text-error text-2xl" style="font-variation-settings: 'FILL' 1;">eco</span>
+</div>
+<div class="grid-cell bg-surface-container rounded-lg flex items-center justify-center cursor-pointer hover:bg-surface-variant transition-colors">
+<div class="w-2 h-2 rounded-full bg-surface-variant/80"></div>
+</div>
+<div class="grid-cell bg-surface-container rounded-lg flex items-center justify-center cursor-pointer hover:bg-surface-variant transition-colors"></div>
+<!-- Row 6 -->
+<div class="grid-cell bg-surface-container rounded-lg flex items-center justify-center cursor-pointer hover:bg-surface-variant transition-colors"></div>
+<div class="grid-cell bg-surface-container rounded-lg flex items-center justify-center cursor-pointer hover:bg-surface-variant transition-colors"></div>
+<div class="grid-cell bg-surface-container rounded-lg flex items-center justify-center cursor-pointer hover:bg-surface-variant transition-colors"></div>
+<div class="grid-cell bg-surface-container rounded-lg flex items-center justify-center cursor-pointer hover:bg-surface-variant transition-colors"></div>
+<div class="grid-cell bg-surface-container rounded-lg flex items-center justify-center cursor-pointer hover:bg-surface-variant transition-colors"></div>
+<div class="grid-cell bg-surface-container rounded-lg flex items-center justify-center cursor-pointer hover:bg-surface-variant transition-colors"></div>
+</div>
+<!-- Row/Col Indicators (Abstracted for clean UI) -->
+<div class="absolute -left-6 top-4 bottom-4 flex flex-col justify-around text-on-surface-variant font-label-sm text-[10px] opacity-50">
+<span>1</span><span>0</span><span>2</span><span>1</span><span>1</span><span>0</span>
+</div>
+<div class="absolute -top-6 left-4 right-4 flex justify-around text-on-surface-variant font-label-sm text-[10px] opacity-50">
+<span>0</span><span>2</span><span>0</span><span>1</span><span>1</span><span>1</span>
+</div>
+</div>
+<!-- Tool Selection / Action Bar -->
+<div class="mt-stack-lg w-full flex justify-center gap-gutter">
+<button class="bg-surface-container hover:bg-surface-variant transition-colors w-16 h-16 rounded-full flex items-center justify-center shadow-ambient">
+<span class="material-symbols-outlined text-outline">close</span>
+</button>
+<button class="bg-primary hover:bg-primary/90 text-on-primary transition-colors px-8 h-16 rounded-full flex items-center justify-center shadow-ambient font-label-bold text-label-bold">
+                Undo Move
+            </button>
+</div>
+</main>
+<!-- Navigation explicitly suppressed for focused gameplay state -->
+</body></html>

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Daily Puzzle</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-tertiary-fixed": "#291802",
+                        "secondary-fixed": "#d0eac9",
+                        "habitat-sand": "#D9C5B2",
+                        "inverse-surface": "#30312d",
+                        "on-surface": "#1b1c19",
+                        "on-secondary-container": "#536a50",
+                        "surface-variant": "#e4e2dd",
+                        "surface-container-highest": "#e4e2dd",
+                        "on-error-container": "#93000a",
+                        "habitat-lavender": "#B8B5CB",
+                        "tertiary-fixed-dim": "#e2c19c",
+                        "on-error": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "text-accent-brown": "#664E31",
+                        "background": "#fbf9f3",
+                        "on-primary-fixed": "#0f1f09",
+                        "outline": "#74786f",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#b8cda9",
+                        "primary-container": "#5d7052",
+                        "on-background": "#1b1c19",
+                        "surface-container": "#f0eee8",
+                        "surface-dim": "#dcdad4",
+                        "habitat-sage": "#748C70",
+                        "habitat-blue": "#A8B9C0",
+                        "tertiary": "#664e31",
+                        "on-surface-variant": "#444840",
+                        "outline-variant": "#c4c8bd",
+                        "surface-container-low": "#f5f3ee",
+                        "primary-fixed": "#d4e9c4",
+                        "secondary": "#4d644b",
+                        "on-tertiary-container": "#ffe8d2",
+                        "error-container": "#ffdad6",
+                        "surface-bright": "#fbf9f3",
+                        "secondary-fixed-dim": "#b4ceae",
+                        "tertiary-container": "#806647",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed-variant": "#3a4c30",
+                        "secondary-container": "#d0eac9",
+                        "surface-container-high": "#eae8e2",
+                        "primary-fixed-dim": "#b8cda9",
+                        "habitat-peach": "#F4D9C6",
+                        "tertiary-fixed": "#ffddb7",
+                        "habitat-terracotta": "#D69E8E",
+                        "surface-cream": "#F2E8CF",
+                        "surface-container-lowest": "#ffffff",
+                        "surface": "#fbf9f3",
+                        "on-tertiary-fixed-variant": "#594226",
+                        "on-primary-container": "#ddf3cd",
+                        "surface-tint": "#516447",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed-variant": "#364c34",
+                        "primary": "#45573b",
+                        "on-secondary-fixed": "#0b200c",
+                        "inverse-on-surface": "#f2f1eb"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "stack-lg": "40px",
+                        "gutter": "16px",
+                        "unit": "4px",
+                        "margin-mobile": "24px",
+                        "stack-md": "20px",
+                        "stack-sm": "12px"
+                    },
+                    fontFamily: {
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "label-bold": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"]
+                    },
+                    fontSize: {
+                        "headline-lg": ["32px", { lineHeight: "40px", letterSpacing: "-0.01em", fontWeight: "700" }],
+                        "label-sm": ["12px", { lineHeight: "16px", fontWeight: "600" }],
+                        "headline-lg-mobile": ["26px", { lineHeight: "34px", letterSpacing: "-0.01em", fontWeight: "700" }],
+                        "label-bold": ["14px", { lineHeight: "20px", letterSpacing: "0.02em", fontWeight: "700" }],
+                        "display-lg": ["40px", { lineHeight: "48px", letterSpacing: "-0.02em", fontWeight: "800" }],
+                        "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+                        "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+                        "headline-md": ["22px", { lineHeight: "30px", fontWeight: "600" }]
+                    }
+                }
+            }
+        };
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined[data-weight="fill"] {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .soft-shadow {
+            box-shadow: 0 4px 24px rgba(102, 78, 49, 0.05);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col md:hidden">
+<!-- Top Navigation Placeholder (Shell context) -->
+<header class="flex justify-between items-center px-margin-mobile h-20 w-full bg-surface dark:bg-surface-dim top-0 relative z-10">
+<div class="flex items-center gap-2 text-primary dark:text-primary-fixed-dim">
+<span class="material-symbols-outlined cursor-pointer hover:opacity-80 transition-opacity" data-icon="arrow_back">arrow_back</span>
+</div>
+<h1 class="font-headline-md text-headline-md text-primary dark:text-primary-fixed-dim font-bold">Daily Puzzle</h1>
+<div class="flex items-center gap-1 text-primary dark:text-primary-fixed-dim font-label-bold text-label-bold cursor-pointer hover:opacity-80 transition-opacity">
+            5 <span class="material-symbols-outlined" data-icon="favorite" data-weight="fill" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</div>
+</header>
+<main class="flex-1 px-margin-mobile pb-32 pt-stack-md flex flex-col gap-stack-lg overflow-y-auto">
+<!-- Hero Section -->
+<section class="flex flex-col items-center text-center gap-stack-sm">
+<h2 class="font-display-lg text-display-lg text-tertiary">Daily Puzzle</h2>
+<div class="flex items-center gap-2 text-primary font-label-bold text-label-bold bg-secondary-container px-4 py-1 rounded-full">
+<span class="material-symbols-outlined text-sm" data-icon="calendar_today">calendar_today</span>
+<span>August 25 · Hard</span>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-[280px] mt-4">
+                Everyone gets the same puzzle today. Can you solve it before the sun sets?
+            </p>
+</section>
+<!-- Streak Section -->
+<section class="bg-surface-container rounded-xl p-6 soft-shadow flex flex-col items-center gap-stack-sm">
+<div class="flex items-center gap-2 text-tertiary font-headline-md text-headline-md">
+<span class="material-symbols-outlined text-tertiary" data-icon="local_fire_department" data-weight="fill" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span>4 Day Streak</span>
+</div>
+<div class="flex justify-between w-full mt-2">
+<!-- M -->
+<div class="flex flex-col items-center gap-1">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-sm" data-icon="check" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">M</span>
+</div>
+<!-- T -->
+<div class="flex flex-col items-center gap-1">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-sm" data-icon="check" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">T</span>
+</div>
+<!-- W -->
+<div class="flex flex-col items-center gap-1">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-sm" data-icon="check" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">W</span>
+</div>
+<!-- T (Today) -->
+<div class="flex flex-col items-center gap-1">
+<div class="w-8 h-8 rounded-full bg-tertiary flex items-center justify-center text-on-tertiary soft-shadow border-2 border-background">
+<span class="material-symbols-outlined text-sm" data-icon="local_fire_department" data-weight="fill" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+</div>
+<span class="font-label-bold text-label-bold text-tertiary">T</span>
+</div>
+<!-- F -->
+<div class="flex flex-col items-center gap-1">
+<div class="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center"></div>
+<span class="font-label-sm text-label-sm text-outline-variant">F</span>
+</div>
+<!-- S -->
+<div class="flex flex-col items-center gap-1">
+<div class="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center"></div>
+<span class="font-label-sm text-label-sm text-outline-variant">S</span>
+</div>
+<!-- S -->
+<div class="flex flex-col items-center gap-1">
+<div class="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center"></div>
+<span class="font-label-sm text-label-sm text-outline-variant">S</span>
+</div>
+</div>
+</section>
+<!-- Preview Grid -->
+<section class="flex flex-col items-center gap-stack-md">
+<div class="w-48 h-48 bg-surface-cream rounded-xl soft-shadow p-2 grid grid-cols-5 grid-rows-5 gap-1 opacity-80" data-alt="A soft, abstract geometric pattern representing a puzzle grid in muted sage greens and warm creams. The aesthetic is minimal, tactile, and calming, resembling a high-end physical board game component bathed in soft natural light." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC0l1Pf-FJoMfxL18MiI4LzcFsa8l0Rdj6Ars2b5H214nlQggKegfJPHVK9gnj_tEYBnbyr-SJDN43IoIaWoUlIp0RklBgxB7hPE2xa40VtnI9gfj7ORojIgWa0Feh9XeafiGEgD1YB1citFBAwKUCa9xdAgYfeqdFuF8UnaldRnfCmcOB9ZXQ_Nd0cn_U4b3IF0j-j3vte2opomLcGVYX257O1IBdz3LUGyNIEWf3Oy90yyhnBoZzv'); background-size: cover; background-position: center;">
+<!-- Abstract representation of a grid if image fails -->
+<div class="bg-habitat-sage/20 rounded-sm"></div>
+<div class="bg-habitat-sage/20 rounded-sm"></div>
+<div class="bg-primary/40 rounded-sm"></div>
+<div class="bg-habitat-sage/20 rounded-sm"></div>
+<div class="bg-habitat-sage/20 rounded-sm"></div>
+<div class="bg-habitat-sage/20 rounded-sm"></div>
+<div class="bg-primary/40 rounded-sm"></div>
+<div class="bg-primary/60 rounded-sm"></div>
+<div class="bg-primary/40 rounded-sm"></div>
+<div class="bg-habitat-sage/20 rounded-sm"></div>
+<div class="bg-primary/40 rounded-sm"></div>
+<div class="bg-primary/60 rounded-sm"></div>
+<div class="bg-tertiary/60 rounded-sm"></div>
+<div class="bg-primary/60 rounded-sm"></div>
+<div class="bg-primary/40 rounded-sm"></div>
+<div class="bg-habitat-sage/20 rounded-sm"></div>
+<div class="bg-primary/40 rounded-sm"></div>
+<div class="bg-primary/60 rounded-sm"></div>
+<div class="bg-primary/40 rounded-sm"></div>
+<div class="bg-habitat-sage/20 rounded-sm"></div>
+<div class="bg-habitat-sage/20 rounded-sm"></div>
+<div class="bg-habitat-sage/20 rounded-sm"></div>
+<div class="bg-primary/40 rounded-sm"></div>
+<div class="bg-habitat-sage/20 rounded-sm"></div>
+<div class="bg-habitat-sage/20 rounded-sm"></div>
+</div>
+</section>
+</main>
+<!-- Bottom CTA Fixed -->
+<div class="fixed bottom-24 w-full px-margin-mobile z-40">
+<button class="w-full bg-primary hover:opacity-90 text-on-primary font-headline-md text-headline-md py-4 rounded-full soft-shadow transition-all active:scale-95 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" data-icon="play_arrow" data-weight="fill" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+            Play Today's Puzzle
+        </button>
+</div>
+<!-- Bottom Navigation Component -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-surface-container dark:bg-surface-container-highest shadow-[0_-4px_24px_rgba(102,78,49,0.05)] rounded-t-lg">
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-5 py-2 hover:bg-habitat-cream/50 dark:hover:bg-surface-variant/20 rounded-full cursor-pointer transition-colors">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm mt-1">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-5 py-2 hover:bg-habitat-cream/50 dark:hover:bg-surface-variant/20 rounded-full cursor-pointer transition-colors">
+<span class="material-symbols-outlined" data-icon="map">map</span>
+<span class="font-label-sm text-label-sm mt-1">Journey</span>
+</div>
+<!-- Active Tab: Daily -->
+<div class="flex flex-col items-center justify-center bg-secondary-container dark:bg-on-secondary-fixed-variant text-on-secondary-container dark:text-secondary-fixed rounded-full px-5 py-2 scale-90 duration-200 ease-out cursor-pointer">
+<span class="material-symbols-outlined" data-icon="calendar_today" data-weight="fill" style="font-variation-settings: 'FILL' 1;">calendar_today</span>
+<span class="font-label-sm text-label-sm mt-1">Daily</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-5 py-2 hover:bg-habitat-cream/50 dark:hover:bg-surface-variant/20 rounded-full cursor-pointer transition-colors">
+<span class="material-symbols-outlined" data-icon="pets">pets</span>
+<span class="font-label-sm text-label-sm mt-1">Collection</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-5 py-2 hover:bg-habitat-cream/50 dark:hover:bg-surface-variant/20 rounded-full cursor-pointer transition-colors">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm mt-1">Profile</span>
+</div>
+</nav>
+</body></html>

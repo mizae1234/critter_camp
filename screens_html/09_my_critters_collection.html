@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>My Critters - Collection</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#291802",
+                        "secondary-fixed": "#d0eac9",
+                        "habitat-sand": "#D9C5B2",
+                        "inverse-surface": "#30312d",
+                        "on-surface": "#1b1c19",
+                        "on-secondary-container": "#536a50",
+                        "surface-variant": "#e4e2dd",
+                        "surface-container-highest": "#e4e2dd",
+                        "on-error-container": "#93000a",
+                        "habitat-lavender": "#B8B5CB",
+                        "tertiary-fixed-dim": "#e2c19c",
+                        "on-error": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "text-accent-brown": "#664E31",
+                        "background": "#fbf9f3",
+                        "on-primary-fixed": "#0f1f09",
+                        "outline": "#74786f",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#b8cda9",
+                        "primary-container": "#5d7052",
+                        "on-background": "#1b1c19",
+                        "surface-container": "#f0eee8",
+                        "surface-dim": "#dcdad4",
+                        "habitat-sage": "#748C70",
+                        "habitat-blue": "#A8B9C0",
+                        "tertiary": "#664e31",
+                        "on-surface-variant": "#444840",
+                        "outline-variant": "#c4c8bd",
+                        "surface-container-low": "#f5f3ee",
+                        "primary-fixed": "#d4e9c4",
+                        "secondary": "#4d644b",
+                        "on-tertiary-container": "#ffe8d2",
+                        "error-container": "#ffdad6",
+                        "surface-bright": "#fbf9f3",
+                        "secondary-fixed-dim": "#b4ceae",
+                        "tertiary-container": "#806647",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed-variant": "#3a4c30",
+                        "secondary-container": "#d0eac9",
+                        "surface-container-high": "#eae8e2",
+                        "primary-fixed-dim": "#b8cda9",
+                        "habitat-peach": "#F4D9C6",
+                        "tertiary-fixed": "#ffddb7",
+                        "habitat-terracotta": "#D69E8E",
+                        "surface-cream": "#F2E8CF",
+                        "surface-container-lowest": "#ffffff",
+                        "surface": "#fbf9f3",
+                        "on-tertiary-fixed-variant": "#594226",
+                        "on-primary-container": "#ddf3cd",
+                        "surface-tint": "#516447",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed-variant": "#364c34",
+                        "primary": "#45573b",
+                        "on-secondary-fixed": "#0b200c",
+                        "inverse-on-surface": "#f2f1eb"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-lg": "40px",
+                        "gutter": "16px",
+                        "unit": "4px",
+                        "margin-mobile": "24px",
+                        "stack-md": "20px",
+                        "stack-sm": "12px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "label-bold": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-bold": ["14px", { "lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "700" }],
+                        "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["22px", { "lineHeight": "30px", "fontWeight": "600" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+        }
+        .weightless-shadow {
+            box-shadow: 0 4px 24px rgba(102, 78, 49, 0.05);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="min-h-screen pb-32">
+<!-- Top Navigation Anchor (Web) -->
+<header class="hidden md:flex justify-between items-center px-margin-mobile h-20 w-full bg-surface text-primary sticky top-0 z-40 weightless-shadow">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary cursor-pointer hover:opacity-80 transition-opacity">arrow_back</span>
+<h1 class="font-headline-md text-headline-md font-bold text-habitat-sage">My Critters</h1>
+</div>
+<div class="font-label-bold text-label-bold text-on-surface-variant">
+            12 of 36 discovered
+        </div>
+</header>
+<main class="max-w-7xl mx-auto px-margin-mobile md:px-gutter pt-stack-md md:pt-stack-lg">
+<!-- Mobile Header -->
+<div class="md:hidden mb-stack-lg">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-habitat-sage mb-unit">My Critters</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">12 of 36 discovered</p>
+</div>
+<!-- Collection Grid -->
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-gutter md:gap-stack-md">
+<!-- Critter: Hazel -->
+<div class="bg-surface-cream rounded-[2rem] p-4 flex flex-col items-center justify-center weightless-shadow relative overflow-hidden group cursor-pointer transition-transform hover:scale-[1.02]">
+<div class="w-24 h-24 rounded-full bg-habitat-sand/30 mb-stack-sm flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A soft, highly detailed 3D rendering of a cute, stylized hedgehog named Hazel in a serene forest setting. The lighting is warm and natural, casting soft shadows, fitting a premium, comforting, light-mode lifestyle aesthetic with muted earthy tones like sage and sand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCql4I2cXaUOW9w9LFxiE13FuPEG9q0gRYbMRI-7pgfmKmpt5BsdK3uJmUkovSl7JkfyDmeTKg6i488HXAKaoF01XV2q91A8HF0oY8X6O76SMLZG6UW4-woQnDb8lsLQTjAdBl4TneLGjbJlCAU6jhlV5VgBcoDTA_C_RtbuW7Cx8la22D1Pc-sUuLG1b2wFO73ikjkNIP-4BXLxBGGhu85nS3PUAdUYCucSH1dW1suzfDEk_7a5uIb"/>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary">Hazel</h3>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mt-1">Hedgehog</span>
+<div class="absolute top-4 right-4 bg-primary text-on-primary rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</div>
+</div>
+<!-- Critter: Finn -->
+<div class="bg-surface-cream rounded-[2rem] p-4 flex flex-col items-center justify-center weightless-shadow relative overflow-hidden group cursor-pointer transition-transform hover:scale-[1.02]">
+<div class="w-24 h-24 rounded-full bg-habitat-terracotta/20 mb-stack-sm flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A gentle, beautifully lit 3D render of a stylized, friendly red fox named Finn sitting peacefully amongst tall grass. The scene evokes a cozy, tactile modernism with warm terracotta and sage green colors, illuminated by soft, natural daylight in a minimalist, calming environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAh1S91eBw_IMi-JAkUadeWofP4o6cL9ZiVD0YHEkrLye3hQxg3FGmfBp4nWvyILPHoZYf7ci-3GGyM6OXhl41ZJerlNwOWXUiryJQGQLl0963ndQK6j7uMFBz-TTg6-6TGjy3y18vW-4Ek29xxtDAfmgyKM_o6wSKOF4y6n9RTGWjJ1NzGesPPh_fgzEOF5FP5vdUnMDsOP8G5adKV986Oiw_HYL5hc2mEVAei18RQdzPgdfQr3Ges"/>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary">Finn</h3>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mt-1">Fox</span>
+</div>
+<!-- Critter: Pip -->
+<div class="bg-surface-cream rounded-[2rem] p-4 flex flex-col items-center justify-center weightless-shadow relative overflow-hidden group cursor-pointer transition-transform hover:scale-[1.02]">
+<div class="w-24 h-24 rounded-full bg-habitat-lavender/20 mb-stack-sm flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A pristine, minimalist 3D rendering of an adorable, soft-textured rabbit named Pip resting on a smooth stone. The overall aesthetic is tranquil and refined, utilizing soft lavender and cream tones with gentle, diffused lighting typical of a high-end, tactile lifestyle design." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDr-8vKWIlF3f5YM9oAdhkGOcmhxaSc3rPKgrZeVTwbVGivxsWrlDv10poiIclsSsNMtK7rueVCyIhVOmC4WcYvQwIEmAqE_VIqYd899vKZFH8wCGBu53373FSskMWfO6V50JNRYr4YL_5ywESPTo7FyIV1E7sOvOVr3vtlbfo-csL8Z5yHt8C7CzbhAzdbrQugGFhgfAYJBLiQvQKr8Vq40MpoP0mgtOzgNvWxHEp15vpvhwt6q4-W"/>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary">Pip</h3>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mt-1">Rabbit</span>
+</div>
+<!-- Critter: Moss -->
+<div class="bg-surface-cream rounded-[2rem] p-4 flex flex-col items-center justify-center weightless-shadow relative overflow-hidden group cursor-pointer transition-transform hover:scale-[1.02]">
+<div class="w-24 h-24 rounded-full bg-habitat-blue/20 mb-stack-sm flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="An elegant, soft-focus 3D illustration of a playful river otter named Moss holding a pebble. Set in a clean, minimalist riverbank environment, the image features calm blue and earthy sand tones, bathed in soft, bright light, perfectly matching a warm, sophisticated interface style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuADrQ8dr22QVmb3jgW8AuYJqHQFoO022oK4VbwlC3AGHOMUaOEmxbdjbTmPcmVA010RTsjFb_vd-woYh-qmToaCDMqg_gZloTM5PDhOJoaciapADrGEg3xZm5B1Mh-S2QNfGxRzYrt87qpZcLbv-Q7ihx15wRe-_9xiVtVJwvRpkaSyiTBP63gFxP1bt7i4IkWXcK81SYYMdmQXsiS4xPZ6h6GkGkO5w2tNyWeFMw6f9ZXMTbnxh37O"/>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary">Moss</h3>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mt-1">Otter</span>
+</div>
+<!-- Locked Critter 1 -->
+<div class="bg-surface-container rounded-[2rem] p-4 flex flex-col items-center justify-center weightless-shadow opacity-70">
+<div class="w-24 h-24 rounded-full bg-surface-dim mb-stack-sm flex items-center justify-center">
+<span class="material-symbols-outlined text-4xl text-outline-variant">lock</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface-variant">???</h3>
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider mt-1">Unknown</span>
+</div>
+<!-- Locked Critter 2 -->
+<div class="bg-surface-container rounded-[2rem] p-4 flex flex-col items-center justify-center weightless-shadow opacity-70">
+<div class="w-24 h-24 rounded-full bg-surface-dim mb-stack-sm flex items-center justify-center">
+<span class="material-symbols-outlined text-4xl text-outline-variant">lock</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface-variant">???</h3>
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider mt-1">Unknown</span>
+</div>
+<!-- Locked Critter 3 -->
+<div class="bg-surface-container rounded-[2rem] p-4 flex flex-col items-center justify-center weightless-shadow opacity-70">
+<div class="w-24 h-24 rounded-full bg-surface-dim mb-stack-sm flex items-center justify-center">
+<span class="material-symbols-outlined text-4xl text-outline-variant">lock</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface-variant">???</h3>
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider mt-1">Unknown</span>
+</div>
+<!-- Locked Critter 4 -->
+<div class="bg-surface-container rounded-[2rem] p-4 flex flex-col items-center justify-center weightless-shadow opacity-70">
+<div class="w-24 h-24 rounded-full bg-surface-dim mb-stack-sm flex items-center justify-center">
+<span class="material-symbols-outlined text-4xl text-outline-variant">lock</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface-variant">???</h3>
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider mt-1">Unknown</span>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-surface-container shadow-[0_-4px_24px_rgba(102,78,49,0.05)] rounded-t-lg">
+<button class="flex flex-col items-center justify-center text-on-surface-variant px-5 py-2 hover:bg-habitat-cream/50 rounded-full group">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant px-5 py-2 hover:bg-habitat-cream/50 rounded-full group">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform">map</span>
+<span class="font-label-sm text-label-sm">Journey</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant px-5 py-2 hover:bg-habitat-cream/50 rounded-full group">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform">calendar_today</span>
+<span class="font-label-sm text-label-sm">Daily</span>
+</button>
+<!-- Active Navigation -->
+<button class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-5 py-2 scale-90 duration-200 ease-out">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">pets</span>
+<span class="font-label-sm text-label-sm">Collection</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant px-5 py-2 hover:bg-habitat-cream/50 rounded-full group">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</button>
+</nav>
+</body></html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Critter Detail - Hazel</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#291802",
+                        "secondary-fixed": "#d0eac9",
+                        "habitat-sand": "#D9C5B2",
+                        "inverse-surface": "#30312d",
+                        "on-surface": "#1b1c19",
+                        "on-secondary-container": "#536a50",
+                        "surface-variant": "#e4e2dd",
+                        "surface-container-highest": "#e4e2dd",
+                        "on-error-container": "#93000a",
+                        "habitat-lavender": "#B8B5CB",
+                        "tertiary-fixed-dim": "#e2c19c",
+                        "on-error": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "text-accent-brown": "#664E31",
+                        "background": "#fbf9f3",
+                        "on-primary-fixed": "#0f1f09",
+                        "outline": "#74786f",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#b8cda9",
+                        "primary-container": "#5d7052",
+                        "on-background": "#1b1c19",
+                        "surface-container": "#f0eee8",
+                        "surface-dim": "#dcdad4",
+                        "habitat-sage": "#748C70",
+                        "habitat-blue": "#A8B9C0",
+                        "tertiary": "#664e31",
+                        "on-surface-variant": "#444840",
+                        "outline-variant": "#c4c8bd",
+                        "surface-container-low": "#f5f3ee",
+                        "primary-fixed": "#d4e9c4",
+                        "secondary": "#4d644b",
+                        "on-tertiary-container": "#ffe8d2",
+                        "error-container": "#ffdad6",
+                        "surface-bright": "#fbf9f3",
+                        "secondary-fixed-dim": "#b4ceae",
+                        "tertiary-container": "#806647",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed-variant": "#3a4c30",
+                        "secondary-container": "#d0eac9",
+                        "surface-container-high": "#eae8e2",
+                        "primary-fixed-dim": "#b8cda9",
+                        "habitat-peach": "#F4D9C6",
+                        "tertiary-fixed": "#ffddb7",
+                        "habitat-terracotta": "#D69E8E",
+                        "surface-cream": "#F2E8CF",
+                        "surface-container-lowest": "#ffffff",
+                        "surface": "#fbf9f3",
+                        "on-tertiary-fixed-variant": "#594226",
+                        "on-primary-container": "#ddf3cd",
+                        "surface-tint": "#516447",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed-variant": "#364c34",
+                        "primary": "#45573b",
+                        "on-secondary-fixed": "#0b200c",
+                        "inverse-on-surface": "#f2f1eb"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-lg": "40px",
+                        "gutter": "16px",
+                        "unit": "4px",
+                        "margin-mobile": "24px",
+                        "stack-md": "20px",
+                        "stack-sm": "12px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "label-bold": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-bold": ["14px", { "lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "700" }],
+                        "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["22px", { "lineHeight": "30px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .weightless-shadow {
+            box-shadow: 0 24px 48px -12px rgba(102, 78, 49, 0.08);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex items-center justify-center p-4 md:p-8">
+<!-- Modal Container -->
+<main class="w-full max-w-2xl bg-surface-cream rounded-[2rem] weightless-shadow relative overflow-hidden flex flex-col md:flex-row">
+<!-- Close Button -->
+<button aria-label="Close" class="absolute top-4 right-4 z-10 p-2 rounded-full bg-surface-container-highest/50 hover:bg-surface-container-highest transition-colors text-on-surface-variant focus:outline-none focus:ring-2 focus:ring-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">close</span>
+</button>
+<!-- Illustration Area -->
+<div class="w-full md:w-1/2 h-64 md:h-auto bg-habitat-sage/20 relative flex items-center justify-center p-8">
+<img alt="Hazel the Hedgehog Illustration" class="w-full h-full object-contain drop-shadow-xl" data-alt="A cozy, hand-drawn style illustration of a cute hedgehog named Hazel. The hedgehog has soft, rounded features and a warm, tactile appearance. The background is a minimalist, warm cream color with subtle nature-inspired textures, evoking a premium lifestyle magazine aesthetic. The lighting is soft and inviting, emphasizing the nurturing and refined brand identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxjB6EQQK_GTkOmobvLTGSKfFH5-LuWK8NQ_aPdpNlWS3ox3T4zZcMnNN8LCEAyrWex-ULC-lAb25YUDUKmWY-V6wz0VNtO5rFLqyH8ec2hCas68DlX6xte56fWqhMIJBUFI0vm4IhoCGOkp44Uj_ZMQKLo-1pZwXEYdOlIP7xoukCly66Bsp1DTVOhVy2ZKkIrKJT0ZDSxYwz3H3ybOMr5pKdJBl6G-jRJ5CCexf306Dl1__A_DyR"/>
+</div>
+<!-- Content Area -->
+<div class="w-full md:w-1/2 p-margin-mobile md:p-8 flex flex-col justify-center">
+<div class="space-y-stack-md">
+<!-- Header -->
+<div>
+<span class="inline-block px-3 py-1 rounded-full bg-habitat-sage/20 text-habitat-sage font-label-bold text-label-bold mb-3">Hedgehog</span>
+<h1 class="font-display-lg text-display-lg text-primary">Hazel</h1>
+</div>
+<!-- Description -->
+<p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+                    Loves quiet forests and tricky puzzles.
+                </p>
+<!-- Discovery Info -->
+<div class="bg-surface rounded-xl p-4 flex items-center gap-4 mt-stack-lg border border-outline-variant/30">
+<div class="w-12 h-12 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">park</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-1">Discovered</p>
+<p class="font-label-bold text-label-bold text-on-surface">Forest Trail · Level 10</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

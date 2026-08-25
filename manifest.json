@@ -1,0 +1,178 @@
+[
+  {
+    "slug": "01_first_launch",
+    "id": "454436b88d904af999b738f5ffdc63e0",
+    "title": "First Launch",
+    "originalTitle": "First Launch - Critter Camp",
+    "category": "Onboarding",
+    "htmlFile": "screens_html/01_first_launch.html",
+    "screenshotFile": "screenshots/01_first_launch.png",
+    "width": "780",
+    "height": "1768"
+  },
+  {
+    "slug": "02_home",
+    "id": "864cf6c743d442a69d222f088f9cc2c1",
+    "title": "Home",
+    "originalTitle": "Home - Critter Camp",
+    "category": "Main",
+    "htmlFile": "screens_html/02_home.html",
+    "screenshotFile": "screenshots/02_home.png",
+    "width": "780",
+    "height": "1930"
+  },
+  {
+    "slug": "03_level18_fresh_puzzle",
+    "id": "252f56ac46104dc28f6841dad852504d",
+    "title": "Level 18 - Fresh Puzzle",
+    "originalTitle": "Level 18 - Fresh Puzzle",
+    "category": "Gameplay",
+    "htmlFile": "screens_html/03_level18_fresh_puzzle.html",
+    "screenshotFile": "screenshots/03_level18_fresh_puzzle.png",
+    "width": "780",
+    "height": "1768"
+  },
+  {
+    "slug": "04_level18_solving",
+    "id": "df1cb8b21f0f4d8394749fe9099415a0",
+    "title": "Level 18 - Solving...",
+    "originalTitle": "Level 18 - Solving...",
+    "category": "Gameplay",
+    "htmlFile": "screens_html/04_level18_solving.html",
+    "screenshotFile": "screenshots/04_level18_solving.png",
+    "width": "844",
+    "height": "1768"
+  },
+  {
+    "slug": "05_level18_almost_done",
+    "id": "d11cda5c80394ff388941e0de7b81c16",
+    "title": "Level 18 - Almost Done!",
+    "originalTitle": "Level 18 - Almost Done!",
+    "category": "Gameplay",
+    "htmlFile": "screens_html/05_level18_almost_done.html",
+    "screenshotFile": "screenshots/05_level18_almost_done.png",
+    "width": "780",
+    "height": "1768"
+  },
+  {
+    "slug": "06_level18_oops",
+    "id": "a40b8192430e42bd81dc8a63b65919c3",
+    "title": "Level 18 - Oops!",
+    "originalTitle": "Level 18 - Oops!",
+    "category": "Gameplay",
+    "htmlFile": "screens_html/06_level18_oops.html",
+    "screenshotFile": "screenshots/06_level18_oops.png",
+    "width": "780",
+    "height": "1768"
+  },
+  {
+    "slug": "07_level_complete",
+    "id": "1cba223b829f4e249560185b328ed8fc",
+    "title": "Level Complete!",
+    "originalTitle": "Level Complete! - Critter Camp",
+    "category": "Gameplay",
+    "htmlFile": "screens_html/07_level_complete.html",
+    "screenshotFile": "screenshots/07_level_complete.png",
+    "width": "780",
+    "height": "1832"
+  },
+  {
+    "slug": "08_forest_trail_journey",
+    "id": "d904151135524c3da3553360ebc39f4b",
+    "title": "Forest Trail - Journey",
+    "originalTitle": "Forest Trail - Journey",
+    "category": "Map / Journey",
+    "htmlFile": "screens_html/08_forest_trail_journey.html",
+    "screenshotFile": "screenshots/08_forest_trail_journey.png",
+    "width": "844",
+    "height": "2996"
+  },
+  {
+    "slug": "09_my_critters_collection",
+    "id": "b59ec3ebf0114e6ca859368e0a263daf",
+    "title": "My Critters - Collection",
+    "originalTitle": "My Critters - Collection",
+    "category": "Collection",
+    "htmlFile": "screens_html/09_my_critters_collection.html",
+    "screenshotFile": "screenshots/09_my_critters_collection.png",
+    "width": "844",
+    "height": "2116"
+  },
+  {
+    "slug": "10_hazel_critter_detail",
+    "id": "47f79c327be540678227cd2fff77e13e",
+    "title": "Hazel - Critter Detail",
+    "originalTitle": "Hazel - Critter Detail",
+    "category": "Detail",
+    "htmlFile": "screens_html/10_hazel_critter_detail.html",
+    "screenshotFile": "screenshots/10_hazel_critter_detail.png",
+    "width": "780",
+    "height": "1768"
+  },
+  {
+    "slug": "11_daily_challenge",
+    "id": "c155f34e345441dbbba024b7a7d6279a",
+    "title": "Daily Challenge",
+    "originalTitle": "Daily Challenge - Critter Camp",
+    "category": "Events",
+    "htmlFile": "screens_html/11_daily_challenge.html",
+    "screenshotFile": "screenshots/11_daily_challenge.png",
+    "width": "844",
+    "height": "1768"
+  },
+  {
+    "slug": "12_tutorial_rules",
+    "id": "f81c3f97c84f4afc8903dfd306be7547",
+    "title": "Tutorial: Rules",
+    "originalTitle": "Tutorial: Rules - Critter Camp",
+    "category": "Help / Guide",
+    "htmlFile": "screens_html/12_tutorial_rules.html",
+    "screenshotFile": "screenshots/12_tutorial_rules.png",
+    "width": "780",
+    "height": "1768"
+  },
+  {
+    "slug": "13_leaderboard",
+    "id": "dc47b0d94b514583978bbcfa6c296dda",
+    "title": "Leaderboard",
+    "originalTitle": "Leaderboard - Critter Camp",
+    "category": "Community",
+    "htmlFile": "screens_html/13_leaderboard.html",
+    "screenshotFile": "screenshots/13_leaderboard.png",
+    "width": "844",
+    "height": "1768"
+  },
+  {
+    "slug": "14_profile_mossyfox",
+    "id": "e1d7bfd45d59429db2adb172863c0358",
+    "title": "Profile - MossyFox",
+    "originalTitle": "Profile - MossyFox",
+    "category": "Profile",
+    "htmlFile": "screens_html/14_profile_mossyfox.html",
+    "screenshotFile": "screenshots/14_profile_mossyfox.png",
+    "width": "836",
+    "height": "2236"
+  },
+  {
+    "slug": "15_level18_pattern_mode",
+    "id": "ba3b5f04a4ab4c25a4185c72ec985126",
+    "title": "Level 18 - Pattern Mode",
+    "originalTitle": "Level 18 - Pattern Mode",
+    "category": "Gameplay",
+    "htmlFile": "screens_html/15_level18_pattern_mode.html",
+    "screenshotFile": "screenshots/15_level18_pattern_mode.png",
+    "width": "780",
+    "height": "1768"
+  },
+  {
+    "slug": "16_settings",
+    "id": "0df0d3497b7842cbb7537661299c8361",
+    "title": "Settings",
+    "originalTitle": "Settings - Critter Camp",
+    "category": "Settings",
+    "htmlFile": "screens_html/16_settings.html",
+    "screenshotFile": "screenshots/16_settings.png",
+    "width": "836",
+    "height": "3336"
+  }
+]

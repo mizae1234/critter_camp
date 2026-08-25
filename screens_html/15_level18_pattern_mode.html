@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Level 18 - Habitat Sort (Colorblind Mode)</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-fixed": "#291802",
+                    "secondary-fixed": "#d0eac9",
+                    "habitat-sand": "#D9C5B2",
+                    "inverse-surface": "#30312d",
+                    "on-surface": "#1b1c19",
+                    "on-secondary-container": "#536a50",
+                    "surface-variant": "#e4e2dd",
+                    "surface-container-highest": "#e4e2dd",
+                    "on-error-container": "#93000a",
+                    "habitat-lavender": "#B8B5CB",
+                    "tertiary-fixed-dim": "#e2c19c",
+                    "on-error": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "text-accent-brown": "#664E31",
+                    "background": "#fbf9f3",
+                    "on-primary-fixed": "#0f1f09",
+                    "outline": "#74786f",
+                    "on-primary": "#ffffff",
+                    "inverse-primary": "#b8cda9",
+                    "primary-container": "#5d7052",
+                    "on-background": "#1b1c19",
+                    "surface-container": "#f0eee8",
+                    "surface-dim": "#dcdad4",
+                    "habitat-sage": "#748C70",
+                    "habitat-blue": "#A8B9C0",
+                    "tertiary": "#664e31",
+                    "on-surface-variant": "#444840",
+                    "outline-variant": "#c4c8bd",
+                    "surface-container-low": "#f5f3ee",
+                    "primary-fixed": "#d4e9c4",
+                    "secondary": "#4d644b",
+                    "on-tertiary-container": "#ffe8d2",
+                    "error-container": "#ffdad6",
+                    "surface-bright": "#fbf9f3",
+                    "secondary-fixed-dim": "#b4ceae",
+                    "tertiary-container": "#806647",
+                    "on-tertiary": "#ffffff",
+                    "on-primary-fixed-variant": "#3a4c30",
+                    "secondary-container": "#d0eac9",
+                    "surface-container-high": "#eae8e2",
+                    "primary-fixed-dim": "#b8cda9",
+                    "habitat-peach": "#F4D9C6",
+                    "tertiary-fixed": "#ffddb7",
+                    "habitat-terracotta": "#D69E8E",
+                    "surface-cream": "#F2E8CF",
+                    "surface-container-lowest": "#ffffff",
+                    "surface": "#fbf9f3",
+                    "on-tertiary-fixed-variant": "#594226",
+                    "on-primary-container": "#ddf3cd",
+                    "surface-tint": "#516447",
+                    "error": "#ba1a1a",
+                    "on-secondary-fixed-variant": "#364c34",
+                    "primary": "#45573b",
+                    "on-secondary-fixed": "#0b200c",
+                    "inverse-on-surface": "#f2f1eb"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-lg": "40px",
+                    "gutter": "16px",
+                    "unit": "4px",
+                    "margin-mobile": "24px",
+                    "stack-md": "20px",
+                    "stack-sm": "12px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Plus Jakarta Sans"],
+                    "label-sm": ["Plus Jakarta Sans"],
+                    "headline-lg-mobile": ["Plus Jakarta Sans"],
+                    "label-bold": ["Plus Jakarta Sans"],
+                    "display-lg": ["Plus Jakarta Sans"],
+                    "body-lg": ["Plus Jakarta Sans"],
+                    "body-md": ["Plus Jakarta Sans"],
+                    "headline-md": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["26px", {"lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "label-bold": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "700"}],
+                    "display-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-md": ["22px", {"lineHeight": "30px", "fontWeight": "600"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+        }
+        
+        /* Pattern overlays for colorblind mode */
+        .pattern-dots {
+            background-image: radial-gradient(theme('colors.on-surface-variant') 1px, transparent 1px);
+            background-size: 8px 8px;
+            opacity: 0.15;
+        }
+        
+        .pattern-stripes {
+            background-image: linear-gradient(45deg, theme('colors.on-surface-variant') 25%, transparent 25%, transparent 50%, theme('colors.on-surface-variant') 50%, theme('colors.on-surface-variant') 75%, transparent 75%, transparent);
+            background-size: 8px 8px;
+            opacity: 0.15;
+        }
+        
+        .pattern-crosshatch {
+            background-image: linear-gradient(45deg, theme('colors.on-surface-variant') 1px, transparent 1px), linear-gradient(-45deg, theme('colors.on-surface-variant') 1px, transparent 1px);
+            background-size: 10px 10px;
+            opacity: 0.2;
+        }
+        
+        .pattern-waves {
+            background: radial-gradient(circle at 100% 50%, transparent 20%, rgba(68, 72, 64, 0.15) 21%, rgba(68, 72, 64, 0.15) 34%, transparent 35%, transparent),
+                        radial-gradient(circle at 0% 50%, transparent 20%, rgba(68, 72, 64, 0.15) 21%, rgba(68, 72, 64, 0.15) 34%, transparent 35%, transparent) 0 -25px;
+            background-size: 30px 50px;
+        }
+
+        .shadow-weightless {
+            box-shadow: 0 4px 24px rgba(102, 78, 49, 0.05);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-surface-dim docked full-width top-0 flat no shadows flex justify-between items-center px-margin-mobile h-20 w-full z-10 sticky">
+<button class="hover:opacity-80 transition-opacity flex items-center justify-center p-2 text-primary dark:text-primary-fixed-dim rounded-full active:scale-95 duration-150 ease-in-out">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">arrow_back</span>
+</button>
+<h1 class="text-headline-md font-headline-md font-bold text-habitat-sage text-center flex-1 mx-4 truncate">Level 18: Pebble Creek</h1>
+<div class="flex items-center gap-1 hover:opacity-80 transition-opacity active:scale-95 duration-150 ease-in-out bg-surface-container py-1 px-3 rounded-full">
+<span class="font-label-bold text-label-bold text-primary">5</span>
+<span class="material-symbols-outlined text-habitat-terracotta" style="font-variation-settings: 'FILL' 1; font-size: 18px;">favorite</span>
+</div>
+</header>
+<!-- Main Game Area -->
+<main class="flex-1 flex flex-col items-center justify-start pt-stack-md pb-[100px] px-margin-mobile max-w-lg mx-auto w-full gap-stack-md">
+<!-- Game Stats / Progress -->
+<div class="flex w-full justify-between items-center bg-surface-container rounded-xl p-4 shadow-weightless">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Score</span>
+<span class="font-headline-md text-headline-md text-primary">2,450</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Moves Left</span>
+<span class="font-headline-md text-headline-md text-primary">12</span>
+</div>
+</div>
+<!-- Mode Indicator -->
+<div class="bg-surface-variant/30 rounded-full px-4 py-2 flex items-center gap-2 self-center">
+<span class="material-symbols-outlined text-habitat-sage text-sm" style="font-variation-settings: 'FILL' 1;">visibility</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Colorblind Mode Active</span>
+</div>
+<!-- The Grid -->
+<!-- 6x6 Grid for Level 18 -->
+<div class="grid grid-cols-6 grid-rows-6 gap-unit w-full aspect-square bg-surface-container-high p-unit rounded-[1.5rem] shadow-weightless mt-4">
+<!-- Row 1 -->
+<div class="relative bg-habitat-sage rounded-lg overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 pattern-dots"></div>
+<span class="material-symbols-outlined text-on-primary z-10 drop-shadow-md">grass</span>
+</div>
+<div class="relative bg-habitat-sage rounded-lg overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 pattern-dots"></div>
+</div>
+<div class="relative bg-habitat-blue rounded-lg overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 pattern-waves"></div>
+<span class="material-symbols-outlined text-on-primary z-10 drop-shadow-md">water_drop</span>
+</div>
+<div class="relative bg-habitat-blue rounded-lg overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 pattern-waves"></div>
+</div>
+<div class="relative bg-habitat-peach rounded-lg overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 pattern-stripes"></div>
+</div>
+<div class="relative bg-habitat-peach rounded-lg overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 pattern-stripes"></div>
+<span class="material-symbols-outlined text-on-tertiary-fixed z-10 drop-shadow-md">terrain</span>
+</div>
+<!-- Row 2 -->
+<div class="relative bg-habitat-sage rounded-lg overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 pattern-dots"></div>
+</div>
+<div class="relative bg-surface-container-lowest rounded-lg border-2 border-primary-container overflow-hidden flex items-center justify-center shadow-[inset_0_0_10px_rgba(93,112,82,0.2)]">
+<!-- Empty/Selectable cell -->
+</div>
+<div class="relative bg-habitat-blue rounded-lg overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 pattern-waves"></div>
+</div>
+<div class="relative bg-habitat-sand rounded-lg overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 pattern-crosshatch"></div>
+</div>
+<div class="relative bg-habitat-peach rounded-lg overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 pattern-stripes"></div>
+</div>
+<div class="relative bg-habitat-peach rounded-lg overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 pattern-stripes"></div>
+</div>
+<!-- Row 3 -->
+<div class="relative bg-habitat-sage rounded-lg overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 pattern-dots"></div>
+</div>
+<div class="relative bg-habitat-sage rounded-lg overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 pattern-dots"></div>
+<span class="material-symbols-outlined text-on-primary z-10 drop-shadow-md">bug_report</span>
+</div>
+<div class="relative bg-habitat-sand rounded-lg overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 pattern-crosshatch"></div>
+</div>
+<div class="relative bg-habitat-sand rounded-lg overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 pattern-crosshatch"></div>
+<span class="material-symbols-outlined text-on-tertiary-fixed z-10 drop-shadow-md">pets</span>
+</div>
+<div class="relative bg-habitat-sand rounded-lg overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 pattern-crosshatch"></div>
+</div>
+<div class="relative bg-habitat-peach rounded-lg overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 pattern-stripes"></div>
+</div>
+<!-- Row 4 -->
+<div class="relative bg-habitat-sage rounded-lg overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 pattern-dots"></div>
+</div>
+<div class="relative bg-habitat-blue rounded-lg overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 pattern-waves"></div>
+</div>
+<div class="relative bg-habitat-blue rounded-lg overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 pattern-waves"></div>
+</div>
+<div class="relative bg-habitat-sand rounded-lg overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 pattern-crosshatch"></div>
+</div>
+<div class="relative bg-surface-container-lowest rounded-lg overflow-hidden flex items-center justify-center">
+<!-- Empty -->
+</div>
+<div class="relative bg-habitat-peach rounded-lg overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 pattern-stripes"></div>
+</div>
+<!-- Row 5 -->
+<div class="relative bg-habitat-blue rounded-lg overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 pattern-waves"></div>
+</div>
+<div class="relative bg-habitat-blue rounded-lg overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 pattern-waves"></div>
+</div>
+<div class="relative bg-habitat-sand rounded-lg overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 pattern-crosshatch"></div>
+</div>
+<div class="relative bg-habitat-sand rounded-lg overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 pattern-crosshatch"></div>
+</div>
+<div class="relative bg-habitat-peach rounded-lg overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 pattern-stripes"></div>
+</div>
+<div class="relative bg-habitat-peach rounded-lg overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 pattern-stripes"></div>
+</div>
+<!-- Row 6 -->
+<div class="relative bg-habitat-blue rounded-lg overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 pattern-waves"></div>
+</div>
+<div class="relative bg-habitat-sand rounded-lg overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 pattern-crosshatch"></div>
+</div>
+<div class="relative bg-habitat-sand rounded-lg overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 pattern-crosshatch"></div>
+</div>
+<div class="relative bg-habitat-peach rounded-lg overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 pattern-stripes"></div>
+</div>
+<div class="relative bg-habitat-peach rounded-lg overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 pattern-stripes"></div>
+</div>
+<div class="relative bg-habitat-peach rounded-lg overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 pattern-stripes"></div>
+</div>
+</div>
+<!-- Controls -->
+<div class="flex w-full gap-gutter mt-stack-sm">
+<button class="flex-1 bg-surface-cream border border-habitat-sage text-primary font-label-bold text-label-bold py-4 rounded-full shadow-weightless active:scale-95 transition-transform flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">undo</span>
+                Undo
+            </button>
+<button class="flex-1 bg-primary text-on-primary font-label-bold text-label-bold py-4 rounded-full shadow-weightless active:scale-95 transition-transform flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">lightbulb</span>
+                Hint (3)
+            </button>
+</div>
+</main>
+<!-- BottomNavBar is suppressed as this is a transactional/focused task screen with a top 'Back' action -->
+</body></html>

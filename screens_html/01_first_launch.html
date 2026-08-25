@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Critter Camp - First Launch</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#291802",
+                        "secondary-fixed": "#d0eac9",
+                        "habitat-sand": "#D9C5B2",
+                        "inverse-surface": "#30312d",
+                        "on-surface": "#1b1c19",
+                        "on-secondary-container": "#536a50",
+                        "surface-variant": "#e4e2dd",
+                        "surface-container-highest": "#e4e2dd",
+                        "on-error-container": "#93000a",
+                        "habitat-lavender": "#B8B5CB",
+                        "tertiary-fixed-dim": "#e2c19c",
+                        "on-error": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "text-accent-brown": "#664E31",
+                        "background": "#fbf9f3",
+                        "on-primary-fixed": "#0f1f09",
+                        "outline": "#74786f",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#b8cda9",
+                        "primary-container": "#5d7052",
+                        "on-background": "#1b1c19",
+                        "surface-container": "#f0eee8",
+                        "surface-dim": "#dcdad4",
+                        "habitat-sage": "#748C70",
+                        "habitat-blue": "#A8B9C0",
+                        "tertiary": "#664e31",
+                        "on-surface-variant": "#444840",
+                        "outline-variant": "#c4c8bd",
+                        "surface-container-low": "#f5f3ee",
+                        "primary-fixed": "#d4e9c4",
+                        "secondary": "#4d644b",
+                        "on-tertiary-container": "#ffe8d2",
+                        "error-container": "#ffdad6",
+                        "surface-bright": "#fbf9f3",
+                        "secondary-fixed-dim": "#b4ceae",
+                        "tertiary-container": "#806647",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed-variant": "#3a4c30",
+                        "secondary-container": "#d0eac9",
+                        "surface-container-high": "#eae8e2",
+                        "primary-fixed-dim": "#b8cda9",
+                        "habitat-peach": "#F4D9C6",
+                        "tertiary-fixed": "#ffddb7",
+                        "habitat-terracotta": "#D69E8E",
+                        "surface-cream": "#F2E8CF",
+                        "surface-container-lowest": "#ffffff",
+                        "surface": "#fbf9f3",
+                        "on-tertiary-fixed-variant": "#594226",
+                        "on-primary-container": "#ddf3cd",
+                        "surface-tint": "#516447",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed-variant": "#364c34",
+                        "primary": "#45573b",
+                        "on-secondary-fixed": "#0b200c",
+                        "inverse-on-surface": "#f2f1eb"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-lg": "40px",
+                        "gutter": "16px",
+                        "unit": "4px",
+                        "margin-mobile": "24px",
+                        "stack-md": "20px",
+                        "stack-sm": "12px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "label-bold": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-bold": ["14px", { "lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "700" }],
+                        "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["22px", { "lineHeight": "30px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+        }
+        
+        .blob-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120vw;
+            height: 120vh;
+            background: radial-gradient(circle at 50% 50%, rgba(214, 158, 142, 0.15) 0%, rgba(244, 217, 198, 0.05) 50%, transparent 80%);
+            z-index: 0;
+            pointer-events: none;
+            animation: breathe 10s ease-in-out infinite alternate;
+        }
+
+        @keyframes breathe {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            100% { transform: translate(-50%, -50%) scale(1.05); }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="antialiased min-h-screen flex flex-col items-center justify-center relative overflow-hidden">
+<div class="blob-bg"></div>
+<main class="relative z-10 w-full max-w-md px-margin-mobile flex flex-col items-center text-center">
+<!-- Illustration -->
+<div class="w-48 h-48 mb-stack-lg relative">
+<div class="absolute inset-0 bg-habitat-peach rounded-[2rem] shadow-[0_24px_48px_rgba(102,78,49,0.05)] transform rotate-3"></div>
+<img class="absolute inset-0 w-full h-full object-cover rounded-[2rem] transform -rotate-3 transition-transform hover:rotate-0 duration-500" data-alt="A minimalist, tactile illustration of a small, cozy woodland critter, like a stylized fox or raccoon, resting peacefully inside a softly rounded tent. The art style is refined, warm, and resembles a premium children's book or an elegant editorial spot illustration. High-key lighting, soft muted colors like sage, peach, and cream. Clean lines, matte finish." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyEozGt7pum99PDo3LdT_U_Ks130rygARm5ccukkIyoLOEybFxARXZuJnRhSHQiTKXbiYMeCz90j3pkQpbeprOc6tsR9WuK6MtkiWjOkwpBCzix_doLnTD-_QpBS6yy83CfTC2S_0uVEEOH08N_HsKeedIGoOmazN9pXLHe5cCHW2uUfbq7R6j0ghHB5cAYC-qxPRJuHLetPRWLtVTyDfbGdzQxPN5AODK18JsQPiZzDCUZ8GxpT1f"/>
+</div>
+<!-- Typography -->
+<h1 class="font-display-lg text-display-lg text-primary mb-stack-sm tracking-tight">
+            Critter Camp
+        </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-stack-lg max-w-xs mx-auto">
+            Find a home for every critter.
+        </p>
+<!-- Actions -->
+<div class="flex flex-col w-full gap-stack-sm">
+<button class="w-full bg-primary hover:bg-secondary text-on-primary font-label-bold text-label-bold py-4 px-6 rounded-full transition-all duration-300 shadow-[0_12px_24px_rgba(102,78,49,0.08)] hover:shadow-[0_16px_32px_rgba(102,78,49,0.12)] hover:-translate-y-1">
+                Start Playing
+            </button>
+<button class="w-full bg-surface-cream hover:bg-surface-container text-primary font-label-bold text-label-bold py-4 px-6 rounded-full border border-habitat-sage transition-all duration-300">
+                How to Play
+            </button>
+</div>
+</main>
+</body></html>

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Critter Camp - Home</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-fixed": "#291802",
+                    "secondary-fixed": "#d0eac9",
+                    "habitat-sand": "#D9C5B2",
+                    "inverse-surface": "#30312d",
+                    "on-surface": "#1b1c19",
+                    "on-secondary-container": "#536a50",
+                    "surface-variant": "#e4e2dd",
+                    "surface-container-highest": "#e4e2dd",
+                    "on-error-container": "#93000a",
+                    "habitat-lavender": "#B8B5CB",
+                    "tertiary-fixed-dim": "#e2c19c",
+                    "on-error": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "text-accent-brown": "#664E31",
+                    "background": "#fbf9f3",
+                    "on-primary-fixed": "#0f1f09",
+                    "outline": "#74786f",
+                    "on-primary": "#ffffff",
+                    "inverse-primary": "#b8cda9",
+                    "primary-container": "#5d7052",
+                    "on-background": "#1b1c19",
+                    "surface-container": "#f0eee8",
+                    "surface-dim": "#dcdad4",
+                    "habitat-sage": "#748C70",
+                    "habitat-blue": "#A8B9C0",
+                    "tertiary": "#664e31",
+                    "on-surface-variant": "#444840",
+                    "outline-variant": "#c4c8bd",
+                    "surface-container-low": "#f5f3ee",
+                    "primary-fixed": "#d4e9c4",
+                    "secondary": "#4d644b",
+                    "on-tertiary-container": "#ffe8d2",
+                    "error-container": "#ffdad6",
+                    "surface-bright": "#fbf9f3",
+                    "secondary-fixed-dim": "#b4ceae",
+                    "tertiary-container": "#806647",
+                    "on-tertiary": "#ffffff",
+                    "on-primary-fixed-variant": "#3a4c30",
+                    "secondary-container": "#d0eac9",
+                    "surface-container-high": "#eae8e2",
+                    "primary-fixed-dim": "#b8cda9",
+                    "habitat-peach": "#F4D9C6",
+                    "tertiary-fixed": "#ffddb7",
+                    "habitat-terracotta": "#D69E8E",
+                    "surface-cream": "#F2E8CF",
+                    "surface-container-lowest": "#ffffff",
+                    "surface": "#fbf9f3",
+                    "on-tertiary-fixed-variant": "#594226",
+                    "on-primary-container": "#ddf3cd",
+                    "surface-tint": "#516447",
+                    "error": "#ba1a1a",
+                    "on-secondary-fixed-variant": "#364c34",
+                    "primary": "#45573b",
+                    "on-secondary-fixed": "#0b200c",
+                    "inverse-on-surface": "#f2f1eb"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-lg": "40px",
+                    "gutter": "16px",
+                    "unit": "4px",
+                    "margin-mobile": "24px",
+                    "stack-md": "20px",
+                    "stack-sm": "12px"
+            },
+            "fontFamily": {
+                    "headline-lg": [
+                            "Plus Jakarta Sans", "sans-serif"
+                    ],
+                    "label-sm": [
+                            "Plus Jakarta Sans", "sans-serif"
+                    ],
+                    "headline-lg-mobile": [
+                            "Plus Jakarta Sans", "sans-serif"
+                    ],
+                    "label-bold": [
+                            "Plus Jakarta Sans", "sans-serif"
+                    ],
+                    "display-lg": [
+                            "Plus Jakarta Sans", "sans-serif"
+                    ],
+                    "body-lg": [
+                            "Plus Jakarta Sans", "sans-serif"
+                    ],
+                    "body-md": [
+                            "Plus Jakarta Sans", "sans-serif"
+                    ],
+                    "headline-md": [
+                            "Plus Jakarta Sans", "sans-serif"
+                    ]
+            },
+            "fontSize": {
+                    "headline-lg": [
+                            "32px",
+                            {
+                                    "lineHeight": "40px",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "label-sm": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-lg-mobile": [
+                            "26px",
+                            {
+                                    "lineHeight": "34px",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "label-bold": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "letterSpacing": "0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "display-lg": [
+                            "40px",
+                            {
+                                    "lineHeight": "48px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "800"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-md": [
+                            "22px",
+                            {
+                                    "lineHeight": "30px",
+                                    "fontWeight": "600"
+                            }
+                    ]
+            }
+          }
+        }
+      }
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+        .weightless-shadow {
+            box-shadow: 0 16px 40px rgba(102, 78, 49, 0.04);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col items-center">
+<div class="w-full max-w-md bg-background relative min-h-screen pb-32">
+<!-- Header -->
+<header class="flex justify-between items-center px-margin-mobile h-20 w-full bg-surface dark:bg-surface-dim top-0 z-10 sticky">
+<h1 class="text-headline-md font-headline-md font-bold text-habitat-sage">Critter Camp</h1>
+<button class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center overflow-hidden hover:opacity-80 transition-opacity">
+<img alt="Profile" class="w-full h-full object-cover" data-alt="A small, circular avatar icon featuring a cute, minimalist illustration of a stylized camper character in warm earth tones, set against a light cream background in a flat, vector illustration style suitable for a modern gaming UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFqe14ykkrwFU9zp4l2ocZ5dgaDPDDhlgIK15C1IOYw92xDeGrBCCRjeVy5SN1yCRhqP_2m5gLZK0hERf9Cw0xenUzZpQmRnXJ6A8ok2jpj9cy8ghy88OgzBVUaKZ-POAl_OGI8yx8O-EzUz3dgXu08z73LzD-8igLkEA7bDP5WxsORKXOdFm-RxaVDWyy2lclb5A7ptd_oG_05CRss7sXiFKtLDbA_b9Amm6jVvIB1FTB7QXlWw4C"/>
+</button>
+</header>
+<main class="px-margin-mobile flex flex-col gap-stack-md pt-stack-sm">
+<!-- Hero Card -->
+<section class="bg-surface-cream rounded-[2rem] p-6 weightless-shadow relative overflow-hidden group">
+<div class="absolute inset-0 opacity-20 bg-[url('data:image/svg+xml,%3Csvg width=\'20\' height=\'20\' viewBox=\'0 0 20 20\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M10 2L12 8L18 10L12 12L10 18L8 12L2 10L8 8L10 2Z\' fill=\'%23748C70\' fill-opacity=\'0.2\' fill-rule=\'evenodd\'/%3E%3C/svg%3E')]"></div>
+<div class="relative z-10 flex flex-col gap-4">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface w-4/5 leading-tight">Ready for a little brain break?</h2>
+<div class="flex items-center gap-2 mt-2">
+<span aria-hidden="true" class="material-symbols-outlined text-habitat-sage">map</span>
+<p class="font-label-bold text-label-bold text-on-surface-variant">Forest Trail · Level 18</p>
+</div>
+<button class="mt-4 bg-primary text-on-primary w-full py-4 rounded-full font-label-bold text-label-bold hover:bg-primary-container transition-colors shadow-sm flex items-center justify-center gap-2">
+                        Continue
+                        <span aria-hidden="true" class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+<img alt="" class="absolute -bottom-6 -right-6 w-32 h-32 object-contain opacity-80" data-alt="A stylized, soft vector illustration of a cozy tent nestled in a lush green forest clearing, using a warm minimal color palette of sage greens, creams, and earthy browns, evoking a relaxing outdoor retreat." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA81Tn9v71ofVjgRyp62XuFnfjk538O0WgoMMvD2QJExyL3OcH7zQv1P-1AiKGZV113062x70p54p2EIaYwmG0IFEcQSmIRkKC52QaJan_gLbrcUuftB9hx_RY3fRd50zZQFPZuaxLHTcs5N78CSJFnPuv2Q1UyxA4mQvMhTaQsSHJLprdJq-hEx0Jnh0iv-W_QC8diUz7mJhYhowtewNKWT9N6ku1GXVPo4C3lPH_NKQwrdhCErBEm"/>
+</section>
+<!-- Daily Puzzle Card -->
+<section class="bg-surface rounded-xl p-5 border border-surface-variant flex items-center justify-between shadow-sm">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span aria-hidden="true" class="material-symbols-outlined text-habitat-terracotta fill">local_fire_department</span>
+<span class="font-label-bold text-label-bold text-habitat-terracotta">4-day streak!</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface">August 25</h3>
+</div>
+<button class="bg-surface-cream border border-habitat-sage text-habitat-sage px-6 py-3 rounded-full font-label-bold text-label-bold hover:bg-surface-variant transition-colors">
+                    Play Daily
+                </button>
+</section>
+<!-- Journey Progress -->
+<section class="bg-surface rounded-[1.5rem] p-6 weightless-shadow flex flex-col gap-3">
+<div class="flex justify-between items-end">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Journey Progress</p>
+<p class="font-headline-md text-headline-md text-on-surface mt-1">Forest Trail 18/40</p>
+</div>
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center">
+<span aria-hidden="true" class="material-symbols-outlined text-habitat-sage">nature</span>
+</div>
+</div>
+<div class="w-full bg-surface-variant h-3 rounded-full mt-2 overflow-hidden">
+<div class="bg-habitat-sage h-full rounded-full w-[45%]"></div>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">2 puzzles until your next critter</p>
+</section>
+<!-- Collection Preview -->
+<section class="flex flex-col gap-4 mt-2">
+<div class="flex justify-between items-center">
+<h3 class="font-headline-md text-headline-md text-on-surface">Recent Critters</h3>
+<a class="font-label-bold text-label-bold text-habitat-sage flex items-center gap-1 hover:opacity-80 transition-opacity" href="#">
+                        View All
+                        <span aria-hidden="true" class="material-symbols-outlined text-sm">chevron_right</span>
+</a>
+</div>
+<div class="flex gap-4 overflow-x-auto pb-4 snap-x hide-scrollbar" style="scrollbar-width: none;">
+<!-- Critter 1 -->
+<div class="snap-start flex-none w-20 h-24 bg-habitat-lavender/30 rounded-2xl flex flex-col items-center justify-center gap-2 weightless-shadow">
+<span aria-hidden="true" class="material-symbols-outlined text-3xl text-primary">cruelty_free</span>
+</div>
+<!-- Critter 2 -->
+<div class="snap-start flex-none w-20 h-24 bg-habitat-peach/30 rounded-2xl flex flex-col items-center justify-center gap-2 weightless-shadow">
+<span aria-hidden="true" class="material-symbols-outlined text-3xl text-habitat-terracotta">pest_control</span>
+</div>
+<!-- Critter 3 -->
+<div class="snap-start flex-none w-20 h-24 bg-habitat-blue/30 rounded-2xl flex flex-col items-center justify-center gap-2 weightless-shadow">
+<span aria-hidden="true" class="material-symbols-outlined text-3xl text-secondary">phishing</span>
+</div>
+<!-- Critter 4 -->
+<div class="snap-start flex-none w-20 h-24 bg-secondary-container/50 rounded-2xl flex flex-col items-center justify-center gap-2 weightless-shadow">
+<span aria-hidden="true" class="material-symbols-outlined text-3xl text-primary">flutter_dash</span>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full max-w-md z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-surface-container dark:bg-surface-container-highest shadow-[0_-4px_24px_rgba(102,78,49,0.05)] rounded-t-lg">
+<!-- Home (Active) -->
+<button class="flex flex-col items-center justify-center bg-secondary-container dark:bg-on-secondary-fixed-variant text-on-secondary-container dark:text-secondary-fixed rounded-full px-5 py-2 scale-90 duration-200 ease-out group">
+<span aria-hidden="true" class="material-symbols-outlined fill group-hover:scale-110 transition-transform">home</span>
+<span class="font-label-sm text-label-sm mt-1">Home</span>
+</button>
+<!-- Journey -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-5 py-2 hover:bg-habitat-cream/50 dark:hover:bg-surface-variant/20 rounded-full group">
+<span aria-hidden="true" class="material-symbols-outlined group-hover:scale-110 transition-transform">map</span>
+<span class="font-label-sm text-label-sm mt-1">Journey</span>
+</button>
+<!-- Daily -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-5 py-2 hover:bg-habitat-cream/50 dark:hover:bg-surface-variant/20 rounded-full group">
+<span aria-hidden="true" class="material-symbols-outlined group-hover:scale-110 transition-transform">calendar_today</span>
+<span class="font-label-sm text-label-sm mt-1">Daily</span>
+</button>
+<!-- Collection -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-5 py-2 hover:bg-habitat-cream/50 dark:hover:bg-surface-variant/20 rounded-full group">
+<span aria-hidden="true" class="material-symbols-outlined group-hover:scale-110 transition-transform">pets</span>
+<span class="font-label-sm text-label-sm mt-1">Collection</span>
+</button>
+<!-- Profile -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-5 py-2 hover:bg-habitat-cream/50 dark:hover:bg-surface-variant/20 rounded-full group">
+<span aria-hidden="true" class="material-symbols-outlined group-hover:scale-110 transition-transform">person</span>
+<span class="font-label-sm text-label-sm mt-1">Profile</span>
+</button>
+</nav>
+</div>
+</body></html>

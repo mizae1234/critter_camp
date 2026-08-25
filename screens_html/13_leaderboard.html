@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Daily Leaderboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#291802",
+                        "secondary-fixed": "#d0eac9",
+                        "habitat-sand": "#D9C5B2",
+                        "inverse-surface": "#30312d",
+                        "on-surface": "#1b1c19",
+                        "on-secondary-container": "#536a50",
+                        "surface-variant": "#e4e2dd",
+                        "surface-container-highest": "#e4e2dd",
+                        "on-error-container": "#93000a",
+                        "habitat-lavender": "#B8B5CB",
+                        "tertiary-fixed-dim": "#e2c19c",
+                        "on-error": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "text-accent-brown": "#664E31",
+                        "background": "#fbf9f3",
+                        "on-primary-fixed": "#0f1f09",
+                        "outline": "#74786f",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#b8cda9",
+                        "primary-container": "#5d7052",
+                        "on-background": "#1b1c19",
+                        "surface-container": "#f0eee8",
+                        "surface-dim": "#dcdad4",
+                        "habitat-sage": "#748C70",
+                        "habitat-blue": "#A8B9C0",
+                        "tertiary": "#664e31",
+                        "on-surface-variant": "#444840",
+                        "outline-variant": "#c4c8bd",
+                        "surface-container-low": "#f5f3ee",
+                        "primary-fixed": "#d4e9c4",
+                        "secondary": "#4d644b",
+                        "on-tertiary-container": "#ffe8d2",
+                        "error-container": "#ffdad6",
+                        "surface-bright": "#fbf9f3",
+                        "secondary-fixed-dim": "#b4ceae",
+                        "tertiary-container": "#806647",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed-variant": "#3a4c30",
+                        "secondary-container": "#d0eac9",
+                        "surface-container-high": "#eae8e2",
+                        "primary-fixed-dim": "#b8cda9",
+                        "habitat-peach": "#F4D9C6",
+                        "tertiary-fixed": "#ffddb7",
+                        "habitat-terracotta": "#D69E8E",
+                        "surface-cream": "#F2E8CF",
+                        "surface-container-lowest": "#ffffff",
+                        "surface": "#fbf9f3",
+                        "on-tertiary-fixed-variant": "#594226",
+                        "on-primary-container": "#ddf3cd",
+                        "surface-tint": "#516447",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed-variant": "#364c34",
+                        "primary": "#45573b",
+                        "on-secondary-fixed": "#0b200c",
+                        "inverse-on-surface": "#f2f1eb"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-lg": "40px",
+                        "gutter": "16px",
+                        "unit": "4px",
+                        "margin-mobile": "24px",
+                        "stack-md": "20px",
+                        "stack-sm": "12px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "label-bold": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-bold": ["14px", { "lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "700" }],
+                        "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["22px", { "lineHeight": "30px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="docked full-width top-0 bg-surface dark:bg-surface-dim flex justify-between items-center px-margin-mobile h-20 w-full z-50 sticky shadow-[0_4px_24px_rgba(102,78,49,0.02)]">
+<button class="text-primary dark:text-primary-fixed-dim hover:opacity-80 transition-opacity active:scale-95 duration-150 ease-in-out p-2 -ml-2 rounded-full">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="text-headline-md font-headline-md font-bold text-habitat-sage">Leaderboard</h1>
+<div class="w-10"></div> <!-- Placeholder for alignment -->
+</header>
+<main class="px-margin-mobile max-w-lg mx-auto w-full pt-stack-sm pb-stack-lg">
+<!-- Tabs & Filters -->
+<div class="flex flex-col gap-stack-sm mb-stack-lg">
+<!-- Main Tabs -->
+<div class="flex bg-surface-container rounded-full p-1">
+<button class="flex-1 bg-surface rounded-full py-2 font-label-bold text-label-bold text-primary shadow-[0_2px_12px_rgba(102,78,49,0.05)] text-center transition-all">Daily</button>
+<button class="flex-1 py-2 font-label-bold text-label-bold text-on-surface-variant text-center transition-all hover:text-primary">Weekly</button>
+</div>
+<!-- Sub Filters -->
+<div class="flex gap-2">
+<button class="px-4 py-1.5 rounded-full bg-primary-container text-on-primary-container font-label-bold text-label-bold text-sm">Global</button>
+<button class="px-4 py-1.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-bold text-label-bold text-sm hover:bg-surface-variant transition-colors">Thailand</button>
+</div>
+</div>
+<!-- Top 3 Podium (Asymmetric Layout) -->
+<div class="flex justify-center items-end gap-4 mb-stack-lg h-48 relative">
+<!-- Rank 2: Moss -->
+<div class="flex flex-col items-center relative pb-8 w-24">
+<div class="absolute -top-3 right-0 z-10 w-6 h-6 bg-surface-container rounded-full flex items-center justify-center border-2 border-background text-xs font-bold text-habitat-blue shadow-sm">2</div>
+<div class="w-16 h-16 rounded-full overflow-hidden border-2 border-surface-container shadow-[0_8px_24px_rgba(102,78,49,0.08)] mb-3 bg-surface-cream">
+<img class="w-full h-full object-cover" data-alt="A portrait of a cute, stylized moss creature character avatar in a soft, premium lifestyle aesthetic. The creature is made of soft green moss and vines, looking friendly. Light mode, high-key warm lighting, minimal cream background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3Lx_hzYipO_N6JPr8xuZz27yCmwPTnNS3UUojFJazFQjEAMwrlI5kDfg0ZuTEaTlhObJs1wZrFBabNpW7qNKjcfqzIAfJXX2MKE2MFkb3k6mA1nPws0vpQBK3n5FbxCYmPLpq9OJXBVFh8Qb_p_ckm9uR-MkQtyBsEXwbnb7emJxSpicicP2ATWoAJxYw3sXFRqb0i2HsUf1BYDs3_R-f24FCmQlzyhrp6zt-MEXyrNGaaU4T3HcC"/>
+</div>
+<span class="font-label-bold text-label-bold text-on-surface truncate w-full text-center">Moss</span>
+<span class="font-label-sm text-label-sm text-habitat-sage">12,450</span>
+<!-- Podium block -->
+<div class="absolute bottom-0 w-full h-12 bg-habitat-blue/20 rounded-t-xl -z-10"></div>
+</div>
+<!-- Rank 1: LunaFox -->
+<div class="flex flex-col items-center relative pb-12 w-28">
+<div class="absolute -top-4 right-2 z-10 w-8 h-8 bg-habitat-sand rounded-full flex items-center justify-center border-2 border-background text-sm font-bold text-tertiary shadow-md">
+<span class="material-symbols-outlined text-sm">emoji_events</span>
+</div>
+<div class="w-20 h-20 rounded-full overflow-hidden border-4 border-habitat-sand shadow-[0_12px_32px_rgba(102,78,49,0.12)] mb-3 bg-surface-cream">
+<img class="w-full h-full object-cover" data-alt="A portrait of a cute, stylized fox character avatar in a soft, premium lifestyle aesthetic. The fox is glowing slightly, looking noble and cute. Light mode, high-key warm lighting, minimal cream background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwaj1tAvkySzCSwiHlMCelhaPLcmVFmXSdGN2ng2-6l8S8Ivt3zcz4m2n8YhNTDm6Ppc4o3r7Fz3j_loMF1hZ-mAwHMmscZirXRSz14ayim0dEvti48_Cl7YPzsYXTWuNM5ElVCDrF4SVqvG3tJ4yMm34bwmgCDIttMK3bdWJL2jpkCAAGy7F5tXWWUP7X9qryjoRuXE10Wdmt4u_LByek5LBCv4zd1_iaS2ckIchQX5X2zFXe5tlO"/>
+</div>
+<span class="font-headline-md text-base font-bold text-on-surface truncate w-full text-center">LunaFox</span>
+<span class="font-label-bold text-label-bold text-habitat-sage">14,200</span>
+<!-- Podium block -->
+<div class="absolute bottom-0 w-full h-16 bg-habitat-sand/40 rounded-t-xl -z-10"></div>
+</div>
+<!-- Rank 3: Nori -->
+<div class="flex flex-col items-center relative pb-6 w-24">
+<div class="absolute -top-2 right-0 z-10 w-6 h-6 bg-surface-container rounded-full flex items-center justify-center border-2 border-background text-xs font-bold text-habitat-terracotta shadow-sm">3</div>
+<div class="w-14 h-14 rounded-full overflow-hidden border-2 border-surface-container shadow-[0_4px_16px_rgba(102,78,49,0.06)] mb-3 bg-surface-cream">
+<img class="w-full h-full object-cover" data-alt="A portrait of a cute, stylized little sprite character avatar wrapped in seaweed in a soft, premium lifestyle aesthetic. Light mode, high-key warm lighting, minimal cream background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSH0QM0WbABpxrQqgpZDKzvAPzr1J37emL637T6LczDsLPmPLxLiKafICPuZQf2SOlLGWscGkoRpBf4la_h2Yu5nlAcEyuuXVSlxpjV367YPqVem7_OS5mCkcIC2achtryZTn5CnXJZFvivEk7pikqXpB-o3SpWDXsWnDnhvhWo_uXPWDHXK9V-OcfJU7g-eGAskk2Jql-5k49Jp-zpMpMAgPWPimQ4LPd3v3LtmIWv2TjDeXrroc5"/>
+</div>
+<span class="font-label-bold text-label-bold text-on-surface truncate w-full text-center">Nori</span>
+<span class="font-label-sm text-label-sm text-habitat-sage">11,890</span>
+<!-- Podium block -->
+<div class="absolute bottom-0 w-full h-8 bg-habitat-terracotta/20 rounded-t-xl -z-10"></div>
+</div>
+</div>
+<!-- List View -->
+<div class="flex flex-col gap-3">
+<!-- List Item 4 -->
+<div class="flex items-center p-4 bg-surface rounded-xl shadow-[0_4px_24px_rgba(102,78,49,0.03)] border border-surface-variant/50">
+<span class="font-label-bold text-label-bold text-on-surface-variant w-8">4</span>
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-cream mr-3">
+<img class="w-full h-full object-cover" data-alt="A small avatar of a stylized squirrel in a warm, premium aesthetic. Light mode, soft lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4o-ot1wzLMBNkWX8-k2uo3mhMYG6zAZryhdgXyDr1SGWWdyLJLzlXhb4yq65-jBCD5DijrNUJ3WTi_NoFGBNqvVlPgzqD_SDo-izucXJVxV82IFm4Yi_Dw6vynT7bXZirVXtOXe5F2PqyZMlBagilPw9gX5BgFF7jA36w6_JhS3p6pGiufXvbb-VoAcMIvZZ2q86sv2KhbeDDzJKdpwTtFkK5SJSGzfd4LW_8LhLKd-sReM0yg7qb"/>
+</div>
+<div class="flex-1 flex flex-col">
+<span class="font-label-bold text-label-bold text-on-surface">Hazel</span>
+<span class="text-xs text-on-surface-variant flex items-center gap-1">
+<span>🇬🇧</span> UK
+                    </span>
+</div>
+<span class="font-label-bold text-label-bold text-primary">10,500</span>
+</div>
+<!-- List Item 5 -->
+<div class="flex items-center p-4 bg-surface rounded-xl shadow-[0_4px_24px_rgba(102,78,49,0.03)] border border-surface-variant/50">
+<span class="font-label-bold text-label-bold text-on-surface-variant w-8">5</span>
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-cream mr-3">
+<img class="w-full h-full object-cover" data-alt="A small avatar of a stylized bird in a warm, premium aesthetic. Light mode, soft lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpUmKnPUUjwpMqSWck3qGpavtkM3I3nfI7Jn0JEGqIM3L2Hm7r7tumvdFFPzh65L9sI_4wkEOc_8uLiVjaZvESmbSiW2TaTU1MvAixgPRTCG9Zemnktd3gTmiveHTjjM7e-opt7hxDpgo8oLO1Q_ehSVLMxEfQUeznhpYXS5dyhdX1rGCZ1kzDGL9C9pfxswAXvOy5DIUOGCRJzv6prcE9qCztAGu6iy_9CQde2Hn3k6Uyex6LjL7q"/>
+</div>
+<div class="flex-1 flex flex-col">
+<span class="font-label-bold text-label-bold text-on-surface">SkyWatcher</span>
+<span class="text-xs text-on-surface-variant flex items-center gap-1">
+<span>🇨🇦</span> CA
+                    </span>
+</div>
+<span class="font-label-bold text-label-bold text-primary">9,800</span>
+</div>
+<!-- List Item 6 -->
+<div class="flex items-center p-4 bg-surface rounded-xl shadow-[0_4px_24px_rgba(102,78,49,0.03)] border border-surface-variant/50">
+<span class="font-label-bold text-label-bold text-on-surface-variant w-8">6</span>
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-cream mr-3">
+<img class="w-full h-full object-cover" data-alt="A small avatar of a stylized cat in a warm, premium aesthetic. Light mode, soft lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1Y2A9o1zqNuXPf3BbAfKPTfLs3KW_cy-5TAWM7Qd6lhEYIot0dlJXqOAHZ-uY97YGI7kj2jgWHoPf31fxJTfneYWho4sQ1RGg-zsKBJ2po5_DWFlyNEMyJqvAOZYBsdmiM3WH5uWcD03uv_4gKDZUud5Fn55HnaYKuMg_GpmX1xCA7QQZFY_w6aVbEuQfRKIR8L11vHfzQjshNPyKbXUQKaNz_tT-8sWBTHuRtAaRU346VZn5Zyxp"/>
+</div>
+<div class="flex-1 flex flex-col">
+<span class="font-label-bold text-label-bold text-on-surface">Momo</span>
+<span class="text-xs text-on-surface-variant flex items-center gap-1">
+<span>🇯🇵</span> JP
+                    </span>
+</div>
+<span class="font-label-bold text-label-bold text-primary">9,100</span>
+</div>
+</div>
+</main>
+<!-- Pinned Current Player -->
+<div class="fixed bottom-[88px] w-full px-margin-mobile z-40 md:hidden max-w-lg left-1/2 -translate-x-1/2">
+<div class="flex items-center p-4 bg-primary-container text-on-primary-container rounded-xl shadow-[0_8px_32px_rgba(102,78,49,0.15)] border-2 border-primary/20 backdrop-blur-sm bg-opacity-95">
+<span class="font-label-bold text-label-bold w-8 opacity-80">128</span>
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface mr-3 border-2 border-on-primary-container/30">
+<img class="w-full h-full object-cover" data-alt="A user profile picture, a subtle, minimal stylized human silhouette or generic elegant avatar in a warm, premium aesthetic. Light mode, soft lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwvuAGZ_0az_q85OBOD6RHXM3FqexRTStTNA4dB_qaailVZgpOm7BCKCxEoRQKnSQU6YficCvjTL2fNOcKaQW858wNPh4bCWryjILwgVmJDLqT1UTYs9aSz-Lm0jP9VJoFgCyv6tNUVI1QtvtqLp5MNlAYf2oPFz8d68M_WxUeNiFdFYDbwp0HErGEWKH9UiwQu85x9To7ZTglutxJpT22uMnwhbC6A8efGOo2sfySxystiu12he-r"/>
+</div>
+<div class="flex-1 flex flex-col">
+<span class="font-label-bold text-label-bold">You</span>
+<span class="text-xs opacity-80 flex items-center gap-1">
+<span>🇺🇸</span> US
+                </span>
+</div>
+<span class="font-label-bold text-label-bold">4,200</span>
+</div>
+</div>
+<!-- Pinned Current Player (Desktop fallback) -->
+<div class="hidden md:block fixed bottom-4 w-full px-margin-mobile z-40 max-w-lg left-1/2 -translate-x-1/2">
+<div class="flex items-center p-4 bg-primary-container text-on-primary-container rounded-xl shadow-[0_8px_32px_rgba(102,78,49,0.15)] border-2 border-primary/20 backdrop-blur-sm bg-opacity-95">
+<span class="font-label-bold text-label-bold w-8 opacity-80">128</span>
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface mr-3 border-2 border-on-primary-container/30">
+<img class="w-full h-full object-cover" data-alt="A user profile picture, a subtle, minimal stylized human silhouette or generic elegant avatar in a warm, premium aesthetic. Light mode, soft lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4zQbIbmj_vGyxIwoQc4SxrqvjheahCXEYKJNxjiZVJwsiUj47zRWhWcumPTMKjCLq6N6oQtKW65jRZV_WbguHg5MCp0QX_HjuaIE3kZlF-O3uJFNuQLEItsIOwQrzntX00fG1hXjqIMUF6ZCOgFB_-TPK0D1npeuC2br3PWlPbyGUJQVXWOfp-v-95t3J2Tpv2uLlBYe6bD2YfrJjYpdOEDX4EpK5GXa_FyqKkBVPTM9BVqRfj9IP"/>
+</div>
+<div class="flex-1 flex flex-col">
+<span class="font-label-bold text-label-bold">You</span>
+<span class="text-xs opacity-80 flex items-center gap-1">
+<span>🇺🇸</span> US
+                </span>
+</div>
+<span class="font-label-bold text-label-bold">4,200</span>
+</div>
+</div>
+<!-- BottomNavBar -->
+<nav class="docked full-width bottom-0 rounded-t-lg bg-surface-container dark:bg-surface-container-highest shadow-[0_-4px_24px_rgba(102,78,49,0.05)] fixed bottom-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 md:hidden">
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-5 py-2 hover:bg-habitat-cream/50 dark:hover:bg-surface-variant/20 rounded-full transition-colors group">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-5 py-2 hover:bg-habitat-cream/50 dark:hover:bg-surface-variant/20 rounded-full transition-colors group">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform">map</span>
+<span class="font-label-sm text-label-sm">Journey</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-secondary-container dark:bg-on-secondary-fixed-variant text-on-secondary-container dark:text-secondary-fixed rounded-full px-5 py-2 hover:bg-habitat-cream/50 dark:hover:bg-surface-variant/20 transition-all scale-90 duration-200 ease-out shadow-sm group">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform">calendar_today</span>
+<span class="font-label-sm text-label-sm">Daily</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-5 py-2 hover:bg-habitat-cream/50 dark:hover:bg-surface-variant/20 rounded-full transition-colors group">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform">pets</span>
+<span class="font-label-sm text-label-sm">Collection</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-5 py-2 hover:bg-habitat-cream/50 dark:hover:bg-surface-variant/20 rounded-full transition-colors group">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</button>
+</nav>
+</body></html>
