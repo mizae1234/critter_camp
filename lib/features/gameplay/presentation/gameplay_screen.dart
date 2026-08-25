@@ -318,17 +318,22 @@ class _GameplayScreenState extends State<GameplayScreen> {
                         },
                         tooltip: 'Back',
                       ),
-                      Column(
-                        children: [
-                          Text(
-                            'Stage ${widget.stage.stageNumber}: ${widget.stage.name}',
-                            style: AppTypography.titleLarge,
-                          ),
-                          Text(
-                            '${widget.stage.biomeName} • ${widget.stage.size}x${widget.stage.size}',
-                            style: AppTypography.labelSmall.copyWith(color: AppColors.outline),
-                          ),
-                        ],
+                      Expanded(
+                        child: Column(
+                          children: [
+                            Text(
+                              'Stage ${widget.stage.stageNumber}: ${widget.stage.name}',
+                              style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w700),
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              '${widget.stage.biomeName} • ${widget.stage.size}x${widget.stage.size}',
+                              style: AppTypography.labelSmall.copyWith(color: AppColors.outline),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
                       ),
                       Row(
                         children: [

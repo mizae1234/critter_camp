@@ -42,39 +42,42 @@ class HomeScreen extends StatelessWidget {
             children: [
               // Top Header Row
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: AppColors.primaryContainer,
-                          borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: AppColors.primaryContainer,
+                            borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+                          ),
+                          child: const Icon(Icons.forest_rounded, color: AppColors.primaryDark, size: 20),
                         ),
-                        child: const Icon(Icons.forest_rounded, color: AppColors.primaryDark, size: 22),
-                      ),
-                      const SizedBox(width: 10),
-                      Text(
-                        'Critter Camp',
-                        style: AppTypography.headlineMedium.copyWith(
-                          color: AppColors.primaryDark,
+                        const SizedBox(width: 8),
+                        Flexible(
+                          child: Text(
+                            'Critter Camp',
+                            style: AppTypography.titleLarge.copyWith(
+                              color: AppColors.primaryDark,
+                              fontWeight: FontWeight.w800,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                  Row(
-                    children: [
-                      StreakBadge(streakDays: userProgress.streakDays),
-                      const SizedBox(width: 8),
-                      AcornBadge(acorns: userProgress.acorns),
-                      const SizedBox(width: 6),
-                      IconButton(
-                        icon: const Icon(Icons.settings_rounded, color: AppColors.onSurfaceVariant),
-                        onPressed: onOpenSettings,
-                        tooltip: 'Settings',
-                      ),
-                    ],
+                  const SizedBox(width: 6),
+                  StreakBadge(streakDays: userProgress.streakDays),
+                  const SizedBox(width: 4),
+                  AcornBadge(acorns: userProgress.acorns),
+                  IconButton(
+                    padding: const EdgeInsets.all(6),
+                    constraints: const BoxConstraints(),
+                    icon: const Icon(Icons.settings_rounded, color: AppColors.onSurfaceVariant, size: 20),
+                    onPressed: onOpenSettings,
+                    tooltip: 'Settings',
                   ),
                 ],
               ),

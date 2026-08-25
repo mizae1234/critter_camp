@@ -10,7 +10,7 @@ class StreakBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: const Color(0xFFFFEDD5), // Warm Orange Tint
         borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
@@ -22,14 +22,15 @@ class StreakBadge extends StatelessWidget {
           const Icon(
             Icons.local_fire_department_rounded,
             color: Color(0xFFEA580C),
-            size: 16,
+            size: 14,
           ),
-          const SizedBox(width: 4),
+          const SizedBox(width: 3),
           Text(
-            '$streakDays Days',
+            '$streakDays d',
             style: AppTypography.labelSmall.copyWith(
               color: const Color(0xFF9A3412),
               fontWeight: FontWeight.w700,
+              fontSize: 11,
             ),
           ),
         ],
@@ -46,7 +47,7 @@ class AcornBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: const Color(0xFFFEF3C7), // Warm Yellow Tint
         borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
@@ -56,16 +57,17 @@ class AcornBadge extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           const Icon(
-            Icons.star_rounded,
+            Icons.grain_rounded,
             color: Color(0xFFD97706),
-            size: 16,
+            size: 14,
           ),
-          const SizedBox(width: 4),
+          const SizedBox(width: 3),
           Text(
             '$acorns',
             style: AppTypography.labelSmall.copyWith(
               color: const Color(0xFF92400E),
               fontWeight: FontWeight.w700,
+              fontSize: 11,
             ),
           ),
         ],

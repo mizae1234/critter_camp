@@ -31,19 +31,24 @@ class JourneyScreen extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Forest Trail',
-                        style: AppTypography.headlineMedium.copyWith(color: AppColors.primaryDark),
-                      ),
-                      Text(
-                        'Biome 1 • $completedCount/${stages.length} Stages Cleared',
-                        style: AppTypography.labelSmall.copyWith(color: AppColors.outline),
-                      ),
-                    ],
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Forest Trail',
+                          style: AppTypography.headlineMedium.copyWith(color: AppColors.primaryDark),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Text(
+                          'Biome 1 • $completedCount/${stages.length} Stages Cleared',
+                          style: AppTypography.labelSmall.copyWith(color: AppColors.outline),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
                   ),
+                  const SizedBox(width: 8),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
