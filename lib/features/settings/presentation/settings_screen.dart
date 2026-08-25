@@ -7,11 +7,13 @@ import '../../../core/widgets/critter_card.dart';
 import '../../../core/localization/app_strings.dart';
 import '../../../services/config/app_config_service.dart';
 import '../../../services/sync/cloud_sync_service.dart';
+import '../../../services/audio/audio_service.dart';
 
 class SettingsScreen extends StatefulWidget {
   final LocalStorage storage;
   final CloudSyncService? syncService;
   final AppConfigService? configService;
+  final AudioService? audioService;
   final VoidCallback onBack;
 
   const SettingsScreen({
@@ -19,6 +21,7 @@ class SettingsScreen extends StatefulWidget {
     required this.storage,
     this.syncService,
     this.configService,
+    this.audioService,
     required this.onBack,
   });
 
@@ -159,6 +162,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     onChanged: (val) {
                       setState(() => _musicVolume = val);
                       widget.storage.setMusicVolume(val);
+                      widget.audioService?.setMusicVolume(val);
                     },
                   ),
                   const SizedBox(height: 8),
@@ -175,6 +179,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     onChanged: (val) {
                       setState(() => _sfxVolume = val);
                       widget.storage.setSfxVolume(val);
+                      widget.audioService?.setSfxVolume(val);
                     },
                   ),
                 ],

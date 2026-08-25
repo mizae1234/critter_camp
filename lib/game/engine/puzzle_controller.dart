@@ -7,6 +7,7 @@ import '../stage/stage_definition.dart';
 import '../validator/stage_validation_result.dart';
 import '../validator/universal_stage_validator.dart';
 import '../solver/stage_solver.dart';
+import '../../services/audio/audio_service.dart';
 
 enum ToolMode {
   placeCritter,
@@ -34,6 +35,8 @@ class PuzzleController extends ChangeNotifier {
   Set<CellPosition> _conflictingCells = {};
   String? _lastError;
 
+  final AudioService? audioService;
+
   // Callbacks
   void Function(StageValidationResult result)? onStageCompleted;
   VoidCallback? onLevelCompleted; // For backward compatibility
@@ -42,6 +45,7 @@ class PuzzleController extends ChangeNotifier {
 
   PuzzleController({
     required this.stage,
+    this.audioService,
     bool isZenMode = false,
     bool isPatternMode = false,
   }) {
@@ -160,6 +164,15 @@ class PuzzleController extends ChangeNotifier {
       newContent: newContent,
     ));
 
+    // Play tactile sound effect
+    if (newContent == CellContent.critter) {
+      audioService?.playPlaceCritter();
+    } else if (newContent == CellContent.xMark) {
+      audioService?.playMarkX();
+    } else {
+      audioService?.playUndo();
+    }
+
     // Validate board using UniversalStageValidator
     _validateCurrentState(newCritterPlacedAt: (newContent == CellContent.critter) ? pos : null);
   }
@@ -175,6 +188,7 @@ class PuzzleController extends ChangeNotifier {
 
     // Check for wrong move penalty on newly placed critter
     if (newCritterPlacedAt != null && _conflictingCells.contains(newCritterPlacedAt)) {
+      audioService?.playConflict();
       if (!_isZenMode) {
         _lives = (_lives - 1).clamp(0, 3);
         onWrongMove?.call();
@@ -189,6 +203,7 @@ class PuzzleController extends ChangeNotifier {
     if (_lastValidation.passed) {
       _isCompleted = true;
       _timer?.cancel();
+      audioService?.playVictory();
       onStageCompleted?.call(_lastValidation);
       onLevelCompleted?.call();
     }
@@ -201,6 +216,7 @@ class PuzzleController extends ChangeNotifier {
 
     final lastMove = _history.removeLast();
     _grid[lastMove.position.row][lastMove.position.col] = lastMove.previousContent;
+    audioService?.playUndo();
 
     _validateCurrentState();
   }

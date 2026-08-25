@@ -11,6 +11,7 @@ import '../../../game/widgets/puzzle_toolbar_widget.dart';
 import '../../../services/hints/progressive_hint_service.dart';
 import '../../../services/ads/ads_service.dart';
 import '../../../services/analytics/analytics_service.dart';
+import '../../../services/audio/audio_service.dart';
 import '../dialogs/oops_dialog.dart';
 
 class GameplayScreen extends StatefulWidget {
@@ -18,6 +19,7 @@ class GameplayScreen extends StatefulWidget {
   final ProgressiveHintService? hintService;
   final AdsService? adsService;
   final AnalyticsService? analyticsService;
+  final AudioService? audioService;
   final VoidCallback onBack;
   final void Function(StageValidationResult result) onStageCompleted;
 
@@ -27,6 +29,7 @@ class GameplayScreen extends StatefulWidget {
     this.hintService,
     this.adsService,
     this.analyticsService,
+    this.audioService,
     required this.onBack,
     required this.onStageCompleted,
   });
@@ -42,7 +45,7 @@ class _GameplayScreenState extends State<GameplayScreen> {
   @override
   void initState() {
     super.initState();
-    _controller = PuzzleController(stage: widget.stage);
+    _controller = PuzzleController(stage: widget.stage, audioService: widget.audioService);
 
     widget.analyticsService?.trackStageStarted(
       stageNumber: widget.stage.stageNumber,

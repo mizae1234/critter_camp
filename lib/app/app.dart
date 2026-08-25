@@ -17,6 +17,7 @@ import '../services/hints/progressive_hint_service.dart';
 import '../services/analytics/analytics_service.dart';
 import '../services/identity/player_identity_service.dart';
 import '../services/sync/cloud_sync_service.dart';
+import '../services/audio/audio_service.dart';
 import '../game/stage/stage_definition.dart';
 import '../game/stage/stages/stage_catalog.dart';
 import '../game/validator/stage_validation_result.dart';
@@ -61,6 +62,7 @@ class _CritterCampAppState extends State<CritterCampApp> {
   late AnalyticsService _analyticsService;
   late PlayerIdentityService _identityService;
   late CloudSyncService _syncService;
+  late AudioService _audioService;
 
   // Repositories
   late ProgressRepository _progressRepo;
@@ -96,6 +98,7 @@ class _CritterCampAppState extends State<CritterCampApp> {
     _analyticsService = AnalyticsService();
     _identityService = PlayerIdentityService(storage: widget.storage, apiClient: _apiClient);
     _syncService = CloudSyncService(storage: widget.storage, apiClient: _apiClient, identityService: _identityService);
+    _audioService = AudioService(storage: widget.storage);
 
     // 2. Initialize Repositories
     _progressRepo = LocalProgressRepository(widget.storage);
@@ -199,6 +202,7 @@ class _CritterCampAppState extends State<CritterCampApp> {
           storage: widget.storage,
           syncService: _syncService,
           configService: _configService,
+          audioService: _audioService,
           onBack: () => setState(() => _currentView = AppView.mainTabs),
         );
 
@@ -220,6 +224,7 @@ class _CritterCampAppState extends State<CritterCampApp> {
           hintService: _hintService,
           adsService: _adsService,
           analyticsService: _analyticsService,
+          audioService: _audioService,
           onBack: () => setState(() => _currentView = AppView.mainTabs),
           onStageCompleted: _handleStageWon,
         );
