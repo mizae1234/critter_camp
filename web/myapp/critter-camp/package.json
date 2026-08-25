@@ -1,0 +1,13 @@
+{
+  "name": "critter-camp-backend",
+  "version": "1.0.0",
+  "description": "Backend API, Identity, Cloud Sync and Remote Config for Critter Camp",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

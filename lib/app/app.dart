@@ -8,6 +8,11 @@ import '../data/repositories/collection_repository.dart';
 import '../data/repositories/progress_repository.dart';
 import '../data/repositories/leaderboard_repository.dart';
 import '../data/repositories/auth_repository.dart';
+import '../services/api/api_client.dart';
+import '../services/config/app_config_service.dart';
+import '../services/ads/ads_service.dart';
+import '../services/identity/player_identity_service.dart';
+import '../services/sync/cloud_sync_service.dart';
 import '../game/stage/stage_definition.dart';
 import '../game/stage/stages/stage_catalog.dart';
 import '../game/validator/stage_validation_result.dart';
@@ -43,6 +48,14 @@ class CritterCampApp extends StatefulWidget {
 }
 
 class _CritterCampAppState extends State<CritterCampApp> {
+  // Services
+  late ApiClient _apiClient;
+  late AppConfigService _configService;
+  late AdsService _adsService;
+  late PlayerIdentityService _identityService;
+  late CloudSyncService _syncService;
+
+  // Repositories
   late ProgressRepository _progressRepo;
   late CollectionRepository _collectionRepo;
   late LeaderboardRepository _leaderboardRepo;
@@ -67,11 +80,29 @@ class _CritterCampAppState extends State<CritterCampApp> {
   @override
   void initState() {
     super.initState();
+    // 1. Initialize Services
+    _apiClient = ApiClient(storage: widget.storage);
+    _configService = AppConfigService(storage: widget.storage, apiClient: _apiClient);
+    _adsService = AdsService(configService: _configService);
+    _identityService = PlayerIdentityService(storage: widget.storage, apiClient: _apiClient);
+    _syncService = CloudSyncService(storage: widget.storage, apiClient: _apiClient, identityService: _identityService);
+
+    // 2. Initialize Repositories
     _progressRepo = LocalProgressRepository(widget.storage);
     _collectionRepo = LocalCollectionRepository(widget.storage);
     _leaderboardRepo = MockLeaderboardRepository();
     _authRepo = MockAuthRepository(widget.storage);
+
+    // 3. Load App State & Start Background Tasks
     _loadAppState();
+    _initBackgroundServices();
+  }
+
+  Future<void> _initBackgroundServices() async {
+    // Non-blocking remote config fetch and ads initialization
+    await _configService.fetchRemoteConfig();
+    await _adsService.initialize();
+    await _syncService.syncPendingProgress();
   }
 
   Future<void> _loadAppState() async {
@@ -95,12 +126,16 @@ class _CritterCampAppState extends State<CritterCampApp> {
     _lastValidationResult = result;
     final int starsEarned = result.starsEarned;
 
-    // Reward progress
-    await _progressRepo.completeLevel(
-      _activeStage.stageNumber,
-      starsEarned,
-      _activeStage.baseAcornsReward,
+    // 1. Local-First Save + Asynchronous Cloud Sync
+    await _syncService.saveStageProgressLocallyFirst(
+      stageNumber: _activeStage.stageNumber,
+      stars: starsEarned,
+      movesCount: 0,
+      elapsedSeconds: 75,
+      acornsReward: _activeStage.baseAcornsReward,
     );
+
+    // 2. Unlock Collection reward
     await _collectionRepo.unlockCritter(_activeStage.rewardCritterId);
     await _loadAppState();
 
@@ -137,6 +172,8 @@ class _CritterCampAppState extends State<CritterCampApp> {
       case AppView.settings:
         return SettingsScreen(
           storage: widget.storage,
+          syncService: _syncService,
+          configService: _configService,
           onBack: () => setState(() => _currentView = AppView.mainTabs),
         );
 
@@ -226,6 +263,8 @@ class _CritterCampAppState extends State<CritterCampApp> {
       case CritterNavTab.profile:
         return ProfileScreen(
           authRepository: _authRepo,
+          identityService: _identityService,
+          syncService: _syncService,
           onOpenSettings: () => setState(() => _currentView = AppView.settings),
         );
     }

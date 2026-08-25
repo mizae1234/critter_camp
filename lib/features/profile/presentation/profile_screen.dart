@@ -4,16 +4,23 @@ import '../../../app/theme/app_typography.dart';
 import '../../../app/theme/app_spacing.dart';
 import '../../../core/widgets/critter_avatar.dart';
 import '../../../core/widgets/critter_card.dart';
+import '../../../core/widgets/critter_button.dart';
 import '../../../data/models/player_profile.dart';
 import '../../../data/repositories/auth_repository.dart';
+import '../../../services/identity/player_identity_service.dart';
+import '../../../services/sync/cloud_sync_service.dart';
 
 class ProfileScreen extends StatefulWidget {
   final AuthRepository authRepository;
+  final PlayerIdentityService identityService;
+  final CloudSyncService syncService;
   final VoidCallback onOpenSettings;
 
   const ProfileScreen({
     super.key,
     required this.authRepository,
+    required this.identityService,
+    required this.syncService,
     required this.onOpenSettings,
   });
 
@@ -35,6 +42,87 @@ class _ProfileScreenState extends State<ProfileScreen> {
     setState(() => _profile = p);
   }
 
+  void _showConnectAccountDialog() {
+    final emailController = TextEditingController();
+    final nameController = TextEditingController(text: _profile?.username ?? 'CozyCamper');
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: AppColors.surfaceContainerLowest,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSpacing.radiusMd)),
+          title: Row(
+            children: [
+              const Icon(Icons.cloud_upload_rounded, color: AppColors.primary),
+              const SizedBox(width: 8),
+              Text('Connect Account', style: AppTypography.titleLarge),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Connect your account to enable multi-device cloud saves. All your existing stage progress and acorns will be preserved!',
+                style: AppTypography.bodyMedium.copyWith(fontSize: 13),
+              ),
+              const SizedBox(height: 14),
+              TextField(
+                controller: emailController,
+                decoration: const InputDecoration(
+                  labelText: 'Email Address',
+                  hintText: 'camper@example.com',
+                  border: OutlineInputBorder(),
+                  isDense: true,
+                ),
+              ),
+              const SizedBox(height: 10),
+              TextField(
+                controller: nameController,
+                decoration: const InputDecoration(
+                  labelText: 'Camper Name',
+                  border: OutlineInputBorder(),
+                  isDense: true,
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white),
+              onPressed: () async {
+                final email = emailController.text.trim();
+                final name = nameController.text.trim();
+                if (email.isNotEmpty) {
+                  final navigator = Navigator.of(context);
+                  final messenger = ScaffoldMessenger.of(context);
+                  final userId = 'usr_${email.replaceAll(RegExp(r'[^a-zA-Z0-9]'), '_')}';
+                  await widget.identityService.connectAccount(
+                    userId: userId,
+                    email: email,
+                    displayName: name.isNotEmpty ? name : 'CozyCamper',
+                  );
+                  await widget.syncService.syncPendingProgress();
+                  navigator.pop();
+                  _loadProfile();
+                  messenger.showSnackBar(
+                    const SnackBar(content: Text('Account connected! All progress merged.')),
+                  );
+                }
+              },
+              child: const Text('Connect & Sync'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_profile == null) {
@@ -42,6 +130,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
 
     final p = _profile!;
+    final isGuest = widget.identityService.isGuest;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -73,58 +162,89 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 backgroundColor: AppColors.surfaceContainerLow,
                 borderRadius: AppSpacing.radiusLg,
                 padding: const EdgeInsets.all(AppSpacing.lg),
-                child: Row(
+                child: Column(
                   children: [
-                    CritterAvatar(emoji: p.avatarEmoji, size: 70),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
+                    Row(
+                      children: [
+                        CritterAvatar(emoji: p.avatarEmoji, size: 68),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(p.username, style: AppTypography.titleLarge),
-                              const SizedBox(width: 6),
+                              Row(
+                                children: [
+                                  Text(
+                                    widget.identityService.currentIdentity.displayName,
+                                    style: AppTypography.titleLarge,
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.primaryContainer,
+                                      borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+                                    ),
+                                    child: Text(
+                                      'Lvl ${p.level}',
+                                      style: AppTypography.labelSmall.copyWith(
+                                        fontSize: 10,
+                                        color: AppColors.primaryDark,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                '${p.rankTitle} • ${widget.identityService.effectivePlayerId}',
+                                style: AppTypography.labelSmall.copyWith(color: AppColors.outline),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(height: 8),
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                                 decoration: BoxDecoration(
-                                  color: AppColors.primaryContainer,
-                                  borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+                                  color: isGuest ? const Color(0xFFFEF3C7) : const Color(0xFFDCFCE7),
+                                  borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
                                 ),
-                                child: Text(
-                                  'Lvl ${p.level}',
-                                  style: AppTypography.labelSmall.copyWith(fontSize: 10, color: AppColors.primaryDark, fontWeight: FontWeight.w700),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      isGuest ? Icons.phone_android_rounded : Icons.cloud_done_rounded,
+                                      size: 12,
+                                      color: isGuest ? const Color(0xFFD97706) : const Color(0xFF15803D),
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      isGuest ? 'Guest (Saved on Device)' : 'Cloud Save Enabled',
+                                      style: AppTypography.labelSmall.copyWith(
+                                        color: isGuest ? const Color(0xFF92400E) : const Color(0xFF15803D),
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
                           ),
-                          const SizedBox(height: 2),
-                          Text(
-                            '${p.rankTitle} • ${p.camperId}',
-                            style: AppTypography.labelSmall.copyWith(color: AppColors.outline),
-                          ),
-                          const SizedBox(height: 8),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFDCFCE7),
-                              borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Icon(Icons.cloud_done_rounded, size: 12, color: Color(0xFF15803D)),
-                                const SizedBox(width: 4),
-                                Text(
-                                  'Cloud Synced',
-                                  style: AppTypography.labelSmall.copyWith(color: const Color(0xFF15803D), fontSize: 9),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
+
+                    if (isGuest) ...[
+                      const SizedBox(height: AppSpacing.md),
+                      CritterButton(
+                        text: 'Connect Account (Enable Cloud Save)',
+                        variant: CritterButtonVariant.secondary,
+                        isFullWidth: true,
+                        icon: Icons.cloud_upload_rounded,
+                        onPressed: _showConnectAccountDialog,
+                      ),
+                    ],
                   ],
                 ),
               ),
@@ -143,7 +263,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 crossAxisSpacing: 10,
                 childAspectRatio: 1.6,
                 children: [
-                  _buildStatCard('Puzzles Solved', '${p.puzzlesSolved}', Icons.extension_rounded, AppColors.primary),
+                  _buildStatCard('Stages Cleared', '${p.puzzlesSolved}', Icons.extension_rounded, AppColors.primary),
                   _buildStatCard('Perfect Clears', '${p.perfectClears}', Icons.star_rounded, AppColors.accentGold),
                   _buildStatCard('Current Streak', '${p.streakDays} Days', Icons.local_fire_department_rounded, const Color(0xFFEA580C)),
                   _buildStatCard('Total Acorns', '${p.totalAcorns}', Icons.grain_rounded, AppColors.textAccentBrown),

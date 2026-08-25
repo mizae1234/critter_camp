@@ -4,14 +4,20 @@ import '../../../app/theme/app_typography.dart';
 import '../../../app/theme/app_spacing.dart';
 import '../../../core/storage/local_storage.dart';
 import '../../../core/widgets/critter_card.dart';
+import '../../../services/config/app_config_service.dart';
+import '../../../services/sync/cloud_sync_service.dart';
 
 class SettingsScreen extends StatefulWidget {
   final LocalStorage storage;
+  final CloudSyncService? syncService;
+  final AppConfigService? configService;
   final VoidCallback onBack;
 
   const SettingsScreen({
     super.key,
     required this.storage,
+    this.syncService,
+    this.configService,
     required this.onBack,
   });
 
@@ -24,6 +30,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   late bool _patternMode;
   late double _musicVolume;
   late double _sfxVolume;
+  bool _isManualSyncing = false;
 
   @override
   void initState() {
@@ -36,6 +43,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final String lastSync = widget.storage.getLastSyncTime() != null
+        ? 'Last Synced: ${widget.storage.getLastSyncTime()!.split('T').first}'
+        : 'Synced with device storage';
+
+    final String appId = widget.configService?.config.appId ?? 'critter-camp';
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -130,26 +143,52 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
             const SizedBox(height: AppSpacing.lg),
 
-            // Section 3: Cloud & Account
-            Text('Account & Privacy', style: AppTypography.titleMedium),
+            // Section 3: Cloud & Backend Sync
+            Text('Account & Cloud Sync', style: AppTypography.titleMedium),
             const SizedBox(height: AppSpacing.sm),
 
             CritterCard(
               padding: EdgeInsets.zero,
               child: Column(
                 children: [
-                  const ListTile(
-                    leading: Icon(Icons.cloud_sync_rounded, color: AppColors.primary),
-                    title: Text('Cloud Sync Status'),
-                    subtitle: Text('Syncing with local device cache', style: TextStyle(fontSize: 12)),
-                    trailing: Icon(Icons.check_circle_rounded, color: AppColors.primary, size: 20),
+                  ListTile(
+                    leading: const Icon(Icons.cloud_sync_rounded, color: AppColors.primary),
+                    title: const Text('Cloud Sync Status'),
+                    subtitle: Text(lastSync, style: const TextStyle(fontSize: 12)),
+                    trailing: _isManualSyncing
+                        ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                        : IconButton(
+                            icon: const Icon(Icons.sync_rounded, color: AppColors.primary),
+                            tooltip: 'Sync Now',
+                            onPressed: () async {
+                              if (widget.syncService != null) {
+                                final messenger = ScaffoldMessenger.of(context);
+                                setState(() => _isManualSyncing = true);
+                                await widget.syncService!.syncPendingProgress();
+                                setState(() => _isManualSyncing = false);
+                                messenger.showSnackBar(
+                                  const SnackBar(content: Text('Cloud sync completed!')),
+                                );
+                              }
+                            },
+                          ),
                   ),
                   const Divider(height: 1, indent: 16, endIndent: 16),
                   ListTile(
-                    leading: const Icon(Icons.restore_rounded, color: AppColors.outline),
-                    title: const Text('Restore Purchases'),
-                    trailing: const Icon(Icons.chevron_right_rounded),
-                    onTap: () {},
+                    leading: const Icon(Icons.app_settings_alt_rounded, color: AppColors.outline),
+                    title: const Text('Platform App ID'),
+                    subtitle: Text('Registered as "$appId"', style: const TextStyle(fontSize: 12)),
+                    trailing: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryContainer,
+                        borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+                      ),
+                      child: Text(
+                        'Web Admin',
+                        style: AppTypography.labelSmall.copyWith(fontSize: 10, color: AppColors.primaryDark, fontWeight: FontWeight.w700),
+                      ),
+                    ),
                   ),
                   const Divider(height: 1, indent: 16, endIndent: 16),
                   ListTile(
@@ -166,7 +205,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
             Center(
               child: Text(
-                'Critter Camp v1.0.0 • Build 42\nMade with Flutter for cozy campers everywhere',
+                'Critter Camp v1.0.0 • Build 42\nIntegrated with web/myapp platform',
                 style: AppTypography.labelSmall.copyWith(color: AppColors.outline, height: 1.5),
                 textAlign: TextAlign.center,
               ),
