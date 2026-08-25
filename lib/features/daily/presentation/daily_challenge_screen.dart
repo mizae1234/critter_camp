@@ -17,14 +17,18 @@ class DailyChallengeScreen extends StatelessWidget {
       backgroundColor: AppColors.background,
       body: Stack(
         children: [
-          // ⛺ Cozy Campsite Background
+          // Background Gradient
           Positioned.fill(
-            child: Opacity(
-              opacity: 0.18,
-              child: Image.asset(
-                'assets/images/bg_campsite.jpg',
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
+            child: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color(0xFFFBF6EE),
+                    Color(0xFFF3EAD8),
+                  ],
+                ),
               ),
             ),
           ),
@@ -56,6 +60,7 @@ class DailyChallengeScreen extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: const Color(0xFFFFEDD5),
                           borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
+                          border: Border.all(color: const Color(0xFFFDBA74)),
                         ),
                         child: Row(
                           children: [
@@ -71,67 +76,113 @@ class DailyChallengeScreen extends StatelessWidget {
                     ],
                   ),
 
-                  const SizedBox(height: AppSpacing.lg),
+                  const SizedBox(height: AppSpacing.md),
 
-                  // Today's Feature Challenge Card
-                  CritterCard(
-                    backgroundColor: AppColors.surfaceContainerLow,
-                    borderRadius: AppSpacing.radiusLg,
-                    padding: const EdgeInsets.all(AppSpacing.lg),
+                  // Today's Feature Challenge Card with Full Scenic Banner
+                  Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.surfaceContainerLowest,
+                      borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
+                      border: Border.all(color: AppColors.outlineVariant.withValues(alpha: 0.8)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.08),
+                          blurRadius: 16,
+                          offset: const Offset(0, 6),
+                        ),
+                      ],
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFFEF3C7),
-                                borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+                        // Scenic Hero Header Image
+                        ClipRRect(
+                          borderRadius: const BorderRadius.vertical(top: Radius.circular(AppSpacing.radiusLg)),
+                          child: Stack(
+                            children: [
+                              Image.asset(
+                                'assets/images/bg_gameplay.jpg',
+                                width: double.infinity,
+                                height: 130,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) => Container(
+                                  height: 130,
+                                  color: AppColors.primaryDark,
+                                ),
                               ),
-                              child: Text(
-                                'TODAY\'S SPECIAL',
-                                style: AppTypography.labelSmall.copyWith(color: AppColors.accentGold, fontWeight: FontWeight.w800),
+                              Positioned(
+                                top: 12,
+                                left: 12,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: Colors.black.withValues(alpha: 0.65),
+                                    borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+                                  ),
+                                  child: const Text(
+                                    '⭐ TODAY\'S SPECIAL',
+                                    style: TextStyle(color: Color(0xFFFCD34D), fontSize: 10, fontWeight: FontWeight.w800),
+                                  ),
+                                ),
                               ),
-                            ),
-                            const Text('⏱️ 14h 22m', style: TextStyle(fontSize: 11, color: AppColors.outline)),
-                          ],
+                              Positioned(
+                                top: 12,
+                                right: 12,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: Colors.black.withValues(alpha: 0.65),
+                                    borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+                                  ),
+                                  child: const Text(
+                                    '⏱️ 14h 22m',
+                                    style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
 
-                        const SizedBox(height: AppSpacing.md),
+                        Padding(
+                          padding: const EdgeInsets.all(AppSpacing.lg),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'The Sunlit Meadow Grove',
+                                style: AppTypography.headlineLarge.copyWith(fontSize: 18),
+                              ),
 
-                        Text(
-                          'The River Grove',
-                          style: AppTypography.headlineLarge,
-                        ),
+                              const SizedBox(height: 4),
 
-                        const SizedBox(height: 4),
+                              Text(
+                                AppStrings.dailyChallengeSub,
+                                style: AppTypography.bodyMedium.copyWith(fontSize: 12),
+                              ),
 
-                        Text(
-                          AppStrings.dailyChallengeSub,
-                          style: AppTypography.bodyMedium,
-                        ),
+                              const SizedBox(height: AppSpacing.md),
 
-                        const SizedBox(height: AppSpacing.md),
+                              Row(
+                                children: [
+                                  _buildBadge(Icons.grid_4x4_rounded, '6x6 Grid'),
+                                  const SizedBox(width: 8),
+                                  _buildBadge(Icons.star_rounded, AppStrings.rewardAcorns),
+                                  const SizedBox(width: 8),
+                                  _buildBadge(Icons.emoji_events_rounded, AppStrings.leaderboard),
+                                ],
+                              ),
 
-                        Row(
-                          children: [
-                            _buildBadge(Icons.grid_4x4_rounded, '6x6 Grid'),
-                            const SizedBox(width: 8),
-                            _buildBadge(Icons.star_rounded, AppStrings.rewardAcorns),
-                            const SizedBox(width: 8),
-                            _buildBadge(Icons.emoji_events_rounded, AppStrings.leaderboard),
-                          ],
-                        ),
+                              const SizedBox(height: AppSpacing.lg),
 
-                        const SizedBox(height: AppSpacing.lg),
-
-                        CritterButton(
-                          text: AppStrings.playDailyChallenge,
-                          isFullWidth: true,
-                          icon: Icons.play_arrow_rounded,
-                          onPressed: onPlayDaily,
+                              CritterButton(
+                                text: AppStrings.playDailyChallenge,
+                                isFullWidth: true,
+                                icon: Icons.play_arrow_rounded,
+                                onPressed: onPlayDaily,
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -159,17 +210,21 @@ class DailyChallengeScreen extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 10),
-                        Wrap(
-                          spacing: 8,
-                          runSpacing: 8,
-                          children: List.generate(28, (index) {
+                        GridView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 7,
+                            mainAxisSpacing: 8,
+                            crossAxisSpacing: 8,
+                          ),
+                          itemCount: 28,
+                          itemBuilder: (context, index) {
                             final day = index + 1;
                             final isDone = day < 25;
                             final isToday = day == 25;
 
                             return Container(
-                              width: 36,
-                              height: 36,
                               decoration: BoxDecoration(
                                 color: isToday
                                     ? AppColors.primary
@@ -192,7 +247,7 @@ class DailyChallengeScreen extends StatelessWidget {
                                       ),
                               ),
                             );
-                          }),
+                          },
                         ),
                       ],
                     ),

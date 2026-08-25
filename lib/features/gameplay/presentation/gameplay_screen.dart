@@ -377,6 +377,14 @@ class _GameplayScreenState extends State<GameplayScreen> {
                               ],
                             ),
                           ),
+                          const SizedBox(width: 4),
+                          IconButton(
+                            padding: const EdgeInsets.all(4),
+                            constraints: const BoxConstraints(),
+                            icon: const Icon(Icons.help_outline_rounded, size: 20, color: AppColors.onSurfaceVariant),
+                            tooltip: AppStrings.howToPlay,
+                            onPressed: _showRulesModal,
+                          ),
                         ],
                       ),
                     ],
@@ -427,5 +435,81 @@ class _GameplayScreenState extends State<GameplayScreen> {
     ],
   ),
 );
+  }
+
+  void _showRulesModal() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.all(AppSpacing.xl),
+          decoration: const BoxDecoration(
+            color: AppColors.surfaceContainerLowest,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(AppSpacing.radiusLg)),
+          ),
+          child: SafeArea(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        const Text('📖', style: TextStyle(fontSize: 22)),
+                        const SizedBox(width: 8),
+                        Text(AppStrings.howToPlayTitle, style: AppTypography.titleLarge.copyWith(color: AppColors.primaryDark, fontSize: 16)),
+                      ],
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close_rounded),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                _buildRuleItem('1️⃣', AppStrings.rule1Title, AppStrings.rule1Desc),
+                const SizedBox(height: 8),
+                _buildRuleItem('2️⃣', AppStrings.rule2Title, AppStrings.rule2Desc),
+                const SizedBox(height: 8),
+                _buildRuleItem('3️⃣', AppStrings.rule3Title, AppStrings.rule3Desc),
+                const SizedBox(height: 14),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildRuleItem(String emoji, String title, String desc) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+        border: Border.all(color: AppColors.outlineVariant.withValues(alpha: 0.6)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(emoji, style: const TextStyle(fontSize: 20)),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: AppTypography.titleMedium.copyWith(fontSize: 13, fontWeight: FontWeight.w700)),
+                const SizedBox(height: 2),
+                Text(desc, style: AppTypography.bodyMedium.copyWith(fontSize: 11, color: AppColors.onSurfaceVariant)),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

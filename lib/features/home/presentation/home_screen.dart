@@ -19,6 +19,7 @@ class HomeScreen extends StatelessWidget {
   final ValueChanged<CritterModel> onSelectCritter;
   final VoidCallback onOpenSettings;
   final VoidCallback onOpenLeaderboard;
+  final VoidCallback onOpenTutorial;
 
   const HomeScreen({
     super.key,
@@ -29,6 +30,7 @@ class HomeScreen extends StatelessWidget {
     required this.onSelectCritter,
     required this.onOpenSettings,
     required this.onOpenLeaderboard,
+    required this.onOpenTutorial,
   });
 
   @override
@@ -56,47 +58,54 @@ class HomeScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-              // Top Header Row
-              Row(
-                children: [
-                  Expanded(
-                    child: Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                            color: AppColors.primaryContainer,
-                            borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
-                          ),
-                          child: const Icon(Icons.forest_rounded, color: AppColors.primaryDark, size: 20),
-                        ),
-                        const SizedBox(width: 8),
-                        Flexible(
-                          child: Text(
-                            'Critter Camp',
-                            style: AppTypography.titleLarge.copyWith(
-                              color: AppColors.primaryDark,
-                              fontWeight: FontWeight.w800,
+                  // Top Header Row
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                color: AppColors.primaryContainer,
+                                borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+                              ),
+                              child: const Icon(Icons.forest_rounded, color: AppColors.primaryDark, size: 20),
                             ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                            const SizedBox(width: 8),
+                            Flexible(
+                              child: Text(
+                                'Critter Camp',
+                                style: AppTypography.titleLarge.copyWith(
+                                  color: AppColors.primaryDark,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(width: 4),
+                      StreakBadge(streakDays: userProgress.streakDays),
+                      const SizedBox(width: 4),
+                      AcornBadge(acorns: userProgress.acorns),
+                      IconButton(
+                        padding: const EdgeInsets.all(4),
+                        constraints: const BoxConstraints(),
+                        icon: const Icon(Icons.help_outline_rounded, color: AppColors.onSurfaceVariant, size: 20),
+                        onPressed: onOpenTutorial,
+                        tooltip: AppStrings.howToPlay,
+                      ),
+                      IconButton(
+                        padding: const EdgeInsets.all(4),
+                        constraints: const BoxConstraints(),
+                        icon: const Icon(Icons.settings_rounded, color: AppColors.onSurfaceVariant, size: 20),
+                        onPressed: onOpenSettings,
+                        tooltip: 'Settings',
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 6),
-                  StreakBadge(streakDays: userProgress.streakDays),
-                  const SizedBox(width: 4),
-                  AcornBadge(acorns: userProgress.acorns),
-                  IconButton(
-                    padding: const EdgeInsets.all(6),
-                    constraints: const BoxConstraints(),
-                    icon: const Icon(Icons.settings_rounded, color: AppColors.onSurfaceVariant, size: 20),
-                    onPressed: onOpenSettings,
-                    tooltip: 'Settings',
-                  ),
-                ],
-              ),
 
               const SizedBox(height: AppSpacing.xl),
 

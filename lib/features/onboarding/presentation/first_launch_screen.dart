@@ -6,12 +6,20 @@ import '../../../core/widgets/critter_button.dart';
 import '../../../core/localization/app_strings.dart';
 
 class FirstLaunchScreen extends StatelessWidget {
+  final bool isReturningPlayer;
+  final int currentStageNumber;
+  final String? playerName;
+  final VoidCallback onContinueGame;
   final VoidCallback onPlayAsGuest;
   final Function(String email, String name) onSignIn;
   final VoidCallback onHowToPlay;
 
   const FirstLaunchScreen({
     super.key,
+    this.isReturningPlayer = false,
+    this.currentStageNumber = 1,
+    this.playerName,
+    required this.onContinueGame,
     required this.onPlayAsGuest,
     required this.onSignIn,
     required this.onHowToPlay,
@@ -19,7 +27,7 @@ class FirstLaunchScreen extends StatelessWidget {
 
   void _showSignInDialog(BuildContext context) {
     final emailController = TextEditingController();
-    final nameController = TextEditingController();
+    final nameController = TextEditingController(text: playerName ?? '');
 
     showDialog(
       context: context,
@@ -116,7 +124,7 @@ class FirstLaunchScreen extends StatelessWidget {
           // Cozy Campsite Background
           Positioned.fill(
             child: Opacity(
-              opacity: 0.16,
+              opacity: 0.18,
               child: Image.asset(
                 'assets/images/bg_campsite.jpg',
                 fit: BoxFit.cover,
@@ -129,7 +137,7 @@ class FirstLaunchScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl, vertical: AppSpacing.md),
               child: Column(
                 children: [
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 20),
 
                   // Hero App Icon
                   Container(
@@ -147,14 +155,14 @@ class FirstLaunchScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(36),
                       child: Image.asset(
                         'assets/images/app_icon.jpg',
-                        width: 130,
-                        height: 130,
+                        width: 140,
+                        height: 140,
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) => Container(
-                          width: 130,
-                          height: 130,
+                          width: 140,
+                          height: 140,
                           color: const Color(0xFFFBF6EE),
-                          child: const Center(child: Text('⛺🦊', style: TextStyle(fontSize: 44))),
+                          child: const Center(child: Text('⛺🦊', style: TextStyle(fontSize: 48))),
                         ),
                       ),
                     ),
@@ -162,77 +170,104 @@ class FirstLaunchScreen extends StatelessWidget {
 
                   const SizedBox(height: AppSpacing.lg),
 
-              // Title
-              Text(
-                AppStrings.appTitle,
-                style: AppTypography.displayLarge.copyWith(
-                  color: AppColors.primaryDark,
-                  fontWeight: FontWeight.w800,
-                ),
-                textAlign: TextAlign.center,
+                  // Title
+                  Text(
+                    AppStrings.appTitle,
+                    style: AppTypography.displayLarge.copyWith(
+                      color: AppColors.primaryDark,
+                      fontWeight: FontWeight.w800,
+                      fontSize: 32,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+
+                  const SizedBox(height: AppSpacing.xs),
+
+                  // Tagline
+                  Text(
+                    AppStrings.appTagline,
+                    style: AppTypography.titleMedium.copyWith(
+                      color: AppColors.onSurfaceVariant,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 15,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+
+                  const SizedBox(height: AppSpacing.xl),
+
+                  // Dynamic Actions based on Returning Player status
+                  if (isReturningPlayer) ...[
+                    // Primary Continue Action
+                    CritterButton(
+                      text: AppStrings.isThai
+                          ? '🏕️ เล่นต่อ (ด่านที่ $currentStageNumber)'
+                          : '🏕️ Continue Journey (Stage $currentStageNumber)',
+                      isFullWidth: true,
+                      icon: Icons.play_arrow_rounded,
+                      onPressed: onContinueGame,
+                    ),
+
+                    const SizedBox(height: AppSpacing.sm),
+
+                    // Switch / Account Action
+                    CritterButton(
+                      text: AppStrings.isThai
+                          ? '👤 ${playerName ?? "ผู้เล่น"} (สลับบัญชี)'
+                          : '👤 ${playerName ?? "Camper"} (Switch Account)',
+                      variant: CritterButtonVariant.secondary,
+                      isFullWidth: true,
+                      icon: Icons.account_circle_outlined,
+                      onPressed: () => _showSignInDialog(context),
+                    ),
+                  ] else ...[
+                    // Play as Guest
+                    CritterButton(
+                      text: AppStrings.playAsGuest,
+                      isFullWidth: true,
+                      icon: Icons.play_arrow_rounded,
+                      onPressed: onPlayAsGuest,
+                    ),
+
+                    const SizedBox(height: AppSpacing.sm),
+
+                    // Sign In / Register
+                    CritterButton(
+                      text: AppStrings.signInOrRegister,
+                      variant: CritterButtonVariant.secondary,
+                      isFullWidth: true,
+                      icon: Icons.login_rounded,
+                      onPressed: () => _showSignInDialog(context),
+                    ),
+                  ],
+
+                  const SizedBox(height: AppSpacing.sm),
+
+                  // How to Play Action
+                  CritterButton(
+                    text: AppStrings.howToPlay,
+                    variant: CritterButtonVariant.ghost,
+                    isFullWidth: true,
+                    icon: Icons.menu_book_rounded,
+                    onPressed: onHowToPlay,
+                  ),
+
+                  const SizedBox(height: AppSpacing.md),
+
+                  Text(
+                    AppStrings.offlineFriendly,
+                    style: AppTypography.labelSmall.copyWith(
+                      color: AppColors.outline,
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+                ],
               ),
-
-              const SizedBox(height: AppSpacing.xs),
-
-              // Tagline
-              Text(
-                AppStrings.appTagline,
-                style: AppTypography.titleMedium.copyWith(
-                  color: AppColors.onSurfaceVariant,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 16,
-                ),
-                textAlign: TextAlign.center,
-              ),
-
-              const SizedBox(height: AppSpacing.xl),
-
-              // Action 1: Play as Guest
-              CritterButton(
-                text: AppStrings.playAsGuest,
-                isFullWidth: true,
-                icon: Icons.play_arrow_rounded,
-                onPressed: onPlayAsGuest,
-              ),
-
-              const SizedBox(height: AppSpacing.sm),
-
-              // Action 2: Sign In / Register
-              CritterButton(
-                text: AppStrings.signInOrRegister,
-                variant: CritterButtonVariant.secondary,
-                isFullWidth: true,
-                icon: Icons.login_rounded,
-                onPressed: () => _showSignInDialog(context),
-              ),
-
-              const SizedBox(height: AppSpacing.sm),
-
-              // Action 3: How to Play
-              CritterButton(
-                text: AppStrings.howToPlay,
-                variant: CritterButtonVariant.ghost,
-                isFullWidth: true,
-                icon: Icons.menu_book_rounded,
-                onPressed: onHowToPlay,
-              ),
-
-              const SizedBox(height: AppSpacing.md),
-
-              Text(
-                AppStrings.offlineFriendly,
-                style: AppTypography.labelSmall.copyWith(
-                  color: AppColors.outline,
-                ),
-              ),
-
-              const SizedBox(height: 20),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
-    ],
-  ),
-);
+    );
   }
 }
