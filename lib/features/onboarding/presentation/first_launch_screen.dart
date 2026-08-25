@@ -64,6 +64,25 @@ class FirstLaunchScreen extends StatelessWidget {
                 isDense: true,
               ),
             ),
+            const SizedBox(height: 10),
+            DropdownButtonFormField<String>(
+              initialValue: '🇹🇭 TH',
+              decoration: InputDecoration(
+                labelText: AppStrings.isThai ? 'ประเทศ (สำหรับ Leaderboard)' : 'Country (for Leaderboard)',
+                border: const OutlineInputBorder(),
+                isDense: true,
+              ),
+              items: const [
+                DropdownMenuItem(value: '🇹🇭 TH', child: Text('🇹🇭 Thailand (ไทย)')),
+                DropdownMenuItem(value: '🇯🇵 JP', child: Text('🇯🇵 Japan')),
+                DropdownMenuItem(value: '🇺🇸 US', child: Text('🇺🇸 United States')),
+                DropdownMenuItem(value: '🇬🇧 GB', child: Text('🇬🇧 United Kingdom')),
+                DropdownMenuItem(value: '🇰🇷 KR', child: Text('🇰🇷 South Korea')),
+                DropdownMenuItem(value: '🇸🇬 SG', child: Text('🇸🇬 Singapore')),
+                DropdownMenuItem(value: '🌍 GL', child: Text('🌍 Global / Other')),
+              ],
+              onChanged: (val) {},
+            ),
           ],
         ),
         actions: [
