@@ -116,4 +116,17 @@ class PlayerIdentityService extends ChangeNotifier {
 
     notifyListeners();
   }
+
+  Future<void> ensureGuestIdentity() async {
+    _loadIdentity();
+    notifyListeners();
+  }
+
+  Future<bool> upgradeToAccount({required String email, required String username}) async {
+    return connectAccount(
+      userId: 'usr_${DateTime.now().millisecondsSinceEpoch}',
+      email: email,
+      displayName: username,
+    );
+  }
 }

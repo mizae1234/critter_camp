@@ -17,6 +17,7 @@ class HomeScreen extends StatelessWidget {
   final VoidCallback onPlayDaily;
   final ValueChanged<CritterModel> onSelectCritter;
   final VoidCallback onOpenSettings;
+  final VoidCallback onOpenLeaderboard;
 
   const HomeScreen({
     super.key,
@@ -26,6 +27,7 @@ class HomeScreen extends StatelessWidget {
     required this.onPlayDaily,
     required this.onSelectCritter,
     required this.onOpenSettings,
+    required this.onOpenLeaderboard,
   });
 
   @override
@@ -172,6 +174,42 @@ class HomeScreen extends StatelessWidget {
                       ),
                       child: const Text('Play Daily'),
                     ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: AppSpacing.md),
+
+              // Leaderboard Banner Card
+              CritterCard(
+                backgroundColor: const Color(0xFFF3F4F6),
+                borderRadius: AppSpacing.radiusMd,
+                onTap: onOpenLeaderboard,
+                child: Row(
+                  children: [
+                    Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFE0E7FF),
+                        borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+                      ),
+                      child: const Center(
+                        child: Text('🏆', style: TextStyle(fontSize: 26)),
+                      ),
+                    ),
+                    const SizedBox(width: 14),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Camp Leaderboard', style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w700)),
+                          const SizedBox(height: 2),
+                          Text('See Top Campers & Thailand Rankings', style: AppTypography.labelSmall.copyWith(color: AppColors.outline)),
+                        ],
+                      ),
+                    ),
+                    const Icon(Icons.chevron_right_rounded, color: AppColors.outline),
                   ],
                 ),
               ),

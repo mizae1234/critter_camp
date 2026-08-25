@@ -27,6 +27,7 @@ class LocalStorage {
   static const String keyPendingSyncQueue = 'cc_pending_sync_queue';
   static const String keyCachedAppConfig = 'cc_cached_app_config';
   static const String keyHasSeenOnboarding = 'cc_has_seen_onboarding';
+  static const String keyLanguage = 'cc_language';
 
   static LocalStorage? _instance;
   late SharedPreferences _prefs;
@@ -163,4 +164,7 @@ class LocalStorage {
 
   bool getHasSeenOnboarding() => _prefs.getBool(keyHasSeenOnboarding) ?? false;
   Future<void> setHasSeenOnboarding(bool val) => _prefs.setBool(keyHasSeenOnboarding, val);
+
+  String getLanguage() => _prefs.getString(keyLanguage) ?? 'th';
+  Future<void> setLanguage(String lang) => _prefs.setString(keyLanguage, lang);
 }

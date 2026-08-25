@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'theme/app_theme.dart';
 import '../core/storage/local_storage.dart';
+import '../core/localization/app_strings.dart';
 import '../core/widgets/critter_bottom_nav.dart';
 import '../data/models/critter_model.dart';
 import '../data/models/user_progress.dart';
@@ -103,6 +104,7 @@ class _CritterCampAppState extends State<CritterCampApp> {
     _authRepo = MockAuthRepository(widget.storage);
 
     // 3. Track App Start & Init Background Services
+    AppStrings.currentLocale.value = widget.storage.getLanguage();
     _analyticsService.trackGameStarted();
     if (!widget.storage.getHasSeenOnboarding()) {
       _currentView = AppView.firstLaunch;
@@ -172,8 +174,16 @@ class _CritterCampAppState extends State<CritterCampApp> {
     switch (_currentView) {
       case AppView.firstLaunch:
         return FirstLaunchScreen(
-          onStartPlaying: () {
-            widget.storage.setHasSeenOnboarding(true);
+          onPlayAsGuest: () async {
+            await widget.storage.setHasSeenOnboarding(true);
+            await _identityService.ensureGuestIdentity();
+            setState(() => _currentView = AppView.mainTabs);
+          },
+          onSignIn: (email, name) async {
+            await widget.storage.setHasSeenOnboarding(true);
+            await _identityService.upgradeToAccount(email: email, username: name);
+            await _syncService.syncPendingProgress();
+            await _loadAppState();
             setState(() => _currentView = AppView.mainTabs);
           },
           onHowToPlay: () => setState(() => _currentView = AppView.tutorial),
@@ -269,6 +279,7 @@ class _CritterCampAppState extends State<CritterCampApp> {
           onPlayDaily: () => _startStage(StageCatalog.stage5),
           onSelectCritter: (c) => setState(() => _currentTab = CritterNavTab.collection),
           onOpenSettings: () => setState(() => _currentView = AppView.settings),
+          onOpenLeaderboard: () => setState(() => _currentView = AppView.leaderboard),
         );
 
       case CritterNavTab.journey:
@@ -291,6 +302,7 @@ class _CritterCampAppState extends State<CritterCampApp> {
           identityService: _identityService,
           syncService: _syncService,
           onOpenSettings: () => setState(() => _currentView = AppView.settings),
+          onOpenLeaderboard: () => setState(() => _currentView = AppView.leaderboard),
         );
     }
   }

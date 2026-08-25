@@ -4,6 +4,7 @@ import '../../../app/theme/app_typography.dart';
 import '../../../app/theme/app_spacing.dart';
 import '../../../core/storage/local_storage.dart';
 import '../../../core/widgets/critter_card.dart';
+import '../../../core/localization/app_strings.dart';
 import '../../../services/config/app_config_service.dart';
 import '../../../services/sync/cloud_sync_service.dart';
 
@@ -30,6 +31,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   late bool _patternMode;
   late double _musicVolume;
   late double _sfxVolume;
+  late String _language;
   bool _isManualSyncing = false;
 
   @override
@@ -39,6 +41,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _patternMode = widget.storage.getPatternMode();
     _musicVolume = widget.storage.getMusicVolume();
     _sfxVolume = widget.storage.getSfxVolume();
+    _language = widget.storage.getLanguage();
   }
 
   @override
@@ -62,6 +65,43 @@ class _SettingsScreenState extends State<SettingsScreen> {
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.md),
           children: [
+            // Section 0: Language Selection (ภาษาไทย / English)
+            Text('Language / ภาษา', style: AppTypography.titleMedium),
+            const SizedBox(height: AppSpacing.sm),
+
+            CritterCard(
+              padding: EdgeInsets.zero,
+              child: Column(
+                children: [
+                  ListTile(
+                    leading: const Text('🇹🇭', style: TextStyle(fontSize: 24)),
+                    title: const Text('ภาษาไทย (Thai)', style: TextStyle(fontWeight: FontWeight.w700)),
+                    subtitle: const Text('แสดงผลภาษาไทย', style: TextStyle(fontSize: 12)),
+                    trailing: _language == 'th' ? const Icon(Icons.check_circle_rounded, color: AppColors.primary) : null,
+                    onTap: () {
+                      setState(() => _language = 'th');
+                      widget.storage.setLanguage('th');
+                      AppStrings.currentLocale.value = 'th';
+                    },
+                  ),
+                  const Divider(height: 1, indent: 16, endIndent: 16),
+                  ListTile(
+                    leading: const Text('🇬🇧', style: TextStyle(fontSize: 24)),
+                    title: const Text('English (US)', style: TextStyle(fontWeight: FontWeight.w700)),
+                    subtitle: const Text('Display in English', style: TextStyle(fontSize: 12)),
+                    trailing: _language == 'en' ? const Icon(Icons.check_circle_rounded, color: AppColors.primary) : null,
+                    onTap: () {
+                      setState(() => _language = 'en');
+                      widget.storage.setLanguage('en');
+                      AppStrings.currentLocale.value = 'en';
+                    },
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: AppSpacing.lg),
+
             // Section 1: Gameplay & Comfort
             Text('Gameplay & Comfort', style: AppTypography.titleMedium),
             const SizedBox(height: AppSpacing.sm),

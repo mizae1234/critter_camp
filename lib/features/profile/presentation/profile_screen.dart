@@ -15,6 +15,7 @@ class ProfileScreen extends StatefulWidget {
   final PlayerIdentityService identityService;
   final CloudSyncService syncService;
   final VoidCallback onOpenSettings;
+  final VoidCallback? onOpenLeaderboard;
 
   const ProfileScreen({
     super.key,
@@ -22,6 +23,7 @@ class ProfileScreen extends StatefulWidget {
     required this.identityService,
     required this.syncService,
     required this.onOpenSettings,
+    this.onOpenLeaderboard,
   });
 
   @override
@@ -269,6 +271,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   _buildStatCard('Total Acorns', '${p.totalAcorns}', Icons.grain_rounded, AppColors.textAccentBrown),
                 ],
               ),
+
+              const SizedBox(height: AppSpacing.md),
+
+              if (widget.onOpenLeaderboard != null)
+                CritterCard(
+                  backgroundColor: const Color(0xFFF3F4F6),
+                  borderRadius: AppSpacing.radiusMd,
+                  onTap: widget.onOpenLeaderboard,
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 44,
+                        height: 44,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFE0E7FF),
+                          borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+                        ),
+                        child: const Center(child: Text('🏆', style: TextStyle(fontSize: 22))),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Camp Leaderboard', style: AppTypography.titleMedium.copyWith(fontSize: 14, fontWeight: FontWeight.w700)),
+                            Text('View Weekly & Thailand Rankings', style: AppTypography.labelSmall.copyWith(color: AppColors.outline)),
+                          ],
+                        ),
+                      ),
+                      const Icon(Icons.chevron_right_rounded, color: AppColors.outline),
+                    ],
+                  ),
+                ),
 
               const SizedBox(height: AppSpacing.lg),
 
