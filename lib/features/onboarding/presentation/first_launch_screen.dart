@@ -111,55 +111,56 @@ class FirstLaunchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl, vertical: AppSpacing.md),
-          child: Column(
-            children: [
-              const SizedBox(height: 20),
+      body: Stack(
+        children: [
+          // Cozy Campsite Background
+          Positioned.fill(
+            child: Opacity(
+              opacity: 0.16,
+              child: Image.asset(
+                'assets/images/bg_campsite.jpg',
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
+              ),
+            ),
+          ),
+          SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl, vertical: AppSpacing.md),
+              child: Column(
+                children: [
+                  const SizedBox(height: 16),
 
-              // Hero Cozy Camp Illustration Card
-              Container(
-                width: 180,
-                height: 180,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFFBF6EE),
-                  borderRadius: BorderRadius.circular(32),
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(0xFF8D5B4C).withValues(alpha: 0.12),
-                      blurRadius: 24,
-                      offset: const Offset(0, 10),
-                    ),
-                  ],
-                  border: Border.all(color: const Color(0xFFE8DCB8), width: 1.5),
-                ),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Container(
-                      width: 130,
-                      height: 130,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Color(0xFFFEF3C7),
-                      ),
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text('⛺', style: TextStyle(fontSize: 60)),
-                        Transform.translate(
-                          offset: const Offset(0, -12),
-                          child: const Text('🦊', style: TextStyle(fontSize: 36)),
+                  // Hero App Icon
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(36),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFF8D5B4C).withValues(alpha: 0.25),
+                          blurRadius: 24,
+                          offset: const Offset(0, 10),
                         ),
                       ],
                     ),
-                  ],
-                ),
-              ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(36),
+                      child: Image.asset(
+                        'assets/images/app_icon.jpg',
+                        width: 130,
+                        height: 130,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => Container(
+                          width: 130,
+                          height: 130,
+                          color: const Color(0xFFFBF6EE),
+                          child: const Center(child: Text('⛺🦊', style: TextStyle(fontSize: 44))),
+                        ),
+                      ),
+                    ),
+                  ),
 
-              const SizedBox(height: AppSpacing.xl),
+                  const SizedBox(height: AppSpacing.lg),
 
               // Title
               Text(
@@ -230,6 +231,8 @@ class FirstLaunchScreen extends StatelessWidget {
           ),
         ),
       ),
-    );
+    ],
+  ),
+);
   }
 }

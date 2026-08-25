@@ -301,10 +301,23 @@ class _GameplayScreenState extends State<GameplayScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Top App Bar
+      body: Stack(
+        children: [
+          // Cozy Meadow Background
+          Positioned.fill(
+            child: Opacity(
+              opacity: 0.15,
+              child: Image.asset(
+                'assets/images/bg_gameplay.jpg',
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
+              ),
+            ),
+          ),
+          SafeArea(
+            child: Column(
+              children: [
+                // Top App Bar
             ListenableBuilder(
               listenable: _controller,
               builder: (context, child) {
@@ -408,6 +421,8 @@ class _GameplayScreenState extends State<GameplayScreen> {
           ],
         ),
       ),
-    );
+    ],
+  ),
+);
   }
 }
