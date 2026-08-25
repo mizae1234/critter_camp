@@ -25,41 +25,56 @@ class FirstLaunchScreen extends StatelessWidget {
             children: [
               const Spacer(flex: 1),
 
-              // Hero Illustration & Badge
+              // Hero Cozy Camp Illustration Card
               Container(
-                width: 140,
-                height: 140,
+                width: 220,
+                height: 220,
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [AppColors.primaryLight, AppColors.primary],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  shape: BoxShape.circle,
+                  color: const Color(0xFFFBF6EE),
+                  borderRadius: BorderRadius.circular(32),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.primary.withValues(alpha: 0.35),
-                      blurRadius: 24,
-                      offset: const Offset(0, 10),
+                      color: const Color(0xFF8D5B4C).withValues(alpha: 0.12),
+                      blurRadius: 30,
+                      offset: const Offset(0, 12),
+                    ),
+                  ],
+                  border: Border.all(color: const Color(0xFFE8DCB8), width: 1.5),
+                ),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    // Soft background glow
+                    Container(
+                      width: 160,
+                      height: 160,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Color(0xFFFEF3C7),
+                      ),
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text('⛺', style: TextStyle(fontSize: 72)),
+                        Transform.translate(
+                          offset: const Offset(0, -15),
+                          child: const Text('🦊', style: TextStyle(fontSize: 42)),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-                child: const Center(
-                  child: Icon(
-                    Icons.forest_rounded,
-                    size: 72,
-                    color: Colors.white,
-                  ),
-                ),
               ),
 
-              const SizedBox(height: AppSpacing.xl),
+              const SizedBox(height: AppSpacing.xxl),
 
               // Title
               Text(
                 'Critter Camp',
                 style: AppTypography.displayLarge.copyWith(
                   color: AppColors.primaryDark,
+                  fontWeight: FontWeight.w800,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -68,34 +83,18 @@ class FirstLaunchScreen extends StatelessWidget {
 
               // Tagline
               Text(
-                'A cozy habitat puzzle game where every animal finds its peaceful grove.',
-                style: AppTypography.bodyLarge,
+                'Find a home for every critter.',
+                style: AppTypography.titleLarge.copyWith(
+                  color: AppColors.onSurfaceVariant,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18,
+                ),
                 textAlign: TextAlign.center,
               ),
 
               const Spacer(flex: 2),
 
-              // Feature Highlights Row
-              Container(
-                padding: const EdgeInsets.all(AppSpacing.md),
-                decoration: BoxDecoration(
-                  color: AppColors.surfaceContainerLow,
-                  borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
-                  border: Border.all(color: AppColors.outlineVariant, width: 1),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    _buildFeatureItem(Icons.grid_4x4_rounded, 'Pure Logic'),
-                    _buildFeatureItem(Icons.pets_rounded, '20+ Critters'),
-                    _buildFeatureItem(Icons.bedtime_rounded, 'Zen Mode'),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: AppSpacing.xl),
-
-              // Actions
+              // Action 1: Start Playing
               CritterButton(
                 text: 'Start Playing',
                 isFullWidth: true,
@@ -105,42 +104,19 @@ class FirstLaunchScreen extends StatelessWidget {
 
               const SizedBox(height: AppSpacing.md),
 
+              // Action 2: How to Play
               CritterButton(
                 text: 'How to Play',
-                variant: CritterButtonVariant.outline,
+                variant: CritterButtonVariant.secondary,
                 isFullWidth: true,
-                icon: Icons.menu_book_rounded,
                 onPressed: onHowToPlay,
               ),
 
-              const SizedBox(height: AppSpacing.lg),
-
-              Text(
-                'No timer pressure • Offline friendly',
-                style: AppTypography.labelSmall.copyWith(
-                  color: AppColors.outline,
-                ),
-              ),
-
-              const SizedBox(height: AppSpacing.md),
+              const SizedBox(height: AppSpacing.xxl),
             ],
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildFeatureItem(IconData icon, String label) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, size: 22, color: AppColors.primary),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          style: AppTypography.labelSmall.copyWith(color: AppColors.onSurfaceVariant),
-        ),
-      ],
     );
   }
 }

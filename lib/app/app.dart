@@ -104,6 +104,9 @@ class _CritterCampAppState extends State<CritterCampApp> {
 
     // 3. Track App Start & Init Background Services
     _analyticsService.trackGameStarted();
+    if (!widget.storage.getHasSeenOnboarding()) {
+      _currentView = AppView.firstLaunch;
+    }
     _loadAppState();
     _initBackgroundServices();
   }
@@ -169,7 +172,10 @@ class _CritterCampAppState extends State<CritterCampApp> {
     switch (_currentView) {
       case AppView.firstLaunch:
         return FirstLaunchScreen(
-          onStartPlaying: () => setState(() => _currentView = AppView.mainTabs),
+          onStartPlaying: () {
+            widget.storage.setHasSeenOnboarding(true);
+            setState(() => _currentView = AppView.mainTabs);
+          },
           onHowToPlay: () => setState(() => _currentView = AppView.tutorial),
         );
 
