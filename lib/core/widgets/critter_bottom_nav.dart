@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../app/theme/app_colors.dart';
 import '../../app/theme/app_typography.dart';
+import '../localization/app_strings.dart';
 
 enum CritterNavTab { home, journey, daily, collection, profile }
 
@@ -39,27 +40,27 @@ class CritterBottomNav extends StatelessWidget {
             children: [
               _buildNavItem(
                 icon: Icons.home_rounded,
-                label: 'Home',
+                label: AppStrings.home,
                 tab: CritterNavTab.home,
               ),
               _buildNavItem(
                 icon: Icons.map_rounded,
-                label: 'Journey',
+                label: AppStrings.journey,
                 tab: CritterNavTab.journey,
               ),
               _buildNavItem(
                 icon: Icons.calendar_today_rounded,
-                label: 'Daily',
+                label: AppStrings.daily,
                 tab: CritterNavTab.daily,
               ),
               _buildNavItem(
                 icon: Icons.pets_rounded,
-                label: 'Collection',
+                label: AppStrings.collection,
                 tab: CritterNavTab.collection,
               ),
               _buildNavItem(
                 icon: Icons.person_rounded,
-                label: 'Profile',
+                label: AppStrings.profile,
                 tab: CritterNavTab.profile,
               ),
             ],

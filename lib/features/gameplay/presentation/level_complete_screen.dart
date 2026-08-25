@@ -10,6 +10,7 @@ import '../../../game/validator/stage_validation_result.dart';
 import '../../../services/ads/ad_policy_service.dart';
 import '../../../services/ads/ads_service.dart';
 import '../../../services/analytics/analytics_service.dart';
+import '../../../core/localization/app_strings.dart';
 
 class LevelCompleteScreen extends StatefulWidget {
   final int stageNumber;
@@ -294,7 +295,7 @@ class _LevelCompleteScreenState extends State<LevelCompleteScreen> {
 
               // Action CTAs
               CritterButton(
-                text: 'Next Stage',
+                text: AppStrings.nextStage,
                 isFullWidth: true,
                 icon: Icons.arrow_forward_rounded,
                 onPressed: _handleNextStage,
@@ -306,7 +307,7 @@ class _LevelCompleteScreenState extends State<LevelCompleteScreen> {
                 children: [
                   Expanded(
                     child: CritterButton(
-                      text: 'Replay',
+                      text: AppStrings.replayStage,
                       variant: CritterButtonVariant.outline,
                       icon: Icons.replay_rounded,
                       onPressed: widget.onReplay,
@@ -315,7 +316,7 @@ class _LevelCompleteScreenState extends State<LevelCompleteScreen> {
                   const SizedBox(width: 10),
                   Expanded(
                     child: CritterButton(
-                      text: 'Map',
+                      text: AppStrings.backToCamp,
                       variant: CritterButtonVariant.ghost,
                       icon: Icons.map_rounded,
                       onPressed: widget.onBackHome,

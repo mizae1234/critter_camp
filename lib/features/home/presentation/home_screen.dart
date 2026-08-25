@@ -9,6 +9,7 @@ import '../../../core/widgets/critter_avatar.dart';
 import '../../../data/models/critter_model.dart';
 import '../../../data/models/user_progress.dart';
 import '../../../game/stage/stages/stage_catalog.dart';
+import '../../../core/localization/app_strings.dart';
 
 class HomeScreen extends StatelessWidget {
   final UserProgress userProgress;
@@ -113,17 +114,17 @@ class HomeScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: AppSpacing.md),
                     Text(
-                      'Ready for a little\nbrain break?',
+                      AppStrings.readyForBrainBreak,
                       style: AppTypography.headlineLarge.copyWith(color: Colors.white),
                     ),
                     const SizedBox(height: AppSpacing.sm),
                     Text(
-                      'Stage ${currentStage.stageNumber}: ${currentStage.name} is waiting for you.',
+                      '${AppStrings.stagePrefix} ${currentStage.stageNumber}: ${currentStage.name} ${AppStrings.stageWaiting}',
                       style: AppTypography.bodyMedium.copyWith(color: Colors.white70),
                     ),
                     const SizedBox(height: AppSpacing.lg),
                     CritterButton(
-                      text: 'Play Stage ${currentStage.stageNumber}',
+                      text: '${AppStrings.playCurrentStage} ${currentStage.stageNumber}',
                       variant: CritterButtonVariant.secondary,
                       isFullWidth: true,
                       icon: Icons.play_arrow_rounded,
@@ -157,10 +158,10 @@ class HomeScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Daily Puzzle • 6x6', style: AppTypography.labelMedium.copyWith(color: AppColors.accentGold)),
+                          Text('${AppStrings.dailyChallenge} • 6x6', style: AppTypography.labelMedium.copyWith(color: AppColors.accentGold)),
                           const SizedBox(height: 2),
-                          Text('River Bend', style: AppTypography.titleMedium),
-                          Text('+25 Acorns reward', style: AppTypography.labelSmall.copyWith(color: AppColors.outline)),
+                          const Text('River Bend', style: TextStyle(fontWeight: FontWeight.w700)),
+                          Text('+25 Acorns', style: AppTypography.labelSmall.copyWith(color: AppColors.outline)),
                         ],
                       ),
                     ),
@@ -172,7 +173,7 @@ class HomeScreen extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSpacing.radiusFull)),
                       ),
-                      child: const Text('Play Daily'),
+                      child: Text(AppStrings.playDaily),
                     ),
                   ],
                 ),
@@ -203,9 +204,9 @@ class HomeScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Camp Leaderboard', style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w700)),
+                          Text(AppStrings.viewLeaderboard, style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w700)),
                           const SizedBox(height: 2),
-                          Text('See Top Campers & Thailand Rankings', style: AppTypography.labelSmall.copyWith(color: AppColors.outline)),
+                          Text(AppStrings.topCampersThisWeek, style: AppTypography.labelSmall.copyWith(color: AppColors.outline)),
                         ],
                       ),
                     ),
@@ -220,7 +221,7 @@ class HomeScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Recent Critters', style: AppTypography.titleLarge),
+                  Text(AppStrings.recentCritters, style: AppTypography.titleLarge),
                   Text('${recentCritters.where((c) => c.isUnlocked).length} Unlocked', style: AppTypography.labelSmall.copyWith(color: AppColors.outline)),
                 ],
               ),

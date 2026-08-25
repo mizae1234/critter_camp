@@ -165,6 +165,6 @@ class LocalStorage {
   bool getHasSeenOnboarding() => _prefs.getBool(keyHasSeenOnboarding) ?? false;
   Future<void> setHasSeenOnboarding(bool val) => _prefs.setBool(keyHasSeenOnboarding, val);
 
-  String getLanguage() => _prefs.getString(keyLanguage) ?? 'th';
+  String getLanguage() => _prefs.getString(keyLanguage) ?? 'en';
   Future<void> setLanguage(String lang) => _prefs.setString(keyLanguage, lang);
 }

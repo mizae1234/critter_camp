@@ -68,26 +68,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.md),
           children: [
-            // Section 0: Language Selection (ภาษาไทย / English)
-            Text('Language / ภาษา', style: AppTypography.titleMedium),
+            // Section 0: Language Selection
+            Text(AppStrings.languageSetting, style: AppTypography.titleMedium),
             const SizedBox(height: AppSpacing.sm),
 
             CritterCard(
               padding: EdgeInsets.zero,
               child: Column(
                 children: [
-                  ListTile(
-                    leading: const Text('🇹🇭', style: TextStyle(fontSize: 24)),
-                    title: const Text('ภาษาไทย (Thai)', style: TextStyle(fontWeight: FontWeight.w700)),
-                    subtitle: const Text('แสดงผลภาษาไทย', style: TextStyle(fontSize: 12)),
-                    trailing: _language == 'th' ? const Icon(Icons.check_circle_rounded, color: AppColors.primary) : null,
-                    onTap: () {
-                      setState(() => _language = 'th');
-                      widget.storage.setLanguage('th');
-                      AppStrings.currentLocale.value = 'th';
-                    },
-                  ),
-                  const Divider(height: 1, indent: 16, endIndent: 16),
                   ListTile(
                     leading: const Text('🇬🇧', style: TextStyle(fontSize: 24)),
                     title: const Text('English (US)', style: TextStyle(fontWeight: FontWeight.w700)),
@@ -99,6 +87,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       AppStrings.currentLocale.value = 'en';
                     },
                   ),
+                  const Divider(height: 1, indent: 16, endIndent: 16),
+                  ListTile(
+                    leading: const Text('🇹🇭', style: TextStyle(fontSize: 24)),
+                    title: const Text('ภาษาไทย (Thai)', style: TextStyle(fontWeight: FontWeight.w700)),
+                    subtitle: const Text('แสดงผลภาษาไทย', style: TextStyle(fontSize: 12)),
+                    trailing: _language == 'th' ? const Icon(Icons.check_circle_rounded, color: AppColors.primary) : null,
+                    onTap: () {
+                      setState(() => _language = 'th');
+                      widget.storage.setLanguage('th');
+                      AppStrings.currentLocale.value = 'th';
+                    },
+                  ),
                 ],
               ),
             ),
@@ -106,7 +106,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             const SizedBox(height: AppSpacing.lg),
 
             // Section 1: Gameplay & Comfort
-            Text('Gameplay & Comfort', style: AppTypography.titleMedium),
+            Text(AppStrings.gameplayComfort, style: AppTypography.titleMedium),
             const SizedBox(height: AppSpacing.sm),
 
             CritterCard(
@@ -114,8 +114,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: Column(
                 children: [
                   SwitchListTile(
-                    title: const Text('Zen Mode'),
-                    subtitle: const Text('Play with unlimited lives and no mistake penalty', style: TextStyle(fontSize: 12)),
+                    title: Text(AppStrings.zenMode),
+                    subtitle: Text(AppStrings.zenModeSub, style: const TextStyle(fontSize: 12)),
                     value: _zenMode,
                     activeTrackColor: AppColors.primary,
                     onChanged: (val) {
@@ -125,8 +125,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   const Divider(height: 1, indent: 16, endIndent: 16),
                   SwitchListTile(
-                    title: const Text('Colorblind Patterns'),
-                    subtitle: const Text('Show tactile letter codes and patterns on habitats', style: TextStyle(fontSize: 12)),
+                    title: Text(AppStrings.highContrast),
+                    subtitle: Text(AppStrings.highContrastSub, style: const TextStyle(fontSize: 12)),
                     value: _patternMode,
                     activeTrackColor: AppColors.primary,
                     onChanged: (val) {
@@ -141,7 +141,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             const SizedBox(height: AppSpacing.lg),
 
             // Section 2: Audio
-            Text('Sound & Atmosphere', style: AppTypography.titleMedium),
+            Text(AppStrings.soundAndAtmosphere, style: AppTypography.titleMedium),
             const SizedBox(height: AppSpacing.sm),
 
             CritterCard(
@@ -152,7 +152,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('Campfire Music', style: TextStyle(fontWeight: FontWeight.w600)),
+                      Text(AppStrings.campfireMusic, style: const TextStyle(fontWeight: FontWeight.w600)),
                       Text('${(_musicVolume * 100).toInt()}%', style: AppTypography.labelSmall),
                     ],
                   ),
@@ -169,7 +169,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('Sound Effects (SFX)', style: TextStyle(fontWeight: FontWeight.w600)),
+                      Text(AppStrings.sfxVolume, style: const TextStyle(fontWeight: FontWeight.w600)),
                       Text('${(_sfxVolume * 100).toInt()}%', style: AppTypography.labelSmall),
                     ],
                   ),
@@ -189,7 +189,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             const SizedBox(height: AppSpacing.lg),
 
             // Section 3: Cloud & Backend Sync
-            Text('Account & Cloud Sync', style: AppTypography.titleMedium),
+            Text(AppStrings.accountAndSync, style: AppTypography.titleMedium),
             const SizedBox(height: AppSpacing.sm),
 
             CritterCard(

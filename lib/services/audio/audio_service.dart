@@ -67,67 +67,57 @@ class AudioService {
     } catch (_) {}
   }
 
-  /// 🐿️ Play Cozy Critter Placement Sound
-  Future<void> playPlaceCritter() async {
+  Future<void> _playAsset(String path) async {
     if (_isMuted || _sfxVolume <= 0.01) return;
     try {
-      HapticFeedback.lightImpact();
-      SystemSound.play(SystemSoundType.click);
+      if (_sfxPlayer != null) {
+        await _sfxPlayer!.stop();
+        await _sfxPlayer!.setVolume(_sfxVolume);
+        await _sfxPlayer!.play(AssetSource(path));
+      }
     } catch (_) {}
+  }
+
+  /// 🐿️ Play Cozy Critter Placement Sound
+  Future<void> playPlaceCritter() async {
+    try { HapticFeedback.lightImpact(); } catch (_) {}
+    await _playAsset('audio/pop.wav');
   }
 
   /// ❌ Play Wooden X Mark Sound
   Future<void> playMarkX() async {
-    if (_isMuted || _sfxVolume <= 0.01) return;
-    try {
-      HapticFeedback.selectionClick();
-      SystemSound.play(SystemSoundType.click);
-    } catch (_) {}
+    try { HapticFeedback.selectionClick(); } catch (_) {}
+    await _playAsset('audio/click.wav');
   }
 
   /// ⚠️ Play Rule Violation / Conflict Sound
   Future<void> playConflict() async {
-    if (_isMuted || _sfxVolume <= 0.01) return;
-    try {
-      HapticFeedback.mediumImpact();
-      SystemSound.play(SystemSoundType.alert);
-    } catch (_) {}
+    try { HapticFeedback.mediumImpact(); } catch (_) {}
+    await _playAsset('audio/error.wav');
   }
 
   /// ↩️ Play Undo Sound
   Future<void> playUndo() async {
-    if (_isMuted || _sfxVolume <= 0.01) return;
-    try {
-      HapticFeedback.selectionClick();
-      SystemSound.play(SystemSoundType.click);
-    } catch (_) {}
+    try { HapticFeedback.selectionClick(); } catch (_) {}
+    await _playAsset('audio/undo.wav');
   }
 
   /// 💡 Play Hint Chime Sound
   Future<void> playHint() async {
-    if (_isMuted || _sfxVolume <= 0.01) return;
-    try {
-      HapticFeedback.lightImpact();
-      SystemSound.play(SystemSoundType.click);
-    } catch (_) {}
+    try { HapticFeedback.lightImpact(); } catch (_) {}
+    await _playAsset('audio/hint.wav');
   }
 
   /// 🏆 Play Level Victory Fanfare Sound
   Future<void> playVictory() async {
-    if (_isMuted || _sfxVolume <= 0.01) return;
-    try {
-      HapticFeedback.heavyImpact();
-      SystemSound.play(SystemSoundType.click);
-    } catch (_) {}
+    try { HapticFeedback.heavyImpact(); } catch (_) {}
+    await _playAsset('audio/victory.wav');
   }
 
   /// 🔘 Play UI Button Tap Sound
   Future<void> playButtonTap() async {
-    if (_isMuted || _sfxVolume <= 0.01) return;
-    try {
-      HapticFeedback.selectionClick();
-      SystemSound.play(SystemSoundType.click);
-    } catch (_) {}
+    try { HapticFeedback.selectionClick(); } catch (_) {}
+    await _playAsset('audio/click.wav');
   }
 
   void dispose() {

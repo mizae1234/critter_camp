@@ -163,13 +163,18 @@ class _CritterCampAppState extends State<CritterCampApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Critter Camp',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
-      home: _isLoading
-          ? const Scaffold(body: Center(child: CircularProgressIndicator()))
-          : _buildCurrentView(),
+    return ValueListenableBuilder<String>(
+      valueListenable: AppStrings.currentLocale,
+      builder: (context, locale, _) {
+        return MaterialApp(
+          title: 'Critter Camp',
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.lightTheme,
+          home: _isLoading
+              ? const Scaffold(body: Center(child: CircularProgressIndicator()))
+              : _buildCurrentView(),
+        );
+      },
     );
   }
 
